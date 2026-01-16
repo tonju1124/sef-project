@@ -113,4 +113,8 @@ function Upload() {
   )
 }
 
+<<<<<<< HEAD
 export default Upload
+=======
+export default Upload
+>>>>>>> 4c85ba76bae172398b0c0b90b8c7dc0f482229d7
