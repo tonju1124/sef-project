@@ -1,1 +1,8 @@
 @import "tailwindcss";
+
+@theme {
+  --color-bg-primary: #FFFFFF;
+  --color-bg-secondary: #BFBFBF;
+  --color-textbox-login: #FFF1F1;
+  --color-textbox-login-hover: #FFE2E2;
+}
