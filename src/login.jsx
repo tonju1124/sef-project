@@ -37,7 +37,7 @@ function LogIn() {
             type="password"
             className="bg-transparent outline-none flex-1 text-lg"
             placeholder="Password"
-          />
+          />  
           <svg
             className="w-6 h-6 text-black cursor-pointer hover:scale-105 transition-all duration-200"
             fill="currentColor"

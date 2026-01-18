@@ -1,12 +1,27 @@
 import { useState } from 'react'
 
 function Upload() {
-  const [count, setCount] = useState(0)
+  const [uploadCount, setUploadCount] = useState(0)
+  const [proofCount, setProofCount] = useState(0)
+  const [coAuthorCount, setCoAuthorCount] = useState(0)
+  const [submitCount, setSubmitCount] = useState(0)
   const [journalOpen, setJournalOpen] = useState(false)
   const [selectedType, setSelectedType] = useState("Journal")
 
-  const handleClick = () => {
-    setCount(count + 1)
+  const handleUploadClick = () => {
+    setUploadCount(uploadCount + 1)
+  }
+
+  const handleProofClick = () => {
+    setProofCount(proofCount + 1)
+  }
+
+  const handleCoAuthorClick = () => {
+    setCoAuthorCount(coAuthorCount + 1)
+  }
+
+  const handleSubmitClick = () => {
+    setSubmitCount(submitCount + 1)
   }
 
   const journalOptions = ["Journal", "Proceeding", "Book", "Article", "Chapter"]
@@ -15,7 +30,7 @@ function Upload() {
     <div>
       {/* Back Button */}
       <button
-        onClick={handleClick}
+        onClick={handleUploadClick}
         className="bg-gray-400 text-black ml-6 mt-6 border-2 border-black rounded-md h-9 w-32"
       >
         Back
@@ -54,19 +69,19 @@ function Upload() {
       {/* Academic Publication */}
       <p className="ml-6 text-2xl mt-4">Upload Your Academic Publication</p>
       <button
-        onClick={handleClick}
+        onClick={handleUploadClick}
         className="bg-gray-400 text-black ml-6 border-2 border-black rounded-md h-9 w-32"
       >
-        Upload: {count}
+        Upload: {uploadCount}
       </button>
 
       {/* Publication Proof */}
       <p className="ml-6 text-2xl mt-4">Upload Your Publication Proof</p>
       <button
-        onClick={handleClick}
+        onClick={handleProofClick}
         className="bg-gray-400 text-black ml-6 border-2 border-black rounded-md h-9 w-32"
       >
-        Upload: {count}
+        Upload: {proofCount}
       </button>
 
       {/* Title */}
@@ -88,10 +103,10 @@ function Upload() {
       {/* Co-author */}
       <p className="ml-6 text-2xl mt-4">Co-author</p>
       <button
-        onClick={handleClick}
+        onClick={handleCoAuthorClick}
         className="bg-gray-400 text-black ml-6 border-2 border-black rounded-md h-9 w-32"
       >
-        Add Co-author: {count}
+        Add Co-author: {coAuthorCount}
       </button>
 
       {/* Description */}
@@ -104,10 +119,10 @@ function Upload() {
 
       {/* Submit */}
       <button
-        onClick={handleClick}
+        onClick={handleSubmitClick}
         className="bg-gray-400 text-black ml-6 mt-6 border-2 border-black rounded-md h-9 w-32"
       >
-        Submit: {count}
+        Submit: {submitCount}
       </button>
     </div>
   )
