@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./upload.css";
+import plusIcon from './assets/plus.svg';
 
 function Upload() {
   const [uploadCount, setUploadCount] = useState(0);
@@ -37,7 +38,8 @@ function Upload() {
     <div className="flex flex-col p-12 bg-white text-black h-screen select-none">
       <div className="flex flex-col gap-1.5">
         {/* Back Button */}
-        <button className="text-black border-2 border-black rounded-md py-1.5 px-4 font-semibold hover:bg-gray-200 transition-all duration-200 cursor-pointer flex w-fit">
+        <button className="text-black border-2 border-black rounded-md py-1.5 px-4 font-semibold hover:bg-gray-200 transition-all duration-200 cursor-pointer flex items-center gap-2 w-fit">
+          <span>&lt;</span>
           Back
         </button>
         {/* Journal Dropdown */}
@@ -81,8 +83,9 @@ function Upload() {
           <h1 className="text-2xl">Upload Your Academic Publication</h1>
           <button
             onClick={handleUploadClick}
-            className="bg-white text-black border-2 border-black rounded-md py-1.5 px-6 w-fit hover:bg-gray-100 transition-all duration-200 cursor-pointer"
+            className="bg-white text-black border-2 border-black rounded-md py-1.5 px-6 w-fit hover:bg-gray-100 transition-all duration-200 cursor-pointer flex items-center gap-2"
           >
+            <img src={plusIcon} alt="Plus icon" className="w-2.5 h-2.5" />
             Upload: {uploadCount}
           </button>
         </div>
@@ -93,8 +96,9 @@ function Upload() {
           <h1 className="text-2xl">Upload Your Publication Proof</h1>
           <button
             onClick={handleProofClick}
-            className="bg-white text-black border-2 border-black rounded-md py-1.5 px-6 w-fit hover:bg-gray-100 transition-all duration-200 cursor-pointer"
+            className="bg-white text-black border-2 border-black rounded-md py-1.5 px-6 w-fit hover:bg-gray-100 transition-all duration-200 cursor-pointer flex items-center gap-2"
           >
+            <img src={plusIcon} alt="Plus icon" className="w-2.5 h-2.5"/>
             Upload: {proofCount}
           </button>
         </div>
@@ -129,8 +133,9 @@ function Upload() {
           <h1 className="text-2xl">Co-author</h1>
           <button
             onClick={handleCoAuthorClick}
-            className="bg-white text-black border-2 border-black rounded-md py-1.5 px-4 w-fit hover:bg-gray-100 transition-all duration-200 cursor-pointer"
+            className="bg-white text-black border-2 border-black rounded-md py-1.5 px-4 w-fit hover:bg-gray-100 transition-all duration-200 cursor-pointer flex items-center gap-2"
           >
+            <img src={plusIcon} alt="Plus icon" className="w-3 h-3"/>
             Add Co-author: {coAuthorCount}
           </button>
         </div>
