@@ -1,5 +1,5 @@
 import { useState } from "react";
-import LoginSidebar from "./components/Login/LoginSidebar";
+import LoginSignupSidebar from "./components/LoginSignupSidebar";
 import LoginHeader from "./components/Login/LoginHeader";
 import LoginAlert from "./components/Login/LoginAlert";
 import LoginInputField from "./components/Login/LoginInputField";
@@ -51,7 +51,7 @@ function LogIn() {
 
   return (
     <div className="min-h-screen bg-white flex select-none">
-      <LoginSidebar />
+      <LoginSignupSidebar />
 
       {/* Right Form Section */}
       <div className="w-full lg:w-1/2 flex items-center justify-center px-4 py-12">

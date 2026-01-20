@@ -3,7 +3,7 @@ function LoginAlert({ type, message }) {
     return (
       <div className="bg-red-100 border border-red-400 rounded-lg p-3 flex items-center gap-2">
         <svg
-          className="w-5 h-5 text-red-600 flex-shrink-0"
+          className="w-5 h-5 text-red-600 shrink-0"
           fill="currentColor"
           viewBox="0 0 24 24"
         >
@@ -18,7 +18,7 @@ function LoginAlert({ type, message }) {
     return (
       <div className="bg-green-100 border border-green-400 rounded-lg p-3 flex items-center gap-2">
         <svg
-          className="w-5 h-5 text-green-600 flex-shrink-0"
+          className="w-5 h-5 text-green-600 shrink-0"
           fill="currentColor"
           viewBox="0 0 24 24"
         >
