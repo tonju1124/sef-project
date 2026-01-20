@@ -1,6 +1,6 @@
-function LoginSidebar() {
+function LoginSignupSidebar() {
   return (
-    <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-bg-gradient-start to-bg-gradient-end text-white flex-col items-center justify-center p-12">
+    <div className="hidden lg:flex lg:w-1/2 bg-linear-to-br from-bg-gradient-start to-bg-gradient-end text-white flex-col items-center justify-center p-12">
       <div className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-lg mb-6">
         <svg
           className="w-8 h-8 text-black"
@@ -24,4 +24,4 @@ function LoginSidebar() {
   );
 }
 
-export default LoginSidebar;
+export default LoginSignupSidebar;
