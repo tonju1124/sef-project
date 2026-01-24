@@ -17,11 +17,11 @@ export const publications = [
   },
   {
     id: 3,
-    title: "GEX",
-    author: "TomeGae",
+    title: "test",
+    author: "TomeGa",
     coauthor: "TomeGlow",
     uploadDate: "1956-01-10",
-    description: "Staying about say gex",
+    description: "arono",
   },
   {
     id: 4,
