@@ -2,7 +2,7 @@ import { useState } from "react";
 import LoginAlert from "../Login/LoginAlert";
 import LoginFormFooter from "../Login/LoginFormFooter";
 import LoginSubmitButton from "../Login/LoginSubmitButton";
-import LoginSignUpLink from "../Login/LoginSignUpLink";
+import SignUpLogInLink from "./SignUpLogInLink";
 import SignUpFields from "./SignUpFields";
 
 function SignUpForm() {
@@ -93,7 +93,7 @@ function SignUpForm() {
         <LoginSubmitButton isLoading={isLoading} />
       </form>
 
-      <LoginSignUpLink />
+      <SignUpLogInLink />
     </div>
   );
 }
