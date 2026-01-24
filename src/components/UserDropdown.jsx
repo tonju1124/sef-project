@@ -1,7 +1,6 @@
 function UserDropdown({ navOpen, userOpen, setUserOpen }) {
   const userMenuItems = [
     "Profile",
-    "Settings",
     "Logout"
   ];
 

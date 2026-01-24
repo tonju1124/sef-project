@@ -13,7 +13,7 @@ export default function DescriptionTextarea({
           className={`border-2 py-2 px-3 rounded-md w-full hover:bg-gray-100 transition-all duration-200 resize-none h-20 ${
             hasError
               ? "border-red-500 placeholder-red-500"
-              : "border-black"
+              : "border-gray-300"
           }`}
           placeholder={hasError ? "Description is required" : "Enter Description"}
         />
