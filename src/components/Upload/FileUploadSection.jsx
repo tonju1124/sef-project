@@ -18,7 +18,7 @@ export default function FileUploadSection({
           className={`bg-white text-black border-2 rounded-md py-1.5 px-6 w-fit hover:bg-gray-100 transition-all duration-200 cursor-pointer flex items-center gap-2 opacity-100 ${
             hasError
               ? "border-red-500"
-              : "border-black"
+              : "border-gray-300"
           }`}
           style={{
             animation: "fadeIn 0.3s ease-out"

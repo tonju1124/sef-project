@@ -1,7 +1,10 @@
+import { useNavigate } from 'react-router-dom';
+
 function UploadPublicationButton() {
+  const navigate = useNavigate();
+
   const handleClick = () => {
-    // Add your upload publication logic here
-    console.log('Upload publication clicked');
+    navigate('/upload');
   };
 
   return (

@@ -1,4 +1,15 @@
+import { useState } from 'react';
+
 function PublicationCard({ title, author, coauthor, uploadDate, description }) {
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isAnimating, setIsAnimating] = useState(false);
+
+  const handleBookmarkClick = () => {
+    setIsAnimating(true);
+    setIsBookmarked(!isBookmarked);
+    setTimeout(() => setIsAnimating(false), 200);
+  };
+
   return (
     <div className="border-b border-gray-300 py-6 px-0">
       <div className="flex items-start justify-start gap-4">
@@ -12,10 +23,19 @@ function PublicationCard({ title, author, coauthor, uploadDate, description }) {
           </div>
         </div>
         <div className="flex items-center gap-2 ml-auto">
-          <button className="text-gray-600 hover:text-gray-800">
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
-            </svg>
+          <button 
+            onClick={handleBookmarkClick}
+            className={`transition-transform duration-200 ${isBookmarked ? 'text-yellow-400 hover:text-yellow-500' : 'text-gray-600 hover:text-gray-800'} ${isAnimating ? 'scale-0' : 'scale-100'}`}
+          >
+            {isBookmarked ? (
+              <svg className="w-5 h-5" fill="currentColor" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+              </svg>
+            ) : (
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+              </svg>
+            )}
           </button>
           <button className="text-gray-600 hover:text-gray-800">
             <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">

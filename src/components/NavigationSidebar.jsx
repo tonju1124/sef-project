@@ -1,12 +1,21 @@
+import { useNavigate } from 'react-router-dom';
+
 function NavigationSidebar({ navOpen, setNavOpen }) {
+  const navigate = useNavigate();
+  
   const navItems = [
-    "Home",
-    "My Project",
-    "Saved",
-    "Notification",
-    "My Analytics",
-    "Verification Status"
+    { label: "Home", path: "/" },
+    { label: "My Project", path: "/my-project" },
+    { label: "Saved", path: "/saved" },
+    { label: "Notification", path: "/notifications" },
+    { label: "My Analytics", path: "/analytics" },
+    { label: "Verification Status", path: "/verification" }
   ];
+
+  const handleNavClick = (path) => {
+    navigate(path);
+    setNavOpen(false);
+  };
 
   return (
     <>
@@ -27,7 +36,7 @@ function NavigationSidebar({ navOpen, setNavOpen }) {
 
       {/* Navigation Sidebar */}
       <nav
-        className={`fixed left-0 top-0 h-screen w-64 bg-gray-100 z-40 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed left-0 top-0 h-screen w-64 rounded-xl bg-gray-100 border border-gray-300 z-40 transform transition-transform duration-300 ease-in-out shadow-xl ${
           navOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -35,12 +44,12 @@ function NavigationSidebar({ navOpen, setNavOpen }) {
           <p className="text-lg font-semibold border-t-2 border-b-2 border-nav-border mb-4 py-4 px-2">My Dashboard</p>
           <ul className="space-y-2">
             {navItems.map((item) => (
-              <li key={item}>
+              <li key={item.label}>
                 <button
-                  onClick={() => setNavOpen(false)}
+                  onClick={() => handleNavClick(item.path)}
                   className="w-full text-left px-4 py-2 rounded hover:bg-gray-200"
                 >
-                  {item}
+                  {item.label}
                 </button>
               </li>
             ))}

@@ -15,7 +15,7 @@ export default function FormInput({
         className={`border-2 py-2 px-3 rounded-md w-[95%] hover:bg-gray-100 transition-all duration-200 ${
           hasError
             ? "border-red-500 placeholder-red-500"
-            : "border-black"
+            : "border-gray-300"
         }`}
         placeholder={placeholder}
       />

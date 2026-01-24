@@ -86,7 +86,7 @@ function Upload() {
   };
 
   return (
-    <div className="flex flex-col p-12 bg-white text-black select-none">
+    <div className="min-h-screen bg-white text-black flex flex-col select-none p-12">
       <div className="flex flex-col gap-1.5">
         <BackButton />
 
