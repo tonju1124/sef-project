@@ -22,6 +22,11 @@ function MainPage() {
     setSortOpen(!sortOpen);
   };
 
+  const handleSortSelect = (option) => {
+    setSortBy(option);
+    setSortOpen(false);
+  };
+
   // Smart search - searches title, author, and description with keyword matching
   const filteredPublications = searchValue.trim() === ''
     ? publications
@@ -49,7 +54,6 @@ function MainPage() {
       case 'Oldest':
         return new Date(a.uploadDate) - new Date(b.uploadDate);
       case 'Most Popular':
-        // Assuming 'Most Popular' is based on newest by default, can be updated
         return new Date(b.uploadDate) - new Date(a.uploadDate);
       default:
         return 0;
@@ -57,39 +61,40 @@ function MainPage() {
   });
 
   return (
-    <div className="min-h-screen bg-white text-black flex flex-col items-center justify-center relative select-none">
+    <div className="min-h-screen bg-white text-black flex flex-col items-start justify-start relative select-none pt-20 pl-20 page-transition">
       <NavigationSidebar navOpen={navOpen} setNavOpen={setNavOpen} />
-      <UserDropdown navOpen={navOpen} userOpen={userOpen} setUserOpen={setUserOpen} />
-
-      <div className={`fixed inset-0 z-20 flex px-20 py-16 justify-center pointer-events-none overflow-y-auto pb-4 ${navOpen ? 'blur-xs' : ''}`}>
-        <div className="text-center pointer-events-auto w-full px-6 pr-20">
-         <SearchBar 
-          value={searchValue} 
-          onChange={setSearchValue}
-          placeholder="Search publications..."
+      <UserDropdown
+        navOpen={navOpen}
+        userOpen={userOpen}
+        setUserOpen={setUserOpen}
+      />
+      <div className={`z-20 w-full pr-20 ${navOpen ? "blur-xs" : ""}`}>
+        <h1 className="text-3xl font-bold mb-4">Home</h1>
+        <div className="border-b border-gray-300 w-full mb-4"></div>
+        <SearchBar
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+          placeholder="Search your publications..."
         />
-
-          {/* Filter System */}
-          <div className="flex items-center justify-between mt-6 px-0">
-            <div className="flex items-center gap-4">
-              <FilterDropdown
-                label="Sort By"
-                value={sortBy}
-                options={sortOptions}
-                isOpen={sortOpen}
-                onToggle={handleSortOpen}
-                onSelect={setSortBy}
-                dropdownPos={sortPos}
-              />
-            </div>
-
-            {/* Upload publication button */}
-            <UploadPublicationButton />
+        <div className="flex items-center justify-between mt-6 px-0">
+          <div className="flex items-center gap-4">
+            <FilterDropdown
+              label="Sort By"
+              value={sortBy}
+              options={sortOptions}
+              isOpen={sortOpen}
+              onToggle={handleSortOpen}
+              onSelect={handleSortSelect}
+              dropdownPos={sortPos}
+            />
           </div>
 
-          {/* Publications List */}
-          <div className="mt-4 w-full items-start text-left">
-            {sortedPublications.map((pub) => (
+          {/* Upload publication button */}
+          <UploadPublicationButton />
+        </div>
+        <div className="mt-2">
+          {filteredPublications.length > 0 ? (
+            sortedPublications.map((pub) => (
               <PublicationCard
                 key={pub.id}
                 title={pub.title}
@@ -97,12 +102,12 @@ function MainPage() {
                 coauthor={pub.coauthor}
                 uploadDate={pub.uploadDate}
                 description={pub.description}
+                bookmarked={pub.bookmarked}
               />
-            ))}
-            {filteredPublications.length === 0 && (
-              <p className="text-center text-gray-500 mt-8">No publications found</p>
-            )}
-          </div>
+            ))
+          ) : (
+            <p className="text-gray-500 text-center py-8">No publications found</p>
+          )}
         </div>
       </div>
     </div>

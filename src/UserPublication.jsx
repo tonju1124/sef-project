@@ -31,7 +31,7 @@ function UserPublication() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-black flex flex-col items-start justify-start relative select-none pt-20 pl-20">
+    <div className="min-h-screen bg-white text-black flex flex-col items-start justify-start relative select-none pt-20 pl-20 page-transition">
       <NavigationSidebar navOpen={navOpen} setNavOpen={setNavOpen} />
       <UserDropdown
         navOpen={navOpen}

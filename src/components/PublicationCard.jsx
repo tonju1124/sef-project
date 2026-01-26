@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-function PublicationCard({ title, author, coauthor, uploadDate, description }) {
-  const [isBookmarked, setIsBookmarked] = useState(false);
+function PublicationCard({ title, author, coauthor, uploadDate, description, bookmarked = false }) {
+  const [isBookmarked, setIsBookmarked] = useState(bookmarked);
   const [isAnimating, setIsAnimating] = useState(false);
 
   const handleBookmarkClick = () => {
@@ -25,7 +25,7 @@ function PublicationCard({ title, author, coauthor, uploadDate, description }) {
         <div className="flex items-center gap-2 ml-auto">
           <button 
             onClick={handleBookmarkClick}
-            className={`transition-transform duration-200 ${isBookmarked ? 'text-yellow-400 hover:text-yellow-500' : 'text-gray-600 hover:text-gray-800'} ${isAnimating ? 'scale-0' : 'scale-100'}`}
+            className={`transition-transform duration-200 ${isBookmarked ? 'text-yellow-400 hover:text-yellow-500' : 'text-gray-800 hover:text-gray-900'} ${isAnimating ? 'scale-0' : 'scale-100'}`}
           >
             {isBookmarked ? (
               <svg className="w-5 h-5" fill="currentColor" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
