@@ -18,8 +18,6 @@ function Verification() {
       <div className={`z-20 w-full pr-20 ${navOpen ? "blur-xs" : ""}`}>
         <h1 className="text-3xl font-bold mb-4">My Publication Verification </h1>
         <div className="border-b border-gray-300 w-full mb-6"></div>
-
-        {/* Publications List Component */}
         <UserVerification />
       </div>
     </div>

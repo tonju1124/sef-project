@@ -5,7 +5,7 @@ function NavigationSidebar({ navOpen, setNavOpen }) {
   
   const navItems = [
     { label: "Home", path: "/" },
-    { label: "My Project", path: "/my-project" },
+    { label: "My Project", path: "/user-publication" },
     { label: "Saved", path: "/saved" },
     { label: "Notification", path: "/notifications" },
     { label: "My Analytics", path: "/analytics" },
