@@ -8,6 +8,7 @@ import SignUp from './SignUp.jsx'
 import MainPage from './MainPage.jsx'
 import Notification from './Notification.jsx'
 import Analytics from './Analytics.jsx'
+import Verification from './Verification.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -19,6 +20,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/upload" element={<Upload />} />
         <Route path="/notifications" element={<Notification />} />
         <Route path="/analytics" element={<Analytics />} />
+        <Route path="/verification" element={<Verification />} />
       </Routes>
     </Router>
   </StrictMode>,
