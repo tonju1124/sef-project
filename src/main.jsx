@@ -9,6 +9,7 @@ import MainPage from './MainPage.jsx'
 import Notification from './Notification.jsx'
 import Analytics from './Analytics.jsx'
 import Verification from './Verification.jsx'
+import UserPublication from './UserPublication.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -21,6 +22,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/notifications" element={<Notification />} />
         <Route path="/analytics" element={<Analytics />} />
         <Route path="/verification" element={<Verification />} />
+        <Route path="/user-publication" element={<UserPublication />} />
       </Routes>
     </Router>
   </StrictMode>,
