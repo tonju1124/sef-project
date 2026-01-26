@@ -1,15 +1,24 @@
+import { useNavigate } from 'react-router-dom';
+
 function UserDropdown({ navOpen, userOpen, setUserOpen }) {
+  const navigate = useNavigate();
+
   const userMenuItems = [
-    "Profile",
-    "Logout"
+    { label: "Profile", path: "/profile" },
+    { label: "Logout", path: "/login" }
   ];
+
+  const handleMenuClick = (path) => {
+    navigate(path);
+    setUserOpen(false);
+  };
 
   return (
     <>
       {/* User Profile Button */}
       <button
         onClick={() => setUserOpen(!userOpen)}
-        className={`fixed top-4 right-4 z-45 flex items-center gap-2 px-4 py-2 border border-gray-300 rounded hover:bg-gray-100 ${navOpen ? 'blur-xs' : ''}`}
+        className={`fixed top-4 right-4 z-45 flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded hover:bg-gray-50 transition-colors ${navOpen ? 'blur-xs' : ''}`}
       >
         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
           <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
@@ -28,12 +37,12 @@ function UserDropdown({ navOpen, userOpen, setUserOpen }) {
       >
         <ul className="py-2">
           {userMenuItems.map((item) => (
-            <li key={item}>
+            <li key={item.label}>
               <button
-                onClick={() => setUserOpen(false)}
-                className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                onClick={() => handleMenuClick(item.path)}
+                className="w-full text-left px-4 py-2 hover:bg-blue-50 text-gray-700 transition-colors"
               >
-                {item}
+                {item.label}
               </button>
             </li>
           ))}

@@ -10,12 +10,6 @@ function LoginFormFooter() {
           Remember me
         </span>
       </label>
-      <a
-        href="#"
-        className="text-black hover:text-gray-700 transition-colors"
-      >
-        Forgot password?
-      </a>
     </div>
   );
 }

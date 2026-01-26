@@ -13,6 +13,17 @@ function SignUpFields({
   setShowPassword,
   showConfirmPassword,
   setShowConfirmPassword,
+  faculty,
+  setFaculty,
+  customFaculty,
+  setCustomFaculty,
+  openDropdown,
+  setOpenDropdown,
+  CustomDropdown,
+  handleFacultyChange,
+  facultyError,
+  customFacultyError,
+  setCustomFacultyError,
 }) {
   return (
     <>
@@ -33,6 +44,42 @@ function SignUpFields({
         placeholder="Enter your email"
         isPasswordField={false}
       />
+
+      <div>
+        <label className="block text-sm font-medium text-gray-900 mb-2">Faculty</label>
+        <CustomDropdown
+          label="faculty"
+          value={faculty === "Others" || (customFaculty && faculty !== "FCI" && faculty !== "FOM" && faculty !== "FCM" && faculty !== "FAC" && faculty !== "FAIE") ? "Others" : faculty}
+          options={[
+            { value: "FCI", label: "FCI - Faculty of Computing and Informatics" },
+            { value: "FOM", label: "FOM - Faculty of Accountancy and Management" },
+            { value: "FCM", label: "FCM - Faculty of Commerce and Management" },
+            { value: "FAC", label: "FAC - Faculty of Arts and Communication" },
+            { value: "FAIE", label: "FAIE - Faculty of Applied Information and Engineering" },
+            { value: "Others", label: "Others" }
+          ]}
+          onChange={handleFacultyChange}
+          isOpen={openDropdown === "faculty"}
+          hasError={facultyError}
+        />
+        {faculty === "Others" ? (
+          <input
+            type="text"
+            value={customFaculty}
+            onChange={(e) => {
+              setCustomFaculty(e.target.value);
+              setFaculty(e.target.value || "Others");
+              if (e.target.value.trim()) {
+                setCustomFacultyError(false);
+              }
+            }}
+            placeholder="Enter your faculty name"
+            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 mt-2 transition-all ${
+              customFacultyError ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-blue-500'
+            }`}
+          />
+        ) : null}
+      </div>
 
       <LoginInputField
         label="Password"

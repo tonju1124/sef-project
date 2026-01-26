@@ -1,7 +1,44 @@
 function LoginSignupSidebar() {
   return (
     <div className="hidden lg:flex lg:w-1/2 bg-linear-to-br from-bg-gradient-start to-bg-gradient-end text-white flex-col items-center justify-center p-12">
-      <div className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-lg mb-6">
+      <style>
+        {`
+          @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+          }
+          @keyframes slideInLeft {
+            from { 
+              opacity: 0;
+              transform: translateX(-30px);
+            }
+            to { 
+              opacity: 1;
+              transform: translateX(0);
+            }
+          }
+          @keyframes slideInUp {
+            from { 
+              opacity: 0;
+              transform: translateY(30px);
+            }
+            to { 
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
+          .animate-fade-in {
+            animation: fadeIn 0.6s ease-out;
+          }
+          .animate-slide-in-left {
+            animation: slideInLeft 0.6s ease-out;
+          }
+          .animate-slide-in-up {
+            animation: slideInUp 0.6s ease-out 0.2s both;
+          }
+        `}
+      </style>
+      <div className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-lg mb-6 animate-fade-in">
         <svg
           className="w-8 h-8 text-black"
           fill="none"
@@ -16,7 +53,7 @@ function LoginSignupSidebar() {
           />
         </svg>
       </div>
-      <h2 className="text-5xl font-bold text-center align-middle w-[40%]">
+      <h2 className="text-5xl font-bold text-center align-middle w-[40%] animate-slide-in-up">
         {" "}
         Welcome to ArticleAPRT
       </h2>
