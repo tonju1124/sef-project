@@ -11,6 +11,7 @@ import Analytics from './Analytics.jsx'
 import Verification from './Verification.jsx'
 import UserPublication from './UserPublication.jsx'
 import UserProfile from './UserProfile.jsx'
+import Bookmark from './Bookmark.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -25,6 +26,7 @@ createRoot(document.getElementById('root')).render(
         <Route path="/verification" element={<Verification />} />
         <Route path="/user-publication" element={<UserPublication />} />
         <Route path="/profile" element={<UserProfile />} />
+        <Route path="/bookmark" element={<Bookmark />} />
       </Routes>
     </Router>
   </StrictMode>,

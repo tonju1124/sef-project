@@ -6,6 +6,7 @@ export const publications = [
     coauthor: "Jane Smith",
     uploadDate: "2024-01-15",
     description: "A comprehensive study on modern development practices",
+    bookmarked: true,
   },
   {
     id: 2,
@@ -14,6 +15,7 @@ export const publications = [
     coauthor: "Bob Johnson",
     uploadDate: "2024-01-10",
     description: "Research findings on technology trends",
+    bookmarked: false,
   },
   {
     id: 3,
@@ -22,6 +24,7 @@ export const publications = [
     coauthor: "TomeGlow",
     uploadDate: "1956-01-10",
     description: "arono",
+    bookmarked: true,
   },
   {
     id: 4,
@@ -30,6 +33,7 @@ export const publications = [
     coauthor: "-",
     uploadDate: "2023-12-01",
     description: "這是我人生中的第一本書，記錄了我的成長與學習歷程。",
+    bookmarked: false,
   },
   {
     id: 5,
@@ -38,6 +42,7 @@ export const publications = [
     coauthor: "Mike Chen",
     uploadDate: "2024-01-20",
     description: "Practical applications of machine learning algorithms in real-world scenarios",
+    bookmarked: true,
   },
   {
     id: 6,
@@ -46,6 +51,7 @@ export const publications = [
     coauthor: "Lisa Wong",
     uploadDate: "2024-01-18",
     description: "Best practices for designing scalable and reliable cloud infrastructure",
+    bookmarked: false,
   },
   {
     id: 7,
@@ -54,6 +60,7 @@ export const publications = [
     coauthor: "James Brown",
     uploadDate: "2024-01-12",
     description: "Essential concepts and techniques for analyzing large datasets",
+    bookmarked: true,
   },
   {
     id: 8,
@@ -62,6 +69,7 @@ export const publications = [
     coauthor: "Anna Lee",
     uploadDate: "2024-01-08",
     description: "Comprehensive guide to protecting web applications from common vulnerabilities",
+    bookmarked: false,
   },
   {
     id: 9,
@@ -70,6 +78,7 @@ export const publications = [
     coauthor: "Prof. Alan Grant",
     uploadDate: "2024-01-05",
     description: "Exploring ethical implications and considerations in AI development",
+    bookmarked: true,
   },
   {
     id: 10,
@@ -78,6 +87,7 @@ export const publications = [
     coauthor: "Maya Patel",
     uploadDate: "2023-12-28",
     description: "Modern approaches to software development and operations integration",
+    bookmarked: false,
   },
   {
     id: 11,
@@ -86,6 +96,7 @@ export const publications = [
     coauthor: "Tom Harris",
     uploadDate: "2023-12-22",
     description: "Real-world use cases and implementation strategies for blockchain systems",
+    bookmarked: true,
   },
   {
     id: 12,
@@ -94,5 +105,6 @@ export const publications = [
     coauthor: "Rachel Green",
     uploadDate: "2023-12-15",
     description: "Internet of Things technologies enabling smart city infrastructure and services",
+    bookmarked: false,
   },
 ];
