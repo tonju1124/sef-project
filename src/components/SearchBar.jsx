@@ -1,4 +1,12 @@
 function SearchBar({ value, onChange, placeholder = "Search..." }) {
+  const handleChange = (e) => {
+    onChange(e.target.value);
+  };
+
+  const handleClear = () => {
+    onChange('');
+  };
+
   return (
     <div className="mb-6">
       <div className="relative w-full">
@@ -6,12 +14,12 @@ function SearchBar({ value, onChange, placeholder = "Search..." }) {
           type="text"
           placeholder={placeholder}
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={handleChange}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:bg-gray-100 focus:border-gray-100 focus:shadow-sm hover:bg-gray-100 hover:border-gray-100 hover:shadow-sm transition-colors duration-300"
         />
         {value && (
           <button
-            onClick={() => onChange('')}
+            onClick={handleClear}
             className="absolute right-12 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

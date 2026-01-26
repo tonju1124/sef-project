@@ -30,6 +30,7 @@ function UserProfileCard() {
         ...prev,
         faculty: "Others"
       }));
+      setCustomFaculty("");
     } else {
       setFormData(prev => ({
         ...prev,
@@ -39,12 +40,18 @@ function UserProfileCard() {
     }
   };
 
+  const handleCustomFacultyChange = (e) => {
+    const value = e.target.value;
+    setCustomFaculty(value);
+  };
+
   const handleSave = () => {
     setIsEditing(false);
     // Clean up bio - if only whitespace, set to empty
     const cleanedData = {
       ...formData,
-      bio: formData.bio.trim() === '' ? '' : formData.bio
+      bio: formData.bio.trim() === '' ? '' : formData.bio,
+      faculty: customFaculty && formData.faculty === "Others" ? customFaculty : formData.faculty
     };
     console.log("Saved:", cleanedData);
     setFormData(cleanedData);
@@ -254,13 +261,7 @@ function UserProfileCard() {
                   <input
                     type="text"
                     value={customFaculty}
-                    onChange={(e) => {
-                      setCustomFaculty(e.target.value);
-                      setFormData(prev => ({
-                        ...prev,
-                        faculty: e.target.value || "Others"
-                      }));
-                    }}
+                    onChange={handleCustomFacultyChange}
                     placeholder="Enter your faculty name"
                     className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 mt-2"
                   />

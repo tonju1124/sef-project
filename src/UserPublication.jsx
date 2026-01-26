@@ -17,13 +17,30 @@ function UserPublication() {
   // Filter publications by current user
   const userPublications = publications.filter(pub => pub.author === currentUser);
 
-  // Further filter by search
+  // Further filter by search with improved logic
   const filteredPublications = searchValue.trim() === ''
     ? userPublications
-    : userPublications.filter(pub =>
-        pub.title.toLowerCase().includes(searchValue.toLowerCase()) ||
-        pub.description.toLowerCase().includes(searchValue.toLowerCase())
-      );
+    : userPublications.filter(pub => {
+        const searchLower = searchValue.toLowerCase().trim();
+        
+        // Direct matches
+        const titleMatch = pub.title.toLowerCase().includes(searchLower);
+        const descriptionMatch = pub.description.toLowerCase().includes(searchLower);
+        
+        if (titleMatch || descriptionMatch) {
+          return true;
+        }
+        
+        // Keyword-based matching
+        const searchWords = searchLower.split(/\s+/).filter(word => word.length > 0);
+        const descriptionLower = pub.description.toLowerCase();
+        const titleLower = pub.title.toLowerCase();
+        
+        return searchWords.some(word => 
+          (descriptionLower.includes(word) && word.length >= 2) || 
+          (titleLower.includes(word) && word.length >= 2)
+        );
+      });
 
   const formatDate = (dateString) => {
     const [year, month, day] = dateString.split('-');
