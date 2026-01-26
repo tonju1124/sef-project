@@ -31,19 +31,28 @@ function MainPage() {
   const filteredPublications = searchValue.trim() === ''
     ? publications
     : publications.filter(pub => {
-        const searchLower = searchValue.toLowerCase();
+        const searchLower = searchValue.toLowerCase().trim();
+        
+        // Direct matches
         const titleMatch = pub.title.toLowerCase().includes(searchLower);
         const authorMatch = pub.author.toLowerCase().includes(searchLower);
+        const coauthorMatch = pub.coauthor.toLowerCase().includes(searchLower);
         const descriptionMatch = pub.description.toLowerCase().includes(searchLower);
         
-        // Extract keywords from search and description for better matching
-        const searchKeywords = searchLower.split(/\s+/);
-        const descriptionKeywords = pub.description.toLowerCase().split(/\s+/);
-        const keywordMatches = searchKeywords.some(keyword =>
-          descriptionKeywords.some(descKeyword => descKeyword.includes(keyword) && keyword.length > 2)
-        );
+        // If any direct match, include it
+        if (titleMatch || authorMatch || coauthorMatch || descriptionMatch) {
+          return true;
+        }
         
-        return titleMatch || authorMatch || descriptionMatch || keywordMatches;
+        // Keyword-based matching for partial words
+        const searchWords = searchLower.split(/\s+/).filter(word => word.length > 0);
+        const descriptionLower = pub.description.toLowerCase();
+        const titleLower = pub.title.toLowerCase();
+        
+        return searchWords.some(word => 
+          (descriptionLower.includes(word) && word.length >= 2) || 
+          (titleLower.includes(word) && word.length >= 2)
+        );
       });
 
   // Sort publications based on sortBy
@@ -73,7 +82,7 @@ function MainPage() {
         <div className="border-b border-gray-300 w-full mb-4"></div>
         <SearchBar
           value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
+          onChange={setSearchValue}
           placeholder="Search your publications..."
         />
         <div className="flex items-center justify-between mt-6 px-0">

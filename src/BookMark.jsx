@@ -32,7 +32,7 @@ function Bookmark() {
         <div className="border-b border-gray-300 w-full mb-4"></div>
         <SearchBar
           value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
+          onChange={setSearchValue}
           placeholder="Search bookmarks..."
         />
         <div className="mt-6">
