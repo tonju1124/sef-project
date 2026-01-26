@@ -5,30 +5,56 @@ import PublicationCard from './components/PublicationCard';
 import UploadPublicationButton from './components/MainPage/UploadPublicationButton';
 import FilterDropdown from './components/MainPage/FilterDropdown';
 import { publications } from './data/publications';
+import SearchBar from './components/SearchBar';
 
 function MainPage() {
   const [navOpen, setNavOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
-  const [timeFilter, setTimeFilter] = useState('All time');
-  const [sortBy, setSortBy] = useState('Sort By');
-  const [timeOpen, setTimeOpen] = useState(false);
+  const [sortBy, setSortBy] = useState('Newest');
   const [sortOpen, setSortOpen] = useState(false);
-  const [timePos, setTimePos] = useState({ top: 0, left: 0 });
   const [sortPos, setSortPos] = useState({ top: 0, left: 0 });
 
-  const timeOptions = ['All time', 'Last week', 'Last month', 'Last year'];
-  const sortOptions = ['Sort By', 'Newest', 'Oldest', 'Most Popular'];
-
-  const handleTimeOpen = (pos) => {
-    setTimePos(pos);
-    setTimeOpen(!timeOpen);
-  };
+  const sortOptions = ['Newest', 'Oldest', 'Most Popular'];
 
   const handleSortOpen = (pos) => {
     setSortPos(pos);
     setSortOpen(!sortOpen);
   };
+
+  // Smart search - searches title, author, and description with keyword matching
+  const filteredPublications = searchValue.trim() === ''
+    ? publications
+    : publications.filter(pub => {
+        const searchLower = searchValue.toLowerCase();
+        const titleMatch = pub.title.toLowerCase().includes(searchLower);
+        const authorMatch = pub.author.toLowerCase().includes(searchLower);
+        const descriptionMatch = pub.description.toLowerCase().includes(searchLower);
+        
+        // Extract keywords from search and description for better matching
+        const searchKeywords = searchLower.split(/\s+/);
+        const descriptionKeywords = pub.description.toLowerCase().split(/\s+/);
+        const keywordMatches = searchKeywords.some(keyword =>
+          descriptionKeywords.some(descKeyword => descKeyword.includes(keyword) && keyword.length > 2)
+        );
+        
+        return titleMatch || authorMatch || descriptionMatch || keywordMatches;
+      });
+
+  // Sort publications based on sortBy
+  const sortedPublications = [...filteredPublications].sort((a, b) => {
+    switch (sortBy) {
+      case 'Newest':
+        return new Date(b.uploadDate) - new Date(a.uploadDate);
+      case 'Oldest':
+        return new Date(a.uploadDate) - new Date(b.uploadDate);
+      case 'Most Popular':
+        // Assuming 'Most Popular' is based on newest by default, can be updated
+        return new Date(b.uploadDate) - new Date(a.uploadDate);
+      default:
+        return 0;
+    }
+  });
 
   return (
     <div className="min-h-screen bg-white text-black flex flex-col items-center justify-center relative select-none">
@@ -37,41 +63,15 @@ function MainPage() {
 
       <div className={`fixed inset-0 z-20 flex px-20 py-16 justify-center pointer-events-none overflow-y-auto pb-4 ${navOpen ? 'blur-xs' : ''}`}>
         <div className="text-center pointer-events-auto w-full px-6 pr-20">
-          <div className="relative w-full">
-            <input
-              type="text"
-              placeholder="Search..."
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:bg-gray-100 focus:border-gray-100 focus:shadow-sm hover:bg-gray-100 hover:border-gray-100 hover:shadow-sm transition-colors duration-300"
-            />
-            <button
-              onClick={() => setSearchValue('')}
-              className="absolute right-12 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-            <button className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </button>
-          </div>
+         <SearchBar 
+          value={searchValue} 
+          onChange={setSearchValue}
+          placeholder="Search publications..."
+        />
 
           {/* Filter System */}
           <div className="flex items-center justify-between mt-6 px-0">
             <div className="flex items-center gap-4">
-              <FilterDropdown
-                label="All time"
-                value={timeFilter}
-                options={timeOptions}
-                isOpen={timeOpen}
-                onToggle={handleTimeOpen}
-                onSelect={setTimeFilter}
-                dropdownPos={timePos}
-              />
               <FilterDropdown
                 label="Sort By"
                 value={sortBy}
@@ -89,7 +89,7 @@ function MainPage() {
 
           {/* Publications List */}
           <div className="mt-4 w-full items-start text-left">
-            {publications.map((pub) => (
+            {sortedPublications.map((pub) => (
               <PublicationCard
                 key={pub.id}
                 title={pub.title}
@@ -99,6 +99,9 @@ function MainPage() {
                 description={pub.description}
               />
             ))}
+            {filteredPublications.length === 0 && (
+              <p className="text-center text-gray-500 mt-8">No publications found</p>
+            )}
           </div>
         </div>
       </div>
