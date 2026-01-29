@@ -17,7 +17,7 @@ function NavigationSidebar({ navOpen, setNavOpen }) {
   ];
 
   const adminItems = [
-    { label: "Announcement", path: "/admin", section: "announcements", icon: "announcement" },
+    { label: "Announcement", path: "/announcement", icon: "announcement" },
     { label: "User Management", path: "/admin", section: "users", icon: "users" },
     { label: "Hide Publication", path: "/admin", section: "dashboard", icon: "hide" }
   ];
@@ -30,7 +30,7 @@ function NavigationSidebar({ navOpen, setNavOpen }) {
       notification: <svg className="w-5 h-5" fill="black" viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>,
       analytics: <svg className="w-5 h-5" fill="black" viewBox="0 0 24 24"><path d="M3 13h2v8H3zm4-8h2v16H7zm4-2h2v18h-2zm4-1h2v19h-2zm4 4h2v15h-2z"/></svg>,
       verification: <svg className="w-5 h-5" fill="black" viewBox="0 0 24 24"><path d="M10 15l-3.5-3.5a1 1 0 0 0-1.414 1.414l4.207 4.207a1 1 0 0 0 1.414 0l9.9-9.9a1 1 0 0 0-1.414-1.414L10 15z"/></svg>,
-      announcement: <svg className="w-5 h-5" fill="black" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>,
+      announcement: <svg className="w-5 h-5" fill="black" viewBox="0 0 24 24"><path d="M13 2.5a1.5 1.5 0 0 1 3 0v11a1.5 1.5 0 0 1-3 0zm-1 .724c-2.067.95-4.539 1.481-7 1.656v6.237a25 25 0 0 1 1.088.085c2.053.204 4.038.668 5.912 1.56zm-8 7.841V4.934c-.68.027-1.399.043-2.008.053A2.02 2.02 0 0 0 0 7v2c0 1.106.896 1.996 1.994 2.009l.496.008a64 64 0 0 1 1.51.048m1.39 1.081q.428.032.85.078l.253 1.69a1 1 0 0 1-.983 1.187h-.548a1 1 0 0 1-.916-.599l-1.314-2.48a66 66 0 0 1 1.692.064q.491.026.966.06"/></svg>,
       users: <svg className="w-5 h-5" fill="black" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.89 1.97 1.74 1.97 2.95V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>,
       hide: <svg className="w-5 h-5" fill="black" viewBox="0 0 24 24"><path d="M12 7c2.76 0 5 2.24 5 5s-2.24 5-5 5-5-2.24-5-5 2.24-5 5-5zm0-2C6.48 5 2 8.13 2 12s4.48 7 10 7 10-3.13 10-7-4.48-7-10-7zm0 10c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/></svg>,
     };

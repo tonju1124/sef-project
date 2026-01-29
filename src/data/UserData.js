@@ -29,6 +29,8 @@ export const adminUser = {
       'Machine Learning Fundamentals',
       'Data Science Review',
       'AI Ethics in 2026',
+      'Advances in Computer Vision',
+      'Cybersecurity Trends',
     ],
     chapter: [
       'Introduction to Deep Learning',

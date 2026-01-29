@@ -1,38 +1,44 @@
-function CategoryCard({ category, count, isExpanded, onToggle, articles }) {
+function CategoryCard({ category, count, isExpanded, onToggle, publications = [] }) {
   return (
-    <div className="border border-gray-300 rounded-lg overflow-hidden">
+    <div>
       <button
         onClick={onToggle}
-        className="w-full p-6 text-left hover:bg-gray-100 transition-colors"
+        className="flex items-center justify-between w-full px-5 py-3 border border-gray-300 rounded hover:bg-gray-100 transition-colors text-left cursor-pointer group"
       >
-        <div className="flex justify-between items-center">
-          <h3 className="text-2xl font-semibold">{category}</h3>
-          <div className="flex items-center gap-2">
-            <span className="text-2xl font-bold">{count}</span>
-            <svg
-              className={`w-5 h-5 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 9l6 6 6-6" />
-            </svg>
-          </div>
+        <span className="text-2xl text-gray-800 transition-transform group-hover:scale-105">{category}</span>
+        <div className="flex items-center gap-2">
+          <span className="text-2xl text-gray-800 transition-transform group-hover:scale-105">{count}</span>
+          <svg
+            className={`w-5 h-5 text-gray-600 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+            fill="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path d="M7 10l5 5 5-5z" />
+          </svg>
         </div>
       </button>
-      {isExpanded && (
-        <div className="border-t border-gray-300 p-6 bg-gray-50 max-h-40 overflow-y-auto">
-          {articles.length > 0 ? (
-            <ul className="space-y-2">
-              {articles.map((article, idx) => (
-                <li key={idx} className="text-sm text-gray-700">• {article}</li>
-              ))}
-            </ul>
+
+      <div
+        className={`overflow-hidden transition-all duration-400 ease-in-out ${
+          isExpanded ? 'max-h-96' : 'max-h-0'
+        }`}
+      >
+        <div className="bg-gray-50 border border-t-0 border-gray-300 rounded-b p-5">
+          {publications.length > 0 ? (
+            <div className="max-h-30 overflow-y-auto">
+              <ul className="space-y">
+                {publications.map((pub, idx) => (
+                  <li key={idx} className="text-gray-700 text-base px-2 py-2 rounded hover:bg-gray-200 transition-colors cursor-pointer">
+                    {pub.title || pub}
+                  </li>
+                ))}
+              </ul>
+            </div>
           ) : (
-            <p className="text-sm text-gray-500">No articles saved</p>
+            <p className="text-gray-600 text-base">No publications in this category.</p>
           )}
         </div>
-      )}
+      </div>
     </div>
   );
 }
