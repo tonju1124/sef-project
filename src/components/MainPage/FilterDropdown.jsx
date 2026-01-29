@@ -1,20 +1,33 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 
 function FilterDropdown({ label, value, options, isOpen, onToggle, onSelect, dropdownPos }) {
   const buttonRef = useRef(null);
+  const dropdownRef = useRef(null);
 
   const handleOpen = () => {
-    if (buttonRef.current) {
-      const rect = buttonRef.current.getBoundingClientRect();
-      onToggle({
-        top: rect.bottom,
-        left: rect.left,
-      });
-    }
+    onToggle(!isOpen);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        if (isOpen) {
+          onToggle(false);
+        }
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen, onToggle]);
+
   return (
-    <div className="relative">
+    <div className="relative inline-block" ref={dropdownRef}>
       <button
         ref={buttonRef}
         onClick={handleOpen}
@@ -26,13 +39,9 @@ function FilterDropdown({ label, value, options, isOpen, onToggle, onSelect, dro
         </svg>
       </button>
       <div
-        className={`fixed bg-white border border-gray-300 rounded-lg shadow-lg z-50 transition-all duration-300 ${
+        className={`absolute top-full left-0 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg z-50 transition-all duration-300 min-w-max ${
           isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
         }`}
-        style={{
-          top: `${dropdownPos.top}px`,
-          left: `${dropdownPos.left}px`,
-        }}
         onClick={(e) => {
           const option = e.target.textContent;
           if (options.includes(option)) {

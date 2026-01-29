@@ -3,19 +3,23 @@ import NavigationSidebar from "./components/NavigationSidebar";
 import UserDropdown from "./components/UserDropdown";
 import SearchBar from "./components/SearchBar";
 import PublicationCard from "./components/PublicationCard";
+import { useUser } from "./context/UserContext";
 import { publications } from "./data/publications";
 
 function UserPublication() {
   const [navOpen, setNavOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+  const { user } = useUser();
 
-  // For demo purposes, assume current user is "John Doe"
-  // In a real app, this would come from user context/auth
-  const currentUser = "John Doe";
-
-  // Filter publications by current user
-  const userPublications = publications.filter(pub => pub.author === currentUser);
+  // Get user's own publications from context
+  const ownPublications = user.publications;
+  
+  // Get publications where user is a co-author (from global publications list)
+  const coAuthorPublications = publications.filter(pub => pub.coauthor === user.name);
+  
+  // Combine both own and co-authored publications
+  const userPublications = [...ownPublications, ...coAuthorPublications];
 
   // Further filter by search with improved logic
   const filteredPublications = searchValue.trim() === ''

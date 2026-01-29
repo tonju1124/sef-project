@@ -1,7 +1,11 @@
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '../context/UserContext';
+import { useState } from 'react';
 
 function UserDropdown({ navOpen, userOpen, setUserOpen }) {
   const navigate = useNavigate();
+  const { user } = useUser();
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
   const userMenuItems = [
     { label: "Profile", path: "/profile" },
@@ -9,21 +13,38 @@ function UserDropdown({ navOpen, userOpen, setUserOpen }) {
   ];
 
   const handleMenuClick = (path) => {
-    navigate(path);
-    setUserOpen(false);
+    if (path === "/login") {
+      setIsTransitioning(true);
+      setTimeout(() => {
+        navigate(path);
+        setUserOpen(false);
+        setIsTransitioning(false);
+      }, 500);
+    } else {
+      navigate(path);
+      setUserOpen(false);
+    }
   };
 
   return (
     <>
+      {/* Transition Overlay */}
+      {isTransitioning && (
+        <div className="fixed inset-0 bg-white z-50 animate-pulse opacity-0 transition-opacity duration-500" />
+      )}
+
+      {/* Page Fade Out */}
+      <div className={`fixed inset-0 bg-white z-40 pointer-events-none transition-opacity duration-500 ${isTransitioning ? 'opacity-50' : 'opacity-0'}`} />
       {/* User Profile Button */}
       <button
-        onClick={() => setUserOpen(!userOpen)}
-        className={`fixed top-4 right-4 z-45 flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded hover:bg-gray-50 transition-colors ${navOpen ? 'blur-xs' : ''}`}
+        onClick={() => !navOpen && setUserOpen(!userOpen)}
+        disabled={navOpen}
+        className={`fixed top-4 right-4 z-45 flex items-center gap-2 px-4 py-2 bg-white border border-gray-300 rounded hover:bg-gray-50 transition-colors ${navOpen ? 'pointer-events-none opacity-50' : ''}`}
       >
         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
           <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
         </svg>
-        <span className="text-sm font-medium">John Doe</span>
+        <span className="text-sm font-medium">{user.name}</span>
         <svg className={`w-4 h-4 transition-transform ${userOpen ? 'rotate-180' : ''}`} fill="currentColor" viewBox="0 0 24 24">
           <path d="M7 10l5 5 5-5z" />
         </svg>

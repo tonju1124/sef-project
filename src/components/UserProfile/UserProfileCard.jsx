@@ -1,20 +1,35 @@
 import { useState, useRef, useEffect } from "react";
+import { useUser } from "../../context/UserContext";
 
 function UserProfileCard() {
+  const { user } = useUser();
   const [isEditing, setIsEditing] = useState(false);
   const [bioExpanded, setBioExpanded] = useState(false);
   const [customFaculty, setCustomFaculty] = useState("");
   const [openDropdown, setOpenDropdown] = useState(null);
   const dropdownRef = useRef(null);
   const [formData, setFormData] = useState({
-    title: "Mr.",
-    name: "John Doe",
-    faculty: "FCI",
-    email: "john.doe@example.com",
-    scholarLink: "https://scholar.google.com",
-    phone: "+60 12-3456789",
-    bio: "Passionate about computer science and technology"
+    title: user.title,
+    name: user.name,
+    faculty: user.faculty,
+    email: user.email,
+    scholarLink: user.scholarLink,
+    phone: user.phone,
+    bio: user.bio
   });
+
+  // Update form when user changes
+  useEffect(() => {
+    setFormData({
+      title: user.title,
+      name: user.name,
+      faculty: user.faculty,
+      email: user.email,
+      scholarLink: user.scholarLink,
+      phone: user.phone,
+      bio: user.bio
+    });
+  }, [user]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
