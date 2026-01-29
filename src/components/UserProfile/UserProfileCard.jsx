@@ -8,6 +8,8 @@ function UserProfileCard() {
   const [customFaculty, setCustomFaculty] = useState("");
   const [openDropdown, setOpenDropdown] = useState(null);
   const dropdownRef = useRef(null);
+  const titleDropdownRef = useRef(null);
+  const facultyDropdownRef = useRef(null);
   const [formData, setFormData] = useState({
     title: user.title,
     name: user.name,
@@ -77,7 +79,10 @@ function UserProfileCard() {
   // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      if (
+        (titleDropdownRef.current && !titleDropdownRef.current.contains(event.target)) &&
+        (facultyDropdownRef.current && !facultyDropdownRef.current.contains(event.target))
+      ) {
         setOpenDropdown(null);
       }
     }
@@ -86,7 +91,7 @@ function UserProfileCard() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const CustomDropdown = ({ label, value, options, onChange, isOpen }) => (
+  const CustomDropdown = ({ label, value, options, onChange, isOpen, dropdownRef }) => (
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={() => setOpenDropdown(isOpen ? null : label)}
@@ -239,6 +244,7 @@ function UserProfileCard() {
                   ]}
                   onChange={(value) => setFormData(prev => ({ ...prev, title: value }))}
                   isOpen={openDropdown === "title"}
+                  dropdownRef={titleDropdownRef}
                 />
               </div>
 
@@ -271,6 +277,7 @@ function UserProfileCard() {
                   ]}
                   onChange={handleFacultyChange}
                   isOpen={openDropdown === "faculty"}
+                  dropdownRef={facultyDropdownRef}
                 />
                 {formData.faculty === "Others" ? (
                   <input

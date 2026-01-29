@@ -1,18 +1,22 @@
 import React, { createContext, useState, useContext } from 'react';
-import { adminUser, studentUser } from '../data/UserData';
+import { adminUser, studentUser, lecturerUser, coordinatorUser } from '../data/UserData';
 
 // Create the context
 const UserContext = createContext();
 
 // Create the provider component
 export function UserProvider({ children }) {
-  const [user, setUser] = useState(studentUser);
+  const [user, setUser] = useState(adminUser);
 
   const switchUser = (role) => {
     if (role === 'admin') {
       setUser(adminUser);
     } else if (role === 'student') {
       setUser(studentUser);
+    } else if (role === 'lecturer') {
+      setUser(lecturerUser);
+    } else if (role === 'coordinator') {
+      setUser(coordinatorUser);
     }
   };
 
