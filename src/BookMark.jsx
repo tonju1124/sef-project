@@ -3,17 +3,17 @@ import NavigationSidebar from "./components/NavigationSidebar";
 import UserDropdown from "./components/UserDropdown";
 import SearchBar from "./components/SearchBar";
 import PublicationCard from "./components/PublicationCard";
+import { useUser } from "./context/UserContext";
 import { publications } from "./data/publications";
 
 function Bookmark() {
   const [navOpen, setNavOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
-  const [bookmarkedIds, setBookmarkedIds] = useState(new Set());
-  const currentUser = "John Doe";
+  const { user } = useUser();
 
   const filteredPublications = publications
-    .filter((publication) => publication.bookmarked)
+    .filter((publication) => user.bookmarks.includes(publication.id))
     .filter((publication) =>
       publication.title.toLowerCase().includes(searchValue.toLowerCase()) ||
       publication.author.toLowerCase().includes(searchValue.toLowerCase())

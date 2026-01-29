@@ -3,16 +3,27 @@ import NavigationSidebar from './components/NavigationSidebar';
 import UserDropdown from './components/UserDropdown';
 import CategoryCard from './components/analytics/CategoryCard';
 import SearchBar from './components/SearchBar';
-import { articlesByCategory, categories, getCategoryCount, getTotalPublications } from './data/Analytics';
+import { useUser } from './context/UserContext';
 
 function Analytics() {
   const [navOpen, setNavOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);
   const [expandedCategory, setExpandedCategory] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const { user } = useUser();
+
+  const articlesByCategory = user.analytics;
+  const categories = Object.keys(articlesByCategory).map(key => ({
+    id: key,
+    label: key.charAt(0).toUpperCase() + key.slice(1)
+  }));
 
   const toggleCategory = (category) => {
     setExpandedCategory(expandedCategory === category ? null : category);
+  };
+
+  const getTotalPublications = () => {
+    return Object.values(articlesByCategory).reduce((total, articles) => total + articles.length, 0);
   };
 
   const totalPublications = getTotalPublications();

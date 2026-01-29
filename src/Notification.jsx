@@ -2,12 +2,13 @@ import { useState } from 'react';
 import NavigationSidebar from './components/NavigationSidebar';
 import UserDropdown from './components/UserDropdown';
 import NotificationCard from './components/Notification/NotificationCard';
-import notifications from './data/notifications';
+import { useUser } from './context/UserContext';
 
 function Notification() {
 
       const [navOpen, setNavOpen] = useState(false);
       const [userOpen, setUserOpen] = useState(false);
+      const { user } = useUser();
 
     return (
         <div className="min-h-screen bg-white text-black flex flex-col items-start justify-start relative select-none pt-20 pl-20 page-transition">
@@ -19,12 +20,12 @@ function Notification() {
                 
                 {/* Notification Items */}
                 <div className="mt-4 w-full items-start text-left space-y-4">
-                  {notifications.map((notif) => (
+                  {user.notifications.map((notif) => (
                     <NotificationCard
                       key={notif.id}
-                      title={notif.title}
-                      timestamp={notif.timestamp}
-                      description={notif.description}
+                      title={notif.message}
+                      timestamp={notif.date}
+                      description={notif.message}
                     />
                   ))}
                 </div>
