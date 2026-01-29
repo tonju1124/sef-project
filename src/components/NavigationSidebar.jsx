@@ -18,7 +18,7 @@ function NavigationSidebar({ navOpen, setNavOpen }) {
 
   const adminItems = [
     { label: "Announcement", path: "/announcement", icon: "announcement" },
-    { label: "User Management", path: "/admin", section: "users", icon: "users" },
+    { label: "User Management", path: "/adminusermanagement", section: "users", icon: "users" },
     { label: "Hide Publication", path: "/admin", section: "dashboard", icon: "hide" }
   ];
 
@@ -61,7 +61,7 @@ function NavigationSidebar({ navOpen, setNavOpen }) {
 
       {/* Navigation Sidebar */}
       <nav
-        className={`fixed left-0 top-0 h-screen w-64 rounded-xl bg-gray-100 border border-gray-300 z-40 transform transition-transform duration-300 ease-in-out shadow-xl ${
+        className={`fixed left-0 top-0 h-screen w-64 rounded-xl bg-linear-to-b from-gray-100 to-gray-50 border border-gray-300 z-40 transform transition-transform duration-300 ease-in-out shadow-xl ${
           navOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >

@@ -27,6 +27,26 @@ export default function UserSwitcher() {
       >
         Student
       </button>
+      <button
+        onClick={() => switchUser('lecturer')}
+        className={`px-4 py-2 rounded-lg font-semibold transition ${
+          user.role === 'lecturer'
+            ? 'bg-blue-600 text-white'
+            : 'bg-gray-300 text-gray-700 hover:bg-gray-400'
+        }`}
+      >
+        Lecturer
+      </button>
+      <button
+        onClick={() => switchUser('coordinator')}
+        className={`px-4 py-2 rounded-lg font-semibold transition ${
+          user.role === 'coordinator'
+            ? 'bg-blue-600 text-white'
+            : 'bg-gray-300 text-gray-700 hover:bg-gray-400'
+        }`}
+      >
+        Coordinator
+      </button>
     </div>
   );
 }
