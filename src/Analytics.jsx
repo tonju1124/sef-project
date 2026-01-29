@@ -78,7 +78,7 @@ function Analytics() {
               count={getFilteredArticles(cat.id).length}
               isExpanded={expandedCategory === cat.id}
               onToggle={() => toggleCategory(cat.id)}
-              articles={getFilteredArticles(cat.id)}
+              publications={getFilteredArticles(cat.id)}
             />
           ))}
         </div>

@@ -14,6 +14,7 @@ import Verification from './Verification.jsx'
 import UserPublication from './UserPublication.jsx'
 import UserProfile from './UserProfile.jsx'
 import Bookmark from './Bookmark.jsx'
+import AdminAnnouncement from './AdminAnnouncement.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -31,6 +32,7 @@ createRoot(document.getElementById('root')).render(
           <Route path="/user-publication" element={<UserPublication />} />
           <Route path="/profile" element={<UserProfile />} />
           <Route path="/bookmark" element={<Bookmark />} />
+          <Route path="/announcement" element={<AdminAnnouncement />} />
         </Routes>
       </Router>
     </UserProvider>
