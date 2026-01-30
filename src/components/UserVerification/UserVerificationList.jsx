@@ -1,7 +1,13 @@
 import { useUser } from "../../context/UserContext";
+import { publications } from "../../data/publications";
 
 function UserVerification() {
   const { user } = useUser();
+
+  // Get publications where current user is author or coauthor
+  const userPublications = publications.filter(
+    pub => pub.author === user.name || pub.coauthor === user.name
+  );
 
   // Format date from YYYY-MM-DD to DD/MM/YYYY
   const formatDate = (dateString) => {
@@ -29,27 +35,25 @@ function UserVerification() {
 
   return (
     <div className="space-y-4">
-      {user.verification.map((item) => (
+      {userPublications.map((publication) => (
         <div
-          key={item.id}
+          key={publication.id}
           className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow duration-300"
         >
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1">
               <h2 className="text-xl font-semibold text-gray-800 mb-2">
-                {item.publicationTitle}
+                {publication.title}
               </h2>
               <p className="text-gray-600 text-sm">
-                Submission Date: {formatDate(item.submissionDate)}
+                Upload Date: {formatDate(publication.uploadDate)}
               </p>
-              {item.verificationDate && (
-                <p className="text-gray-600 text-sm">
-                  Verification Date: {formatDate(item.verificationDate)}
-                </p>
-              )}
+              <p className="text-gray-600 text-sm">
+                Category: {publication.category.charAt(0).toUpperCase() + publication.category.slice(1)}
+              </p>
             </div>
-            <div className={`${getStatusColor(item.status)} px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap`}>
-              {getStatusLabel(item.status)}
+            <div className={`${getStatusColor(publication.status)} px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap`}>
+              {getStatusLabel(publication.status)}
             </div>
           </div>
         </div>

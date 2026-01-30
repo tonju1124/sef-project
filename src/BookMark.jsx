@@ -13,7 +13,9 @@ function Bookmark() {
   const { user } = useUser();
 
   const filteredPublications = publications
-    .filter((publication) => user.bookmarks.includes(publication.id))
+    .filter((publication) => user.bookmarks.includes(publication.id) && 
+      (user.role === "admin" ? true : (!publication.hidden && publication.status === "verified"))
+    )
     .filter((publication) =>
       publication.title.toLowerCase().includes(searchValue.toLowerCase()) ||
       publication.author.toLowerCase().includes(searchValue.toLowerCase())
@@ -40,6 +42,7 @@ function Bookmark() {
             filteredPublications.map((publication) => (
               <PublicationCard
                 key={publication.id}
+                id={publication.id}
                 title={publication.title}
                 author={publication.author}
                 coauthor={publication.coauthor}

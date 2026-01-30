@@ -15,7 +15,8 @@ import UserPublication from './UserPublication.jsx'
 import UserProfile from './UserProfile.jsx'
 import Bookmark from './Bookmark.jsx'
 import AdminAnnouncement from './AdminAnnouncement.jsx'
-import AdminUserManagement from './AdminUserManage.jsx';
+import AdminUserManagement from './AdminUserManage.jsx'
+import HiddenPublication from './AdminHidePublication.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -35,6 +36,7 @@ createRoot(document.getElementById('root')).render(
           <Route path="/bookmark" element={<Bookmark />} />
           <Route path="/announcement" element={<AdminAnnouncement />} />
           <Route path="/adminusermanagement" element={<AdminUserManagement />} />
+          <Route path="/hiddenpublication" element={<HiddenPublication />} />
         </Routes>
       </Router>
     </UserProvider>
