@@ -10,16 +10,15 @@ function UserPublication() {
   const [navOpen, setNavOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+  const [showHideModal, setShowHideModal] = useState(false);
   const { user } = useUser();
 
-  // Get user's own publications from context
-  const ownPublications = user.publications;
-  
-  // Get publications where user is a co-author (from global publications list)
-  const coAuthorPublications = publications.filter(pub => pub.coauthor === user.name);
-  
-  // Combine both own and co-authored publications
-  const userPublications = [...ownPublications, ...coAuthorPublications];
+  // Get publications where current user is author or coauthor from global publications list
+  // Admins see everything, regular users see only verified and not hidden
+  const userPublications = publications.filter(pub => 
+    (pub.author === user.name || pub.coauthor === user.name) && 
+    (user.role === "admin" ? true : (!pub.hidden && pub.status === "verified"))
+  );
 
   // Further filter by search with improved logic
   const filteredPublications = searchValue.trim() === ''
@@ -53,12 +52,12 @@ function UserPublication() {
 
   return (
     <div className="min-h-screen bg-white text-black flex flex-col items-start justify-start relative select-none pt-20 pl-20 page-transition">
-      <NavigationSidebar navOpen={navOpen} setNavOpen={setNavOpen} />
-      <UserDropdown
+      {!showHideModal && <NavigationSidebar navOpen={navOpen} setNavOpen={setNavOpen} />}
+      {!showHideModal && <UserDropdown
         navOpen={navOpen}
         userOpen={userOpen}
         setUserOpen={setUserOpen}
-      />
+      />}
       <div className={`z-20 w-full pr-20 ${navOpen ? "blur-xs" : ""}`}>
         <h1 className="text-3xl font-bold mb-4">My Publication</h1>
         <div className="border-b-2 border-gray-300 w-full mb-6"></div>
@@ -76,11 +75,13 @@ function UserPublication() {
             filteredPublications.map((pub) => (
               <PublicationCard
                 key={pub.id}
+                id={pub.id}
                 title={pub.title}
                 author={pub.author}
                 coauthor={pub.coauthor}
                 uploadDate={formatDate(pub.uploadDate)}
                 description={pub.description}
+                onModalStateChange={setShowHideModal}
               />
             ))
           ) : (

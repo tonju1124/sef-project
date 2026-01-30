@@ -4,8 +4,10 @@ import UserDropdown from './components/UserDropdown';
 import PublicationCard from './components/PublicationCard';
 import UploadPublicationButton from './components/MainPage/UploadPublicationButton';
 import FilterDropdown from './components/MainPage/FilterDropdown';
+import AdminFilterDropdown from './components/MainPage/AdminFilterDropdown';
 import { publications } from './data/publications';
 import SearchBar from './components/SearchBar';
+import { useUser } from './context/UserContext';
 
 function MainPage() {
   const [navOpen, setNavOpen] = useState(false);
@@ -14,8 +16,23 @@ function MainPage() {
   const [sortBy, setSortBy] = useState('Newest');
   const [sortOpen, setSortOpen] = useState(false);
   const [sortPos, setSortPos] = useState({ top: 0, left: 0 });
+  const [adminFilters, setAdminFilters] = useState({
+    hidden: 'All',
+    status: {
+      verified: true,
+      pending: true,
+      rejected: true
+    }
+  });
+  const [refreshKey, setRefreshKey] = useState(0);
+  const { user } = useUser();
 
   const sortOptions = ['Newest', 'Oldest', 'Most Popular'];
+
+  const handleHideConfirm = () => {
+    // Trigger a re-render to apply filters after publication data changes
+    setRefreshKey(prev => prev + 1);
+  };
 
   const handleSortOpen = (pos) => {
     setSortPos(pos);
@@ -27,10 +44,43 @@ function MainPage() {
     setSortOpen(false);
   };
 
+  const handleAdminFilterChange = (filters) => {
+    setAdminFilters(filters);
+  };
+
   // Smart search - searches title, author, and description with keyword matching
+  // Admins see everything (with admin filters), regular users see only verified and not hidden
   const filteredPublications = searchValue.trim() === ''
-    ? publications
+    ? publications.filter(pub => {
+        // Regular users: only verified and not hidden
+        if (user.role !== "admin") {
+          return !pub.hidden && pub.status === "verified";
+        }
+        
+        // Admin filters
+        const hiddenMatch = adminFilters.hidden === 'All' ? true :
+          adminFilters.hidden === 'Hidden' ? pub.hidden :
+          adminFilters.hidden === 'Visible' ? !pub.hidden : true;
+        
+        const statusMatch = adminFilters.status[pub.status];
+        
+        return hiddenMatch && statusMatch;
+      })
     : publications.filter(pub => {
+        // Regular users: only verified and not hidden
+        if (user.role !== "admin" && (pub.hidden || pub.status !== "verified")) return false;
+        
+        // Admin filters
+        if (user.role === "admin") {
+          const hiddenMatch = adminFilters.hidden === 'All' ? true :
+            adminFilters.hidden === 'Hidden' ? pub.hidden :
+            adminFilters.hidden === 'Visible' ? !pub.hidden : true;
+          
+          const statusMatch = adminFilters.status[pub.status];
+          
+          if (!hiddenMatch || !statusMatch) return false;
+        }
+        
         const searchLower = searchValue.toLowerCase().trim();
         
         // Direct matches
@@ -96,6 +146,9 @@ function MainPage() {
               onSelect={handleSortSelect}
               dropdownPos={sortPos}
             />
+            {user.role === "admin" && (
+              <AdminFilterDropdown onFilterChange={handleAdminFilterChange} />
+            )}
           </div>
 
           {/* Upload publication button */}
@@ -106,12 +159,14 @@ function MainPage() {
             sortedPublications.map((pub) => (
               <PublicationCard
                 key={pub.id}
+                id={pub.id}
                 title={pub.title}
                 author={pub.author}
                 coauthor={pub.coauthor}
                 uploadDate={pub.uploadDate}
                 description={pub.description}
                 bookmarked={pub.bookmarked}
+                onHideConfirm={handleHideConfirm}
               />
             ))
           ) : (

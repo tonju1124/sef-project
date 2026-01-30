@@ -19,7 +19,7 @@ function NavigationSidebar({ navOpen, setNavOpen }) {
   const adminItems = [
     { label: "Announcement", path: "/announcement", icon: "announcement" },
     { label: "User Management", path: "/adminusermanagement", section: "users", icon: "users" },
-    { label: "Hide Publication", path: "/admin", section: "dashboard", icon: "hide" }
+    { label: "Hide Publication", path: "/hiddenpublication", section: "dashboard", icon: "hide" }
   ];
 
   const getIcon = (iconName) => {

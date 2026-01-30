@@ -4,6 +4,7 @@ import UserDropdown from './components/UserDropdown';
 import CategoryCard from './components/analytics/CategoryCard';
 import SearchBar from './components/SearchBar';
 import { useUser } from './context/UserContext';
+import { publications } from './data/publications';
 
 function Analytics() {
   const [navOpen, setNavOpen] = useState(false);
@@ -12,7 +13,22 @@ function Analytics() {
   const [searchQuery, setSearchQuery] = useState('');
   const { user } = useUser();
 
-  const articlesByCategory = user.analytics;
+  // Filter publications where current user is author or coauthor
+  // Admins see everything, regular users see only verified and not hidden
+  const userPublications = publications.filter(
+    pub => (pub.author === user.name || pub.coauthor === user.name) && 
+      (user.role === "admin" ? true : (!pub.hidden && pub.status === "verified"))
+  );
+
+  // Group publications by category
+  const articlesByCategory = {
+    journal: userPublications.filter(pub => pub.category === 'journal').map(pub => pub.title),
+    chapter: userPublications.filter(pub => pub.category === 'chapter').map(pub => pub.title),
+    book: userPublications.filter(pub => pub.category === 'book').map(pub => pub.title),
+    proceeding: userPublications.filter(pub => pub.category === 'proceeding').map(pub => pub.title),
+    article: userPublications.filter(pub => pub.category === 'article').map(pub => pub.title),
+  };
+
   const categories = Object.keys(articlesByCategory).map(key => ({
     id: key,
     label: key.charAt(0).toUpperCase() + key.slice(1)
@@ -23,7 +39,7 @@ function Analytics() {
   };
 
   const getTotalPublications = () => {
-    return Object.values(articlesByCategory).reduce((total, articles) => total + articles.length, 0);
+    return userPublications.length;
   };
 
   const totalPublications = getTotalPublications();
