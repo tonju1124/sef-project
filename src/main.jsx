@@ -17,6 +17,8 @@ import Bookmark from './Bookmark.jsx'
 import AdminAnnouncement from './AdminAnnouncement.jsx'
 import AdminUserManagement from './AdminUserManage.jsx'
 import HiddenPublication from './AdminHidePublication.jsx';
+import CoordinatorAnalytics from './CoordinatorAnalytics.jsx';
+import CoordinatorVerify from './CoordinatorVerify.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -37,6 +39,8 @@ createRoot(document.getElementById('root')).render(
           <Route path="/announcement" element={<AdminAnnouncement />} />
           <Route path="/adminusermanagement" element={<AdminUserManagement />} />
           <Route path="/hiddenpublication" element={<HiddenPublication />} />
+          <Route path="/verifypublication" element={<CoordinatorVerify />} />
+          <Route path="/departmentanalytics" element={<CoordinatorAnalytics />} />
         </Routes>
       </Router>
     </UserProvider>
