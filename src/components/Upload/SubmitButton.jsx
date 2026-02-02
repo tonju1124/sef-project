@@ -3,7 +3,7 @@ export default function SubmitButton({ onClick }) {
     <div className="flex justify-end w-[95%]">
       <p
         onClick={onClick}
-        className="text-black border-2 border-gray-300 rounded-md py-1.5 px-4 font-semibold hover:bg-gray-200 transition-all duration-200 cursor-pointer"
+        className="text-white border bg-black rounded-md py-1.5 px-4 font-semibold hover:bg-gray-800 hover:border-black focus:bg-gray-800 focus:border-black focus:shadow-md transition-all duration-300 cursor-pointer outline-none"
       >
         Submit
       </p>

@@ -1,5 +1,3 @@
-import plusIcon from '../../assets/plus.svg';
-
 export default function FileUploadSection({
   title,
   buttonLabel,
@@ -15,7 +13,7 @@ export default function FileUploadSection({
       {files.length === 0 && (
         <button
           onClick={onButtonClick}
-          className={`bg-white text-black border-2 rounded-md py-1.5 px-6 w-fit hover:bg-gray-100 transition-all duration-200 cursor-pointer flex items-center gap-2 opacity-100 ${
+          className={`bg-white text-black border-2 rounded-md py-1.5 px-6 w-fit hover:bg-gray-100 hover:border-gray-400 focus:bg-gray-100 focus:border-gray-400 focus:shadow-md transition-all duration-300 cursor-pointer flex items-center gap-2 opacity-100 outline-none ${
             hasError
               ? "border-red-500"
               : "border-gray-300"
@@ -24,7 +22,9 @@ export default function FileUploadSection({
             animation: "fadeIn 0.3s ease-out"
           }}
         >
-          <img src={plusIcon} alt="Plus icon" className="w-2.5 h-2.5" />
+          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+          </svg>
           {buttonLabel}
         </button>
       )}

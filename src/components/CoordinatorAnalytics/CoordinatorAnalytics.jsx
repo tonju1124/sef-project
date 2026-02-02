@@ -7,7 +7,8 @@ function CoordinatorAnalytics() {
   const [expandedCategory, setExpandedCategory] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const allPublications = publications;
+  // Only show verified publications
+  const allPublications = publications.filter(pub => pub.status === 'verified');
 
   const articlesByCategory = {
     journal: allPublications.filter(pub => pub.category === 'journal').map(pub => pub.title),

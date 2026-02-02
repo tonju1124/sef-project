@@ -9,6 +9,7 @@ import SearchBar from "./components/SearchBar";
 function CoordinatorVerify() {
   const [navOpen, setNavOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const { user } = useUser();
 
   if (user.role !== "coordinator") {
@@ -26,8 +27,12 @@ function CoordinatorVerify() {
       <div className={`z-20 w-full pr-20 ${navOpen ? "blur-xs" : ""}`}>
         <h1 className="text-3xl font-bold mb-4">Publication Verification</h1>
         <div className="border-b border-gray-300 w-full mb-6"></div>
-        <SearchBar/>
-        <CoordinatorVerifyComponent />
+        <SearchBar 
+          value={searchQuery}
+          onChange={setSearchQuery}
+          placeholder="Search by title, author, or co-author..."
+        />
+        <CoordinatorVerifyComponent searchQuery={searchQuery} />
       </div>
     </div>
   );
