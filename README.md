@@ -1,6 +1,6 @@
 # SEF Project – Research Publications Portal
 
-A React + Vite front-end for managing and showcasing academic publications. The app supports multiple roles (student, lecturer, coordinator, admin), publication uploads, verification flows, analytics dashboards, bookmarks, notifications, and profile pages. Data is currently mocked in the client for demo purposes.
+A React + Vite front-end for managing and showcasing academic publications. The app supports multiple roles (student, lecturer, coordinator, admin), publication uploads, verification flows, analytics dashboards, bookmarks, notifications, and profile pages. Data is currently mocked in the client for demo purposes. This is also my first react project.
 
 ## Features
 
