@@ -53,7 +53,8 @@ export const publications = [
     author: "John Doe",
     coauthor: "Michael Chen",
     uploadDate: "2024-01-20",
-    description: "Practical applications of machine learning algorithms in real-world scenarios",
+    description:
+      "Practical applications of machine learning algorithms in real-world scenarios",
     bookmarked: true,
     hidden: false,
     category: "journal",
@@ -65,7 +66,8 @@ export const publications = [
     author: "David Kumar",
     coauthor: "Lisa Wong",
     uploadDate: "2024-01-18",
-    description: "Best practices for designing scalable and reliable cloud infrastructure",
+    description:
+      "Best practices for designing scalable and reliable cloud infrastructure",
     bookmarked: false,
     hidden: false,
     category: "chapter",
@@ -77,7 +79,8 @@ export const publications = [
     author: "Emma Wilson",
     coauthor: "James Brown",
     uploadDate: "2024-01-12",
-    description: "Essential concepts and techniques for analyzing large datasets",
+    description:
+      "Essential concepts and techniques for analyzing large datasets",
     bookmarked: true,
     hidden: false,
     category: "book",
@@ -89,7 +92,8 @@ export const publications = [
     author: "Robert Martinez",
     coauthor: "Anna Lee",
     uploadDate: "2024-01-08",
-    description: "Comprehensive guide to protecting web applications from common vulnerabilities",
+    description:
+      "Comprehensive guide to protecting web applications from common vulnerabilities",
     bookmarked: false,
     hidden: true,
     category: "journal",
@@ -101,7 +105,8 @@ export const publications = [
     author: "Amelia Johnson",
     coauthor: "Jane Smith",
     uploadDate: "2024-01-05",
-    description: "Exploring ethical implications and considerations in AI development",
+    description:
+      "Exploring ethical implications and considerations in AI development",
     bookmarked: true,
     hidden: false,
     category: "proceeding",
@@ -113,7 +118,8 @@ export const publications = [
     author: "Chris Rodriguez",
     coauthor: "Maya Patel",
     uploadDate: "2023-12-28",
-    description: "Modern approaches to software development and operations integration",
+    description:
+      "Modern approaches to software development and operations integration",
     bookmarked: false,
     hidden: false,
     category: "article",
@@ -125,7 +131,8 @@ export const publications = [
     author: "Sophie Anderson",
     coauthor: "Tom Harris",
     uploadDate: "2023-12-22",
-    description: "Real-world use cases and implementation strategies for blockchain systems",
+    description:
+      "Real-world use cases and implementation strategies for blockchain systems",
     bookmarked: true,
     hidden: true,
     category: "journal",
@@ -137,7 +144,8 @@ export const publications = [
     author: "Kevin Zhang",
     coauthor: "Rachel Green",
     uploadDate: "2023-12-15",
-    description: "Internet of Things technologies enabling smart city infrastructure and services",
+    description:
+      "Internet of Things technologies enabling smart city infrastructure and services",
     bookmarked: false,
     hidden: false,
     category: "chapter",
@@ -149,7 +157,8 @@ export const publications = [
     author: "Dr. Paul Harris",
     coauthor: "Elena Rodriguez",
     uploadDate: "2024-01-25",
-    description: "Introduction to quantum mechanics and quantum computing principles",
+    description:
+      "Introduction to quantum mechanics and quantum computing principles",
     bookmarked: true,
     hidden: true,
     category: "book",
@@ -161,7 +170,8 @@ export const publications = [
     author: "Jane Smith",
     coauthor: "John Doe",
     uploadDate: "2024-01-22",
-    description: "Latest trends and best practices in mobile application development",
+    description:
+      "Latest trends and best practices in mobile application development",
     bookmarked: false,
     hidden: true,
     category: "proceeding",
@@ -173,7 +183,8 @@ export const publications = [
     author: "Victoria Price",
     coauthor: "Nathan Cole",
     uploadDate: "2024-01-19",
-    description: "Current cybersecurity threats and effective defense mechanisms",
+    description:
+      "Current cybersecurity threats and effective defense mechanisms",
     bookmarked: true,
     hidden: false,
     category: "journal",
@@ -185,7 +196,8 @@ export const publications = [
     author: "Marcus Johnson",
     coauthor: "Lisa Park",
     uploadDate: "2024-01-17",
-    description: "Guidelines and patterns for designing robust and scalable APIs",
+    description:
+      "Guidelines and patterns for designing robust and scalable APIs",
     bookmarked: false,
     hidden: false,
     category: "article",
@@ -221,7 +233,8 @@ export const publications = [
     author: "Samuel Brooks",
     coauthor: "Amanda Scott",
     uploadDate: "2024-01-09",
-    description: "Design patterns and best practices for microservices-based systems",
+    description:
+      "Design patterns and best practices for microservices-based systems",
     bookmarked: true,
     hidden: true,
     category: "book",
@@ -233,7 +246,8 @@ export const publications = [
     author: "Oliver Chang",
     coauthor: "Sophie Kumar",
     uploadDate: "2024-01-06",
-    description: "In-depth analysis comparing GraphQL and REST architectural approaches",
+    description:
+      "In-depth analysis comparing GraphQL and REST architectural approaches",
     bookmarked: false,
     hidden: false,
     category: "article",
@@ -245,7 +259,8 @@ export const publications = [
     author: "Patricia Davis",
     coauthor: "Michael Zhang",
     uploadDate: "2023-12-30",
-    description: "Deploying and managing serverless applications in production environments",
+    description:
+      "Deploying and managing serverless applications in production environments",
     bookmarked: true,
     hidden: false,
     category: "proceeding",
@@ -257,7 +272,8 @@ export const publications = [
     author: "Henry Foster",
     coauthor: "Eleanor Brown",
     uploadDate: "2023-12-27",
-    description: "Exploring edge computing technologies and their impact on system design",
+    description:
+      "Exploring edge computing technologies and their impact on system design",
     bookmarked: false,
     hidden: true,
     category: "journal",
@@ -269,7 +285,8 @@ export const publications = [
     author: "Jessica Mills",
     coauthor: "Timothy Hall",
     uploadDate: "2023-12-24",
-    description: "Techniques for optimizing React application performance and user experience",
+    description:
+      "Techniques for optimizing React application performance and user experience",
     bookmarked: true,
     hidden: false,
     category: "chapter",
@@ -281,7 +298,8 @@ export const publications = [
     author: "Andrew Phillips",
     coauthor: "Catherine Anderson",
     uploadDate: "2023-12-20",
-    description: "Scalable database sharding techniques for handling massive datasets",
+    description:
+      "Scalable database sharding techniques for handling massive datasets",
     bookmarked: false,
     hidden: true,
     category: "article",
@@ -293,7 +311,8 @@ export const publications = [
     author: "Rachel Evans",
     coauthor: "Thomas Wright",
     uploadDate: "2023-12-18",
-    description: "Implementing logging, monitoring, and tracing in distributed systems",
+    description:
+      "Implementing logging, monitoring, and tracing in distributed systems",
     bookmarked: true,
     hidden: false,
     category: "book",

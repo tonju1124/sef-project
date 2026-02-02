@@ -3,14 +3,13 @@ import { publications } from '../../data/publications';
 import StatusDropdown from './StatusDropdown';
 import { FilterDropdown } from './StatusDropdown';
 
-function CoordinatorVerify() {
+function CoordinatorVerify({ searchQuery = '' }) {
   const [pubStatuses, setPubStatuses] = useState(
     publications.reduce((acc, pub) => {
       acc[pub.id] = pub.status;
       return acc;
     }, {})
   );
-  const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
 
   // Format date from YYYY-MM-DD to DD/MM/YYYY
@@ -21,16 +20,24 @@ function CoordinatorVerify() {
   };
 
   const handleStatusChange = (pubId, newStatus) => {
+    // Update local state
     setPubStatuses(prev => ({
       ...prev,
       [pubId]: newStatus
     }));
+    
+    // Update the publications array directly
+    const publication = publications.find(p => p.id === pubId);
+    if (publication) {
+      publication.status = newStatus.toLowerCase();
+    }
   };
 
   // Filter publications based on search and status filter
   const filteredPublications = publications.filter(publication => {
     const matchesSearch = publication.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         publication.author.toLowerCase().includes(searchQuery.toLowerCase());
+                         publication.author.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         (publication.coauthor && publication.coauthor.toLowerCase().includes(searchQuery.toLowerCase()));
     const matchesStatus = statusFilter === 'All' || publication.status === statusFilter.toLowerCase();
     return matchesSearch && matchesStatus;
   });

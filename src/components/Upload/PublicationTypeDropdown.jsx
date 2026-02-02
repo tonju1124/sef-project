@@ -18,14 +18,16 @@ export default function PublicationTypeDropdown({ selectedType, setSelectedType 
       <div className="relative text-black">
         <button
           onClick={() => setJournalOpen(!journalOpen)}
-          className="bg-white border-2 border-gray-300 rounded-md px-4 py-1.5 flex justify-between items-center hover:bg-gray-100 transition-all duration-200 cursor-pointer"
+          className="bg-white border-2 border-gray-300 rounded-md px-4 py-1.5 flex justify-between items-center hover:bg-gray-100 hover:border-gray-400 focus:bg-gray-100 focus:border-gray-400 focus:shadow-md transition-all duration-300 cursor-pointer outline-none"
         >
           {selectedType}
-          <span
-            className={`ml-2 text-sm transition-transform duration-300 ${journalOpen ? "rotate-180" : ""}`}
+          <svg
+            className={`w-4 h-4 transition-transform duration-300 ${journalOpen ? "rotate-180" : ""}`}
+            fill="currentColor"
+            viewBox="0 0 24 24"
           >
-            ▼
-          </span>
+            <path d="M7 10l5 5 5-5z" />
+          </svg>
         </button>
         {journalOpen && (
           <div className="absolute bg-white border-2 border-gray-300 rounded-md mt-1 w-40 z-10 dropdown-open">

@@ -19,6 +19,7 @@ import AdminUserManagement from './AdminUserManage.jsx'
 import HiddenPublication from './AdminHidePublication.jsx';
 import CoordinatorAnalytics from './CoordinatorAnalytics.jsx';
 import CoordinatorVerify from './CoordinatorVerify.jsx';
+import PublicationPage from './PublicationPage.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -41,6 +42,7 @@ createRoot(document.getElementById('root')).render(
           <Route path="/hiddenpublication" element={<HiddenPublication />} />
           <Route path="/verifypublication" element={<CoordinatorVerify />} />
           <Route path="/departmentanalytics" element={<CoordinatorAnalytics />} />
+          <Route path="/publication/:id" element={<PublicationPage />} />
         </Routes>
       </Router>
     </UserProvider>
