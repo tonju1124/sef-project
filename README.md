@@ -18,8 +18,6 @@ A React + Vite front-end for managing and showcasing academic publications. The 
 - Vite 7
 - React Router
 - Tailwind CSS
-- Recharts (charts)
-- ESLint
 
 ## Getting Started
 
