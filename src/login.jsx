@@ -1,14 +1,10 @@
 import { useState } from "react";
 import LoginSignupSidebar from "./components/LoginSignupSidebar";
 import LoginHeader from "./components/Login/LoginHeader";
-import LoginAlert from "./components/Login/LoginAlert";
-import LoginInputField from "./components/Login/LoginInputField";
-import LoginFormFooter from "./components/Login/LoginFormFooter";
-import LoginSubmitButton from "./components/Login/LoginSubmitButton";
-import LoginSignUpLink from "./components/Login/LoginSignUpLink";
+import LoginForm from "./components/Login/LoginForm";
 
 function LogIn() {
-  const [username, setUsername] = useState("");
+  const [id, setId] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -21,8 +17,8 @@ function LogIn() {
     setSuccess(false);
 
     // Validation
-    if (!username.trim()) {
-      setError("Username is required");
+    if (!id.trim()) {
+      setError("ID is required");
       return;
     }
     if (!password) {
@@ -39,7 +35,7 @@ function LogIn() {
       // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setSuccess(true);
-      setUsername("");
+      setId("");
       setPassword("");
       console.log("Login successful");
     } catch (err) {
@@ -75,39 +71,18 @@ function LogIn() {
         <div className="w-full max-w-md">
           <LoginHeader />
 
-          {/* Form Card */}
-          <div className="bg-white rounded-lg p-8 border border-gray-200 shadow-lg">
-            <form onSubmit={handleSubmit} className="space-y-5">
-              {error && <LoginAlert type="error" message={error} />}
-              {success && <LoginAlert type="success" message="" />}
-
-              <LoginInputField
-                label="Username"
-                type="text"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="Enter your username"
-                isPasswordField={false}
-              />
-
-              <LoginInputField
-                label="Password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Enter your password"
-                showPassword={showPassword}
-                onTogglePassword={() => setShowPassword(!showPassword)}
-                isPasswordField={true}
-              />
-
-              <LoginFormFooter />
-
-              <LoginSubmitButton isLoading={isLoading} />
-            </form>
-
-            <LoginSignUpLink />
-          </div>
+          <LoginForm
+            id={id}
+            setId={setId}
+            password={password}
+            setPassword={setPassword}
+            showPassword={showPassword}
+            setShowPassword={setShowPassword}
+            isLoading={isLoading}
+            error={error}
+            success={success}
+            onSubmit={handleSubmit}
+          />
         </div>
       </div>
     </div>

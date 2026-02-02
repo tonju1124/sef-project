@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 import LoginAlert from "../Login/LoginAlert";
 import LoginFormFooter from "../Login/LoginFormFooter";
 import LoginSubmitButton from "../Login/LoginSubmitButton";
@@ -6,21 +6,25 @@ import SignUpLogInLink from "./SignUpLogInLink";
 import SignUpFields from "./SignUpFields";
 
 function SignUpForm() {
-  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [role, setRole] = useState("");
   const [faculty, setFaculty] = useState("");
   const [customFaculty, setCustomFaculty] = useState("");
+  const [roleError, setRoleError] = useState(false);
   const [facultyError, setFacultyError] = useState(false);
   const [customFacultyError, setCustomFacultyError] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
-  const dropdownRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+
+  const handleRoleChange = (value) => {
+    setRole(value);
+  };
 
   const handleFacultyChange = (value) => {
     if (value === "Others") {
@@ -34,9 +38,7 @@ function SignUpForm() {
   // Close dropdown when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setOpenDropdown(null);
-      }
+      setOpenDropdown(null);
     }
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -44,7 +46,7 @@ function SignUpForm() {
   }, []);
 
   const CustomDropdown = ({ label, value, options, onChange, isOpen, hasError }) => (
-    <div className="relative" ref={dropdownRef}>
+    <div className="relative">
       <button
         onClick={() => setOpenDropdown(isOpen ? null : label)}
         className={`w-full px-4 py-2 border rounded-lg text-left flex justify-between items-center hover:bg-gray-50 focus:outline-none focus:ring-2 transition-all ${
@@ -81,16 +83,17 @@ function SignUpForm() {
   );
 
   const validateForm = () => {
-    if (!username.trim()) {
-      setError("Username is required");
-      return false;
-    }
     if (!email.trim()) {
       setError("Email is required");
       return false;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       setError("Please enter a valid email");
+      return false;
+    }
+    if (!role.trim()) {
+      setError("Please select a role");
+      setRoleError(true);
       return false;
     }
     if (!faculty.trim()) {
@@ -103,8 +106,10 @@ function SignUpForm() {
       setCustomFacultyError(true);
       return false;
     }
+    setRoleError(false);
     setFacultyError(false);
     setCustomFacultyError(false);
+    return true;
   };
 
   const handleSubmit = async (e) => {
@@ -118,12 +123,13 @@ function SignUpForm() {
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       setSuccess(true);
-      setUsername("");
       setEmail("");
       setPassword("");
       setConfirmPassword("");
+      setRole("");
       setFaculty("");
       setCustomFaculty("");
+      setRoleError(false);
       setFacultyError(false);
       setCustomFacultyError(false);
       console.log("Signup successful");
@@ -158,8 +164,6 @@ function SignUpForm() {
         {success && <LoginAlert type="success" message="Account created successfully!" />}
 
         <SignUpFields
-          username={username}
-          setUsername={setUsername}
           email={email}
           setEmail={setEmail}
           password={password}
@@ -170,6 +174,8 @@ function SignUpForm() {
           setShowPassword={setShowPassword}
           showConfirmPassword={showConfirmPassword}
           setShowConfirmPassword={setShowConfirmPassword}
+          role={role}
+          setRole={setRole}
           faculty={faculty}
           setFaculty={setFaculty}
           customFaculty={customFaculty}
@@ -177,7 +183,9 @@ function SignUpForm() {
           openDropdown={openDropdown}
           setOpenDropdown={setOpenDropdown}
           CustomDropdown={CustomDropdown}
+          handleRoleChange={handleRoleChange}
           handleFacultyChange={handleFacultyChange}
+          roleError={roleError}
           facultyError={facultyError}
           customFacultyError={customFacultyError}
           setCustomFacultyError={setCustomFacultyError}
