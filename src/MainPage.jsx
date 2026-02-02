@@ -27,7 +27,7 @@ function MainPage() {
   const [refreshKey, setRefreshKey] = useState(0);
   const { user } = useUser();
 
-  const sortOptions = ['Newest', 'Oldest', 'Most Popular'];
+  const sortOptions = ['Newest', 'Oldest'];
 
   const handleHideConfirm = () => {
     // Trigger a re-render to apply filters after publication data changes
@@ -48,16 +48,13 @@ function MainPage() {
     setAdminFilters(filters);
   };
 
-  // Smart search - searches title, author, and description with keyword matching
-  // Admins see everything (with admin filters), regular users see only verified and not hidden
+
   const filteredPublications = searchValue.trim() === ''
     ? publications.filter(pub => {
-        // Regular users: only verified and not hidden
         if (user.role !== "admin") {
           return !pub.hidden && pub.status === "verified";
         }
         
-        // Admin filters
         const hiddenMatch = adminFilters.hidden === 'All' ? true :
           adminFilters.hidden === 'Hidden' ? pub.hidden :
           adminFilters.hidden === 'Visible' ? !pub.hidden : true;
@@ -67,7 +64,6 @@ function MainPage() {
         return hiddenMatch && statusMatch;
       })
     : publications.filter(pub => {
-        // Regular users: only verified and not hidden
         if (user.role !== "admin" && (pub.hidden || pub.status !== "verified")) return false;
         
         // Admin filters
@@ -112,8 +108,6 @@ function MainPage() {
         return new Date(b.uploadDate) - new Date(a.uploadDate);
       case 'Oldest':
         return new Date(a.uploadDate) - new Date(b.uploadDate);
-      case 'Most Popular':
-        return new Date(b.uploadDate) - new Date(a.uploadDate);
       default:
         return 0;
     }

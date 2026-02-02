@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./upload.css";
 import { useUser } from "./context/UserContext";
 import { publications } from "./data/publications";
@@ -9,9 +10,11 @@ import FormInput from "./components/Upload/FormInput";
 import CoAuthorSection from "./components/Upload/CoAuthorSection";
 import DescriptionTextarea from "./components/Upload/DescriptionTextarea";
 import SubmitButton from "./components/Upload/SubmitButton";
+import PublicationSuccessModal from "./components/Upload/PublicationSuccessModal";
 
 function Upload() {
   const { user } = useUser();
+  const navigate = useNavigate();
   const [selectedType, setSelectedType] = useState("Journal");
   const [title, setTitle] = useState("");
   const [coAuthorName, setCoAuthorName] = useState("");
@@ -19,6 +22,7 @@ function Upload() {
   const [description, setDescription] = useState("");
   const [publicationFiles, setPublicationFiles] = useState([]);
   const [proofFiles, setProofFiles] = useState([]);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [errors, setErrors] = useState({
     title: false,
     description: false,
@@ -105,11 +109,12 @@ function Upload() {
     setProofFiles([]);
     setErrors({ title: false, description: false, publication: false, proof: false });
     
-    alert("Publication submitted successfully! Status: Pending");
+    setShowSuccessModal(true);
   };
 
   return (
     <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 text-black flex flex-col select-none p-8">
+      {showSuccessModal && <PublicationSuccessModal onClose={() => setShowSuccessModal(false)} />}
       <div className="w-full max-w-4xl mx-auto flex flex-col gap-6">
         <BackButton />
 
