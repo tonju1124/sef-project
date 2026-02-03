@@ -1,0 +1,784 @@
+================================================================================
+                    SEF PROJECT - FRONTEND SYSTEM DOCUMENTATION
+================================================================================
+
+Project Name: SEF (Scientific Excellence Framework) - Research Publication Portal
+Last Updated: February 3, 2026
+Tech Stack: React 19.2.0 + Vite 7.2.4 + Tailwind CSS 4.1.18
+
+================================================================================
+                              TABLE OF CONTENTS
+================================================================================
+
+1. System Overview
+2. Technology Stack
+3. Project Architecture
+4. User Roles & Permissions
+5. Main Features & Pages
+6. Component Structure
+7. State Management
+8. Routing System
+9. Key Workflows
+10. Styling Approach
+11. Q&A Section
+
+================================================================================
+                              1. SYSTEM OVERVIEW
+================================================================================
+
+The SEF Project is a Research Publication Portal designed for academic institutions
+to manage, verify, and share research publications. The system supports multiple
+user roles with different capabilities and provides a comprehensive platform for
+publication management, verification workflows, and analytics.
+
+Primary Goals:
+- Centralized publication repository for students and lecturers
+- Coordinator verification workflow for quality control
+- Admin management tools for system oversight
+- Analytics and insights for research output tracking
+- User-friendly interface for publication discovery
+
+================================================================================
+                           2. TECHNOLOGY STACK
+================================================================================
+
+Core Technologies:
+- React 19.2.0          : UI library for component-based architecture
+- Vite 7.2.4           : Fast build tool and dev server
+- React Router DOM 7.13.0 : Client-side routing
+- Tailwind CSS 4.1.18  : Utility-first CSS framework
+
+Development Tools:
+- ESLint               : Code linting and quality
+- Git                  : Version control
+
+Build Output:
+- Entry point: src/main.jsx
+- Configuration: vite.config.js
+- Base HTML: index.html
+- Compiled output served via Vite dev server
+
+================================================================================
+                          3. PROJECT ARCHITECTURE
+================================================================================
+
+Directory Structure:
+/
+├── public/                    # Static assets
+├── src/
+│   ├── main.jsx              # Application entry point
+│   ├── index.css             # Global styles (consolidated)
+│   ├── [Page Components]     # Top-level page components
+│   ├── assets/               # Images, icons, media files
+│   ├── components/           # Reusable UI components
+│   │   ├── Login/           # Login-related components
+│   │   ├── SignUp/          # Registration components
+│   │   ├── MainPage/        # Homepage components
+│   │   ├── Upload/          # Publication upload components
+│   │   ├── PublicationPage/ # Publication detail components
+│   │   ├── Notification/    # Notification components
+│   │   ├── UserProfile/     # Profile components
+│   │   ├── CoordinatorVerify/ # Verification components
+│   │   ├── CoordinatorAnalytics/ # Analytics components
+│   │   ├── AdminUserManage/ # Admin user management
+│   │   └── AdminHiddenPublication/ # Admin publication management
+│   ├── context/             # React Context for state management
+│   │   └── UserContext.jsx  # User authentication state
+│   └── data/                # Static data and mock data
+│       ├── publications.js  # Publication data
+│       └── UserData.js      # User data
+├── vite.config.js           # Vite configuration
+├── eslint.config.js         # ESLint configuration
+└── package.json             # Dependencies and scripts
+
+Component Organization Pattern:
+- Feature-based folders (Login/, SignUp/, Upload/, etc.)
+- Each feature contains related sub-components
+- Shared components at root level (SearchBar, NavigationSidebar, etc.)
+- Page-level components in src/ root
+
+================================================================================
+                        4. USER ROLES & PERMISSIONS
+================================================================================
+
+1. STUDENT
+   - Upload publications
+   - View own publications
+   - View published research
+   - Search and filter publications
+   - Receive notifications
+   - Edit profile
+
+2. LECTURER
+   - All student permissions
+   - View analytics for own publications
+   - Upload research papers
+   - Co-author publications with students
+   - View verification status
+
+3. COORDINATOR
+   - All lecturer permissions
+   - Verify pending publications
+   - Approve/reject submissions
+   - View coordinator analytics dashboard
+   - Manage publication status
+   - Access verification queue
+
+4. ADMIN
+   - Full system access
+   - User management (activate/deactivate)
+   - Hide/unhide publications
+   - View all analytics
+   - System-wide announcements
+   - Manage user roles
+   - Access hidden publications
+
+================================================================================
+                         5. MAIN FEATURES & PAGES
+================================================================================
+
+PUBLIC PAGES:
+-------------
+1. Login Page (login.jsx)
+   - Email/password authentication
+   - Error handling and validation
+   - Link to signup page
+   - Components: LoginForm, LoginHeader, LoginInputField, LoginSubmitButton,
+                 LoginAlert, LoginSignUpLink, LoginFormFooter
+
+2. Sign Up Page (SignUp.jsx)
+   - User registration form
+   - Role selection (Student/Lecturer)
+   - Faculty selection
+   - Password confirmation
+   - Components: SignUpForm, SignUpHeader, SignUpFields, RoleDropdown,
+                 FacultyDropdown, SignUpLogInLink
+
+AUTHENTICATED PAGES:
+-------------------
+3. Main Page (MainPage.jsx)
+   - Publication feed
+   - Search and filter functionality
+   - Filter by category, status, visibility
+   - Upload button for creating new publications
+   - Components: SearchBar, FilterDropdown, AdminFilterDropdown,
+                 UploadPublicationButton, PublicationCard
+
+4. Publication Page (PublicationPage.jsx)
+   - Detailed publication view
+   - Author information
+   - Publication metadata
+   - File preview/download
+   - Components: PublicationHeader, PublicationInfo, PublicationDescription,
+                 FilePreview
+
+5. Upload Page (upload.jsx)
+   - Publication submission form
+   - File upload functionality
+   - Publication type selection
+   - Co-author management
+   - Description and metadata
+   - Components: FormInput, FileUploadSection, PublicationTypeDropdown,
+                 CoAuthorSection, DescriptionTextarea, SubmitButton,
+                 BackButton, PublicationSuccessModal
+
+6. User Profile (UserProfile.jsx)
+   - User information display
+   - Profile editing
+   - Publication history
+   - Components: UserProfileCard
+
+7. User Publications (UserPublication.jsx)
+   - List of user's own publications
+   - Status tracking (pending, approved, rejected)
+
+8. Notifications (Notification.jsx)
+   - System notifications
+   - Publication status updates
+   - Components: NotificationCard
+
+9. Analytics (Analytics.jsx)
+    - User-specific analytics
+    - Publication metrics
+    - Components: CategoryCard
+
+COORDINATOR PAGES:
+-----------------
+10. Coordinator Verify (CoordinatorVerify.jsx)
+    - Pending publication queue
+    - Verification workflow
+    - Approve/reject actions
+    - Components: CoordinatorVerify, StatusDropdown
+
+11. Coordinator Analytics (CoordinatorAnalytics.jsx)
+    - Department-wide analytics
+    - Verification statistics
+    - Components: CoordinatorAnalytics
+
+ADMIN PAGES:
+-----------
+12. Admin User Management (AdminUserManage.jsx)
+    - User list with filtering
+    - Activate/deactivate users
+    - Role management
+    - Components: AdminUserManageBox, TypeFilter, DeactiveConfirmation
+
+13. Admin Hidden Publications (AdminHidePublication.jsx)
+    - View hidden publications
+    - Restore functionality
+    - Publication management
+    - Components: AdminHidePublication, HideConfirmation
+
+14. Admin Announcements (AdminAnnouncement.jsx)
+    - Create system-wide announcements
+    - Notification management
+
+VERIFICATION PAGES:
+------------------
+15. Verification Page (Verification.jsx)
+    - User account verification
+    - Components: UserVerificationList
+
+SHARED COMPONENTS:
+-----------------
+- NavigationSidebar: Left sidebar navigation
+- UserDropdown: User account menu
+- UserSwitcher: Role switching functionality
+- LoginSignupSidebar: Authentication pages sidebar
+- NotAnAdminError: Access denied for non-admin
+- NotACoordinator: Access denied for non-coordinator
+
+================================================================================
+                          6. COMPONENT STRUCTURE
+================================================================================
+
+COMPONENT HIERARCHY:
+
+Application Root (main.jsx)
+├── UserContext.Provider (context/UserContext.jsx)
+│   └── React Router
+│       ├── Login Page
+│       │   ├── LoginSignupSidebar
+│       │   └── LoginForm
+│       │       ├── LoginHeader
+│       │       ├── LoginInputField
+│       │       ├── LoginAlert
+│       │       ├── LoginSubmitButton
+│       │       ├── LoginSignUpLink
+│       │       └── LoginFormFooter
+│       │
+│       ├── SignUp Page
+│       │   ├── LoginSignupSidebar
+│       │   └── SignUpForm
+│       │       ├── SignUpHeader
+│       │       ├── SignUpFields
+│       │       │   ├── RoleDropdown
+│       │       │   └── FacultyDropdown
+│       │       └── SignUpLogInLink
+│       │
+│       ├── Main Page (with NavigationSidebar)
+│       │   ├── NavigationSidebar
+│       │   │   └── UserDropdown
+│       │   ├── SearchBar
+│       │   ├── FilterDropdown or AdminFilterDropdown
+│       │   ├── UploadPublicationButton
+│       │   └── PublicationCard (multiple)
+│       │
+│       ├── Upload Page
+│       │   ├── BackButton
+│       │   ├── FormInput (multiple)
+│       │   ├── PublicationTypeDropdown
+│       │   ├── FileUploadSection
+│       │   ├── CoAuthorSection
+│       │   ├── DescriptionTextarea
+│       │   ├── SubmitButton
+│       │   └── PublicationSuccessModal
+│       │
+│       ├── Publication Page
+│       │   ├── PublicationHeader
+│       │   ├── PublicationInfo
+│       │   ├── PublicationDescription
+│       │   └── FilePreview
+│       │
+│       ├── Coordinator Verify
+│       │   ├── NavigationSidebar
+│       │   ├── CoordinatorVerify
+│       │   └── StatusDropdown
+│       │
+│       ├── Admin User Manage
+│       │   ├── NavigationSidebar
+│       │   ├── TypeFilter
+│       │   ├── AdminUserManageBox (multiple)
+│       │   └── DeactiveConfirmation (modal)
+│       │
+│       └── Admin Hidden Publications
+│           ├── NavigationSidebar
+│           ├── SearchBar
+│           └── HideConfirmation (modal)
+
+KEY COMPONENT PATTERNS:
+
+1. Dropdown Components:
+   - StatusDropdown: Publication status selection
+   - FilterDropdown: General filtering
+   - AdminFilterDropdown: Admin-specific filters
+   - RoleDropdown: User role selection
+   - FacultyDropdown: Faculty selection
+   - PublicationTypeDropdown: Publication type selection
+   - TypeFilter: User type filtering
+   - All follow similar pattern: toggle, options list, selection handler
+
+2. Modal Components:
+   - PublicationSuccessModal: Upload success confirmation
+   - DeactiveConfirmation: User deactivation confirmation
+   - HideConfirmation: Publication hide confirmation
+   - All follow pattern: overlay, centered modal, action buttons
+
+3. Card Components:
+   - PublicationCard: Publication list item
+   - NotificationCard: Notification list item
+   - UserProfileCard: User information display
+   - CategoryCard: Analytics category display
+   - All follow consistent card styling with Tailwind
+
+4. Form Components:
+   - FormInput: Reusable text input
+   - LoginInputField: Login-specific input
+   - DescriptionTextarea: Multi-line text input
+   - FileUploadSection: File upload with drag-drop
+   - CoAuthorSection: Dynamic co-author management
+
+5. Button Components:
+   - SubmitButton: Form submission
+   - LoginSubmitButton: Login-specific submit
+   - BackButton: Navigation back
+   - UploadPublicationButton: Navigate to upload page
+
+================================================================================
+                          7. STATE MANAGEMENT
+================================================================================
+
+GLOBAL STATE:
+------------
+UserContext (context/UserContext.jsx)
+- Manages authentication state
+- Stores user information
+- Provides user data across components
+- Context values:
+  * currentUser: User object or null
+  * setCurrentUser: Function to update user
+  * isAuthenticated: Boolean
+  * userRole: String (student, lecturer, coordinator, admin)
+
+Usage Pattern:
+```javascript
+import { useContext } from 'react';
+import { UserContext } from './context/UserContext';
+
+function MyComponent() {
+  const { currentUser, userRole } = useContext(UserContext);
+  // Access user data
+}
+```
+
+LOCAL STATE:
+-----------
+Each component manages its own state using React hooks:
+
+1. Form State (useState):
+   - Input values
+   - Validation errors
+   - Form submission status
+
+2. UI State (useState):
+   - Dropdown open/closed
+   - Modal visibility
+   - Loading states
+   - Error messages
+
+3. Data State (useState):
+   - Fetched publication data
+   - User lists
+   - Notification lists
+
+4. Effect Hooks (useEffect):
+   - Click-outside detection for dropdowns
+   - Data fetching on mount
+   - Event listener setup/cleanup
+
+Common State Patterns:
+```javascript
+// Dropdown state
+const [isOpen, setIsOpen] = useState(false);
+
+// Form input state
+const [value, setValue] = useState('');
+
+// Data loading state
+const [data, setData] = useState([]);
+const [loading, setLoading] = useState(true);
+
+// Error handling state
+const [error, setError] = useState(null);
+```
+
+================================================================================
+                            8. ROUTING SYSTEM
+================================================================================
+
+Routes are configured in main.jsx using React Router DOM.
+
+PUBLIC ROUTES (No Authentication Required):
+------------------------------------------
+/login              → Login Page
+/signup             → Sign Up Page
+
+PROTECTED ROUTES (Authentication Required):
+------------------------------------------
+/                   → Main Page (Publication Feed)
+/upload             → Upload Publication
+/publication/:id    → Publication Detail Page
+/profile            → User Profile
+/user-publications  → User's Own Publications
+/notifications      → Notifications
+/analytics          → User Analytics
+/verification       → User Verification
+
+COORDINATOR ROUTES:
+------------------
+/coordinator-verify    → Coordinator Verification Queue
+/coordinator-analytics → Coordinator Analytics Dashboard
+
+ADMIN ROUTES:
+------------
+/admin-user-manage      → Admin User Management
+/admin-hide-publication → Admin Hidden Publications
+/admin-announcement     → Admin Announcements
+
+Route Protection:
+- Routes check UserContext for authentication
+- Role-based access control via userRole
+- Redirect to login if not authenticated
+- Show NotAnAdminError for unauthorized admin routes
+- Show NotACoordinator for unauthorized coordinator routes
+
+Navigation:
+- NavigationSidebar provides navigation links
+- React Router's Link component for client-side navigation
+- useNavigate hook for programmatic navigation
+
+================================================================================
+                            9. KEY WORKFLOWS
+================================================================================
+
+1. USER REGISTRATION & LOGIN:
+   Step 1: User navigates to /signup
+   Step 2: Fills out SignUpForm (email, role, faculty, password)
+   Step 3: Submits form → Creates account
+   Step 4: Redirects to /login
+   Step 5: Enters credentials in LoginForm
+   Step 6: Authentication → UserContext updated
+   Step 7: Redirects to Main Page
+
+2. PUBLICATION UPLOAD:
+   Step 1: User clicks UploadPublicationButton
+   Step 2: Navigates to /upload
+   Step 3: Fills out publication form:
+           - Title (FormInput)
+           - Publication type (PublicationTypeDropdown)
+           - Description (DescriptionTextarea)
+           - Co-authors (CoAuthorSection)
+           - Files (FileUploadSection)
+   Step 4: Clicks SubmitButton
+   Step 5: PublicationSuccessModal appears
+   Step 6: Publication saved with "Pending" status
+   Step 7: Coordinator receives verification notification
+
+3. COORDINATOR VERIFICATION:
+   Step 1: Coordinator navigates to /coordinator-verify
+   Step 2: Views pending publications list
+   Step 3: Clicks on publication to review
+   Step 4: Uses StatusDropdown to select status:
+           - Approved
+           - Rejected
+           - Pending Review
+   Step 5: Publication status updated
+   Step 6: Author receives notification
+
+4. PUBLICATION DISCOVERY:
+   Step 1: User on Main Page
+   Step 2: Uses SearchBar to enter keywords
+   Step 3: Applies FilterDropdown for:
+           - Category
+           - Faculty
+           - Publication Type
+   Step 4: Admin can also filter by:
+           - Hidden/visible status
+           - Verification status
+   Step 5: PublicationCards update based on filters
+   Step 6: Clicks card to view details
+   Step 7: Navigates to PublicationPage
+
+5. ADMIN USER MANAGEMENT:
+   Step 1: Admin navigates to /admin-user-manage
+   Step 2: Views user list with AdminUserManageBox components
+   Step 3: Uses TypeFilter to filter by role
+   Step 4: Uses SearchBar to find specific users
+   Step 5: Clicks "Deactivate" on user
+   Step 6: DeactiveConfirmation modal appears
+   Step 7: Confirms action
+   Step 8: User account deactivated
+
+6. ADMIN PUBLICATION MANAGEMENT:
+   Step 1: Admin on Main Page with AdminFilterDropdown
+   Step 2: Selects publication to hide
+   Step 3: HideConfirmation modal appears
+   Step 4: Confirms action
+   Step 5: Publication hidden from public view
+   Step 6: To restore: Navigate to /admin-hide-publication
+   Step 7: Find publication in hidden list
+   Step 8: Click restore button
+   Step 9: Publication visible again
+
+================================================================================
+                          10. STYLING APPROACH
+================================================================================
+
+TAILWIND CSS UTILITY-FIRST:
+---------------------------
+All components use Tailwind CSS utility classes for styling.
+
+Common Patterns:
+
+1. Layout:
+   - Flexbox: flex, flex-col, flex-row, justify-center, items-center
+   - Grid: grid, grid-cols-1, gap-4
+   - Spacing: p-4, m-2, px-6, py-3, space-y-4
+
+2. Typography:
+   - Size: text-sm, text-base, text-lg, text-xl, text-2xl
+   - Weight: font-normal, font-medium, font-semibold, font-bold
+   - Color: text-gray-700, text-blue-600, text-red-500
+
+3. Colors:
+   - Backgrounds: bg-white, bg-gray-100, bg-blue-500
+   - Borders: border, border-gray-300, border-blue-500
+   - Hover states: hover:bg-gray-100, hover:text-blue-700
+
+4. Interactive Elements:
+   - Buttons: rounded, shadow, transition-colors, hover:shadow-lg
+   - Inputs: border, rounded-lg, focus:outline-none, focus:ring
+   - Dropdowns: absolute, z-10, shadow-lg
+
+5. Responsive Design:
+   - Mobile-first approach
+   - Breakpoint prefixes: sm:, md:, lg:, xl:
+   - Example: w-full md:w-1/2 lg:w-1/3
+
+6. Animations:
+   - Transitions: transition-colors, transition-all, duration-300
+   - Hover effects: hover:shadow-sm, hover:bg-gray-100
+   - Focus states: focus:border-blue-500
+
+GLOBAL STYLES (index.css):
+-------------------------
+- CSS reset and base styles
+- Custom Tailwind configurations
+- Global font settings
+- Consolidated from previous upload.css
+
+Style Organization:
+- No CSS modules or styled-components
+- All styles inline with Tailwind utilities
+- Custom styles only in index.css
+- Consistent color palette across components
+
+================================================================================
+                             11. Q&A SECTION
+================================================================================
+
+Q1: What is the main purpose of this application?
+A: The SEF Project is a Research Publication Portal designed for academic
+   institutions to manage research publications. It provides a platform for
+   students and lecturers to upload, share, and discover research, with
+   coordinator verification workflows and admin management tools.
+
+Q2: What are the different user roles and their permissions?
+A: There are four roles:
+   - Student: Upload and view publications, bookmark, search
+   - Lecturer: All student permissions plus analytics
+   - Coordinator: Verify publications, access verification queue and analytics
+   - Admin: Full system access including user management and publication hiding
+
+Q3: How does the verification workflow work?
+A: Students/lecturers upload publications → Publications enter "Pending" status
+   → Coordinators review in /coordinator-verify → Coordinators approve/reject
+   using StatusDropdown → Authors receive notifications → Approved publications
+   become visible on main feed.
+
+Q4: How is authentication managed?
+A: Authentication state is managed via UserContext (React Context API). When
+   users log in, their data is stored in the context and accessible throughout
+   the app. Protected routes check authentication status before rendering.
+
+Q5: What happens when a user uploads a publication?
+A: User navigates to /upload → Fills out form with title, type, description,
+   co-authors, and files → Submits → Publication saved with "Pending" status
+   → Success modal shows → Publication enters coordinator verification queue
+   → User can track status in /user-publications.
+
+Q6: How do filters work on the Main Page?
+A: Users can filter publications using:
+   - SearchBar: Keyword search
+   - FilterDropdown (regular users): Category, faculty, type
+   - AdminFilterDropdown (admins): Additional filters for hidden status and
+     verification status
+   Filters can be combined and reset.
+
+Q7: Can publications be edited after upload?
+A: Publications are immutable once uploaded. They cannot be edited or deleted by
+    users through the frontend but the admin can hide the publication. 
+    Any modifications must be made directly in the
+    backend database by the development team. This ensures data integrity and
+    maintains a complete audit trail of all submissions.
+
+Q8: How are co-authors managed?
+A: The CoAuthorSection component in the upload form allows users to dynamically
+   add multiple co-authors. Users can input co-author names and add/remove
+   them before submission.
+
+Q9: What analytics are available?
+A: - Regular users: Personal analytics in /analytics showing their publication
+     metrics and category breakdown
+   - Coordinators: Department-wide analytics in /coordinator-analytics showing
+     verification statistics and trends. Access to all analytics across the system
+
+Q10: What file types can be uploaded?
+A: The FileUploadSection component handles file uploads. Specific file type
+    restrictions would be configured in the component or backend. Typically
+    supports PDF, DOC, DOCX for research publications.
+
+Q11: How do notifications work?
+A: Users receive notifications for:
+    - System announcements from admins like activites
+
+Q12: Can admins delete users?
+A: Based on the AdminUserManage page structure, admins can deactivate users
+    (not delete). The DeactiveConfirmation modal confirms this action.
+    Deactivated users lose access but data is preserved.
+
+Q13: What is the difference between hiding and rejecting a publication?
+A: - Rejecting: Coordinator action during verification. Publication not approved
+                for public viewing. Author notified to make improvements.
+   - Hiding: Admin action on already-published content. Removes from public
+             view (admin moderation). Can be restored via /admin-hide-publication.
+
+Q14: How is the navigation structured?
+A: NavigationSidebar on left side provides links to all accessible pages based
+    on user role. Public pages (login/signup) use LoginSignupSidebar.
+    UserDropdown in sidebar provides account menu.
+
+Q15: Are there any mobile-responsive features?
+A: Yes, Tailwind CSS is used with mobile-first responsive design. Components
+    use responsive breakpoints (sm:, md:, lg:) for different screen sizes.
+
+Q16: How are dropdown menus implemented?
+A: All dropdowns follow similar pattern:
+    - State for open/closed (useState)
+    - Toggle function to open/close
+    - Click-outside detection (useEffect with event listeners)
+    - Options array for menu items
+    - Selection handler to update parent state
+    Examples: StatusDropdown, FilterDropdown, RoleDropdown, etc.
+
+Q17: What happens if a non-admin tries to access admin pages?
+A: Route protection checks user role. Non-admin users see NotAnAdminError
+    component. Similarly, non-coordinators see NotACoordinator component when
+    accessing coordinator-only routes.
+
+Q18: How is the project built and deployed?
+A: - Development: npm run dev (Vite dev server)
+   - Build: npm run build (generates production bundle)
+   - Preview: npm run preview (preview production build)
+   Configuration in vite.config.js
+
+Q19: What is the data flow for publications?
+A: Upload → Stored in data structure → Pending status → Coordinator review →
+    Status update → If approved, appears in main feed → Searchable/filterable
+    → Users can view details → View in PublicationPage
+
+Q20: How are form validations handled?
+A: Forms use local state for validation errors. LoginForm, SignUpForm, and
+    Upload form all have error states. Validation typically done on submit with
+    error messages displayed via alert components (e.g., LoginAlert).
+
+Q21: Can users switch between roles?
+A: The UserSwitcher component suggests role-switching capability, likely for
+    users with multiple roles (e.g., a lecturer who is also a coordinator).
+    This allows accessing different dashboards without logging out.
+
+Q22: What is the UserVerificationList component for?
+A: Located in the Verification page, this component displays users pending
+    verification. Likely used by coordinators or admins to verify new user
+    registrations before granting full access.
+
+Q23: How are announcements distributed?
+A: Admins create announcements via AdminAnnouncement page. These likely appear
+    as notifications to all users or displayed prominently on the main page.
+
+Q24: What development branch is currently active?
+A: Multiple branches exist:
+    - "doc" branch: Documentation updates
+    - "fi" branch: Recently created (purpose unclear from context)
+    Main development work appears to be on the "doc" branch.
+
+Q25: Are there any testing files in the project?
+A: Based on the visible structure, no dedicated test files are shown. Testing
+    would need to be added separately using tools like Jest, React Testing
+    Library, or Vitest.
+
+Q26: How is code quality maintained?
+A: - ESLint configuration (eslint.config.js) for code linting
+   - JSDoc comments for component documentation
+   - Inline comments for function explanations
+   - Consistent code style across components
+
+Q27: What is the purpose of the data folder?
+A: Contains static/mock data files (publications.js, UserData.js) that were used
+    during initial frontend development. Now that backend API integration is
+    complete, the frontend fetches all data directly from the backend API
+    instead of using these mock files.
+
+Q28: How are loading states handled?
+A: Components typically use loading state (useState) to show loading indicators
+    while data is being fetched. Pattern: Show spinner/skeleton → Fetch data →
+    Update state → Render content.
+
+Q29: What is the FilePreview component?
+A: Part of PublicationPage, displays uploaded files (PDFs, documents) inline
+    or provides download functionality. Allows users to preview research files
+    without leaving the page.
+
+================================================================================
+                            DEVELOPMENT NOTES
+================================================================================
+
+Current State:
+- Frontend fully structured with all major pages and components
+- Documentation complete with JSDoc and inline comments
+- Styling consolidated using Tailwind CSS
+- Backend API integration complete - fetching real data from backend
+- Git branch "doc" active for documentation work
+
+================================================================================
+                              END OF DOCUMENTATION
+================================================================================
+
+For additional questions or clarifications, refer to:
+- Component source files in src/components/
+- Main page components in src/
+- Configuration files: vite.config.js, package.json
+- Git history for change tracking
+
+Document Version: 1.0
+Generated: February 3, 2026

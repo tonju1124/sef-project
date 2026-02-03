@@ -71,9 +71,9 @@ function FacultyDropdown({ value, customFaculty, setCustomFaculty, onChange, has
             <polyline points="6 9 12 15 18 9"></polyline>
           </svg>
         </button>
+        {/* Display faculty options - user can click to select */}
         {isOpen && (
           <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg z-10 animate-slide-in">
-            /* Display faculty options - user can click to select */
             {options.map(option => (
               <button
                 key={option.value}
