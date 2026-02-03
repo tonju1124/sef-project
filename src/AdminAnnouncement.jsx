@@ -4,6 +4,12 @@ import UserDropdown from './components/UserDropdown';
 import { useUser } from './context/UserContext';
 import NotAnAdminError from './components/NotAnAdminError';
 
+/**
+ * AdminAnnouncement Component
+ * 
+ * Admin-only page for creating and managing system-wide announcements.
+ * Restricted to users with admin privileges.
+ */
 function AdminAnnouncement() {
   const [navOpen, setNavOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);

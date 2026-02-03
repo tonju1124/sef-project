@@ -1,8 +1,20 @@
+/**
+ * SearchBar Component
+ * 
+ * A reusable search input field with clear button functionality.
+ * Used across the application for filtering lists and publications.
+ */
 function SearchBar({ value, onChange, placeholder = "Search..." }) {
+  /**
+   * Updates search value when user types in input field.
+   */
   const handleChange = (e) => {
     onChange(e.target.value);
   };
 
+  /**
+   * Clears the search value when user clicks clear button.
+   */
   const handleClear = () => {
     onChange('');
   };
@@ -10,13 +22,15 @@ function SearchBar({ value, onChange, placeholder = "Search..." }) {
   return (
     <div className="mb-6">
       <div className="relative w-full">
+        {/* Text input field for search queries */}
         <input
-          type="text"
+n          type="text"
           placeholder={placeholder}
           value={value}
           onChange={handleChange}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:bg-gray-100 focus:border-gray-100 focus:shadow-sm hover:bg-gray-100 hover:border-gray-100 hover:shadow-sm transition-colors duration-300"
         />
+        {/* Clear button - appears only when there's text in the input */}
         {value && (
           <button
             onClick={handleClear}

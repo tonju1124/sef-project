@@ -3,6 +3,13 @@ import NavigationSidebar from "./components/NavigationSidebar";
 import UserDropdown from "./components/UserDropdown";
 import UserVerification from "./components/UserVerification/UserVerificationList";
 
+/**
+ * Verification Component
+ * 
+ * Page displaying the verification status of user's publications.
+ * Shows a list of all publications submitted by the user with their current verification status
+ * (pending, verified, or rejected).
+ */
 function Verification() {
   const [navOpen, setNavOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);

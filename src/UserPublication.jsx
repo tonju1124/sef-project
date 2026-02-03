@@ -6,6 +6,12 @@ import PublicationCard from "./components/PublicationCard";
 import { useUser } from "./context/UserContext";
 import { publications } from "./data/publications";
 
+/**
+ * UserPublication Component
+ * 
+ * Displays all publications where the current user is the author or co-author.
+ * Includes search functionality to filter user's publications.
+ */
 function UserPublication() {
   const [navOpen, setNavOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);
@@ -16,7 +22,7 @@ function UserPublication() {
   // Get publications where current user is author or coauthor from global publications list
   // Admins see everything, regular users see only verified and not hidden
   const userPublications = publications.filter(pub => 
-    (pub.author === user.name || pub.coauthor === user.name) && 
+    (pub.author === user.userID || pub.coauthor === user.userID) && 
     (user.role === "admin" ? true : (!pub.hidden && pub.status === "verified"))
   );
 
@@ -45,6 +51,12 @@ function UserPublication() {
         );
       });
 
+  /**
+   * Formats a date string from YYYY-MM-DD to DD/MM/YYYY format
+   * 
+   * @param {string} dateString - Date in YYYY-MM-DD format
+   * @returns {string} Formatted date in DD/MM/YYYY format
+   */
   const formatDate = (dateString) => {
     const [year, month, day] = dateString.split('-');
     return `${day}/${month}/${year}`;

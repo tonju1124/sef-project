@@ -1,5 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
 
+/**
+ * AdminFilterDropdown Component
+ * 
+ * A dropdown filter menu for admin users to filter publications by hidden status and verification status.
+ * Allows filtering by hidden/visible and verification status (verified, pending, rejected).
+ */
 function AdminFilterDropdown({ onFilterChange }) {
   const [isOpen, setIsOpen] = useState(false);
   const [hiddenFilter, setHiddenFilter] = useState('All');
@@ -13,7 +19,10 @@ function AdminFilterDropdown({ onFilterChange }) {
 
   const hiddenOptions = ['All', 'Hidden', 'Visible'];
 
-  // Notify parent of filter changes
+  /**
+   * Notifies parent component of filter changes.
+   * Triggers callback with current hidden status and verification status filters.
+   **/
   const notifyFilterChange = (hidden, status) => {
     onFilterChange?.({
       hidden,
@@ -21,16 +30,26 @@ function AdminFilterDropdown({ onFilterChange }) {
     });
   };
 
+  /**
+   * Toggles the dropdown open/closed state.
+   */
   const handleOpen = () => {
     setIsOpen(!isOpen);
   };
 
+  /**
+   * Updates the hidden status filter and notifies parent of the change.
+   **/
   const handleHiddenChange = (option) => {
     setHiddenFilter(option);
     notifyFilterChange(option, statusFilters);
   };
 
   const handleStatusToggle = (status) => {
+  /**
+   * Toggles a verification status filter on/off.
+   * Updates the status filter state and notifies parent of the change.
+   **/
     const newStatusFilters = {
       ...statusFilters,
       [status]: !statusFilters[status]
@@ -39,6 +58,10 @@ function AdminFilterDropdown({ onFilterChange }) {
     notifyFilterChange(hiddenFilter, newStatusFilters);
   };
 
+  /**
+   * Resets all filters to their default values.
+   * Clears both hidden status and verification status filters, then notifies parent.
+   */
   const handleResetFilters = () => {
     setHiddenFilter('All');
     setStatusFilters({
@@ -53,6 +76,10 @@ function AdminFilterDropdown({ onFilterChange }) {
     });
   };
 
+  /**
+   * Sets up click-outside handler to close dropdown when user clicks elsewhere.
+   * Adds/removes event listeners based on dropdown open state.
+   */
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {

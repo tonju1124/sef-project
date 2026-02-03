@@ -1,5 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * UploadPublicationButton Component
+ * 
+ * A button that navigates to the publication upload page.
+ * Displayed on the main page to allow users to publish their research.
+ */
 function UploadPublicationButton() {
   const navigate = useNavigate();
 

@@ -1,5 +1,11 @@
 import { useRef, useEffect } from 'react';
 
+/**
+ * FilterDropdown Component
+ * 
+ * A reusable dropdown selector for filtering lists.
+ * Used on the main page for sorting and filtering publications.
+ */
 function FilterDropdown({ label, value, options, isOpen, onToggle, onSelect, dropdownPos }) {
   const buttonRef = useRef(null);
   const dropdownRef = useRef(null);

@@ -1,16 +1,29 @@
 import { useState, useRef, useEffect } from 'react';
 
+/**
+ * TypeFilter Component
+ * 
+ * A dropdown filter for selecting user type.
+ * Allows filtering by user role (All, Admin, Student, Lecturer, Coordinator).
+ */
 function TypeFilter({ value, onChange }) {
   const [isOpen, setIsOpen] = useState(false);
   const types = ['All', 'Admin', 'Student', 'Lecturer', 'Coordinator'];
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
 
+  /**
+   * Updates the selected filter value and closes the dropdown.
+   */
   const handleSelect = (type) => {
     onChange(type);
     setIsOpen(false);
   };
 
+  /**
+   * Sets up click-outside handler to close dropdown when user clicks elsewhere.
+   * Adds/removes event listener based on dropdown open state.
+   */
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {

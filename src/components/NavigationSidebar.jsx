@@ -2,15 +2,22 @@ import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useUser } from "../context/UserContext";
 
+/**
+ * NavigationSidebar Component
+ * 
+ * A responsive sidebar navigation menu that provides access to different sections of the application
+ * based on user roles. The sidebar includes standard user navigation items, admin-specific panels,
+ * and coordinator-specific panels. It can be toggled open/closed and includes an overlay for mobile views.
+ */
 function NavigationSidebar({ navOpen, setNavOpen }) {
   const navigate = useNavigate();
   const { user } = useUser();
   const isAdmin = user.isAdmin;
 
+  // Navigation items available to all users
   const navItems = [
     { label: "Home", path: "/", icon: "home" },
     { label: "My Project", path: "/user-publication", icon: "project" },
-    { label: "Saved", path: "/bookmark", icon: "bookmark" },
     { label: "Notification", path: "/notifications", icon: "notification" },
     { label: "My Analytics", path: "/analytics", icon: "analytics" },
     {
@@ -20,6 +27,7 @@ function NavigationSidebar({ navOpen, setNavOpen }) {
     },
   ];
 
+  // Navigation items visible only to admin users
   const adminItems = [
     { label: "Announcement", path: "/announcement", icon: "announcement" },
     {
@@ -36,6 +44,7 @@ function NavigationSidebar({ navOpen, setNavOpen }) {
     },
   ];
 
+  // Navigation items visible only to coordinator users
   const coordinatorItems = [
     { label: "Verify Publication", path: "/verifypublication", icon: "coordinatorverify" },
     {
@@ -45,6 +54,15 @@ function NavigationSidebar({ navOpen, setNavOpen }) {
     },
   ];
 
+  /**
+   * Returns the appropriate SVG icon for a given icon name
+   * 
+   * This function maps icon names to their corresponding SVG markup for consistent
+   * icon rendering across all navigation items.
+   * 
+   * @param {string} iconName - The name of the icon to retrieve (e.g., 'home', 'project', 'notification')
+   * @returns {JSX.Element|null} The SVG icon element or null if the icon name doesn't exist
+   */
   const getIcon = (iconName) => {
     const icons = {
       home: (
@@ -55,11 +73,6 @@ function NavigationSidebar({ navOpen, setNavOpen }) {
       project: (
         <svg className="w-5 h-5" fill="black" viewBox="0 0 24 24">
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-8-6z" />
-        </svg>
-      ),
-      bookmark: (
-        <svg className="w-5 h-5" fill="black" viewBox="0 0 24 24">
-          <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
         </svg>
       ),
       notification: (
@@ -106,6 +119,15 @@ function NavigationSidebar({ navOpen, setNavOpen }) {
     return icons[iconName] || null;
   };
 
+  /**
+   * Handles navigation item click events
+   * 
+   * Navigates to the specified path and optionally passes a section state.
+   * Closes the sidebar after navigation to improve mobile UX.
+   * 
+   * @param {string} path - The route path to navigate to (e.g., '/analytics', '/verification')
+   * @param {string} [section] - Optional section identifier to pass as navigation state (e.g., 'users', 'dashboard')
+   */
   const handleNavClick = (path, section) => {
     navigate(path, { state: { activeTab: section } });
     setNavOpen(false);
@@ -113,6 +135,7 @@ function NavigationSidebar({ navOpen, setNavOpen }) {
 
   return (
     <>
+      {/* Toggle button for opening/closing the sidebar */}
       <button
         onClick={() => setNavOpen(!navOpen)}
         className="fixed top-4 left-4 z-50 p-2 hover:bg-gray-200 rounded shadow-sm"

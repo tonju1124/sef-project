@@ -7,6 +7,11 @@ import AdminUserManagementBox from './components/AdminUserManage/AdminUserManage
 import TypeFilter from './components/AdminUserManage/TypeFilter';
 import SearchBar from './components/SearchBar';
 
+/*
+ * AdminUserManagement Component
+ * Admin-only page for managing user accounts.
+ * Allows admins to view, search, filter, and deactivate user accounts.
+ */
 function AdminUserManagement() {
   const [navOpen, setNavOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);

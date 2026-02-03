@@ -9,6 +9,12 @@ import { publications } from './data/publications';
 import SearchBar from './components/SearchBar';
 import { useUser } from './context/UserContext';
 
+/**
+ * MainPage Component
+ * 
+ * The main landing page displaying all publications with filtering, sorting, and search capabilities.
+ * Provides different views and controls based on user role (admin vs regular users).
+ */
 function MainPage() {
   const [navOpen, setNavOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);
@@ -159,7 +165,6 @@ function MainPage() {
                 coauthor={pub.coauthor}
                 uploadDate={pub.uploadDate}
                 description={pub.description}
-                bookmarked={pub.bookmarked}
                 onHideConfirm={handleHideConfirm}
               />
             ))

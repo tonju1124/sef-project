@@ -1,3 +1,9 @@
+/**
+ * SignUpHeader Component
+ * 
+ * Displays the welcoming header for the sign-up page.
+ * Shows the page title and a brief call-to-action description.
+ */
 function SignUpHeader() {
   return (
     <div className="mb-4">

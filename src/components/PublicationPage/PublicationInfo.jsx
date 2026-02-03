@@ -1,3 +1,9 @@
+/**
+ * PublicationInfo Component
+ * 
+ * Displays metadata about the publication (author, date, category).
+ * Shown in a grid layout on the publication detail page.
+ */
 function PublicationInfo({ author, coauthor, uploadDate, category, formatDate }) {
   return (
     <div className="grid grid-cols-2 gap-6 mb-8 pb-8 border-b border-gray-200">

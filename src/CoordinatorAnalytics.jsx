@@ -5,6 +5,12 @@ import CoordinatorAnalyticsComponent from './components/CoordinatorAnalytics/Coo
 import { useUser } from './context/UserContext';
 import NotACoordinator from './components/NotACoordinator';
 
+/**
+ * CoordinatorAnalytics Component
+ * 
+ * Coordinator-only page displaying department-wide publication analytics.
+ * Provides insights into publication statistics across the department.
+ */
 function CoordinatorAnalytics() {
   const [navOpen, setNavOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);

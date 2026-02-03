@@ -1,5 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * BackButton Component
+ * 
+ * A navigation button that returns to the home page.
+ * Displayed at the top of the upload page.
+ */
 export default function BackButton() {
   const navigate = useNavigate();
 

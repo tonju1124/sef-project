@@ -3,6 +3,12 @@ import LoginSignupSidebar from "./components/LoginSignupSidebar";
 import LoginHeader from "./components/Login/LoginHeader";
 import LoginForm from "./components/Login/LoginForm";
 
+/**
+ * LogIn Component
+ * 
+ * The login page allowing users to authenticate with their credentials.
+ * Includes form validation, loading states, and error/success messaging.
+ */
 function LogIn() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
@@ -11,6 +17,12 @@ function LogIn() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
 
+  /**
+   * Handles form submission for user login
+   * Validates input fields, simulates API call, and manages success/error states
+   * 
+   * @param {React.FormEvent<HTMLFormElement>} e - The form submit event
+   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");

@@ -1,3 +1,9 @@
+/**
+ * DescriptionTextarea Component
+ * 
+ * A textarea input for entering publication descriptions.
+ * Includes character counter and error state styling.
+ */
 export default function DescriptionTextarea({
   description,
   onChange,

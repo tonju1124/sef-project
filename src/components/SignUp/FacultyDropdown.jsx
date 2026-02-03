@@ -1,9 +1,19 @@
 import { useState, useRef, useEffect } from "react";
 
+/**
+ * FacultyDropdown Component
+ * 
+ * A dropdown selector for choosing a faculty from predefined options.
+ * When "Others" is selected, displays a text input field for custom faculty entry.
+ */
 function FacultyDropdown({ value, customFaculty, setCustomFaculty, onChange, hasError, customFacultyError, setCustomFacultyError }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
+  /**
+   * Sets up click-outside handler to close dropdown when user clicks elsewhere.
+   * Adds/removes event listener based on dropdown open state.
+   */
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -18,6 +28,10 @@ function FacultyDropdown({ value, customFaculty, setCustomFaculty, onChange, has
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
 
+  /**
+   * Available faculty options to display in the dropdown.
+   * Includes predefined faculties and "Others" option for custom entry.
+   */
   const options = [
     { value: "FCI", label: "FCI - Faculty of Computing and Informatics" },
     { value: "FOM", label: "FOM - Faculty of Accountancy and Management" },
@@ -27,7 +41,16 @@ function FacultyDropdown({ value, customFaculty, setCustomFaculty, onChange, has
     { value: "Others", label: "Others" }
   ];
 
+  /**
+   * Determines the display value for the dropdown button.
+   * Shows "Others" if custom faculty is selected or being edited.
+   */
   const displayValue = value === "Others" || (customFaculty && value !== "FCI" && value !== "FOM" && value !== "FCM" && value !== "FAC" && value !== "FAIE") ? "Others" : value;
+
+  /**
+   * Toggles the dropdown open/closed state.
+   */
+  const toggleDropdown = () => setIsOpen(!isOpen);
 
   return (
     <>
@@ -50,6 +73,7 @@ function FacultyDropdown({ value, customFaculty, setCustomFaculty, onChange, has
         </button>
         {isOpen && (
           <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg z-10 animate-slide-in">
+            /* Display faculty options - user can click to select */
             {options.map(option => (
               <button
                 key={option.value}
@@ -65,11 +89,13 @@ function FacultyDropdown({ value, customFaculty, setCustomFaculty, onChange, has
           </div>
         )}
       </div>
+      {/* Show custom faculty input field when "Others" option is selected */}
       {displayValue === "Others" ? (
         <input
           type="text"
           value={customFaculty}
           onChange={(e) => {
+            // Update custom faculty value and clear error if input has text
             setCustomFaculty(e.target.value);
             if (e.target.value.trim()) {
               setCustomFacultyError(false);

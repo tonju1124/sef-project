@@ -1,8 +1,20 @@
 import { useState, useRef, useEffect } from 'react';
 
+/**
+ * StatusDropdown Component
+ * 
+ * A dropdown selector for changing publication verification status.
+ * Displays status with color-coded icons and allows selection from verified, pending, or rejected states.
+ */
+
 function StatusDropdown({ status, onChange }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
+
+  /**
+   * Returns the color styling for a given status.
+   * Applies appropriate background and text colors based on status type.
+   **/
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -17,10 +29,17 @@ function StatusDropdown({ status, onChange }) {
     }
   };
 
+  /**
+   * Converts status text to display format with first letter capitalized.
+   **/
   const getStatusLabel = (status) => {
     return status.charAt(0).toUpperCase() + status.slice(1);
   };
 
+  /**
+   * Returns the appropriate SVG icon for a given status.
+   * Different icons represent verified (checkmark), pending (circle), and rejected (X) states.
+   **/
   const getStatusIcon = (status) => {
     switch (status) {
       case 'verified':
@@ -46,11 +65,19 @@ function StatusDropdown({ status, onChange }) {
     }
   };
 
+  /**
+   * Handles status selection from dropdown options.
+   * Updates the status value and closes the dropdown.
+   **/
   const handleSelect = (newStatus) => {
     onChange(newStatus);
     setIsOpen(false);
   };
 
+  /**
+   * Sets up click-outside handler to close dropdown when user clicks elsewhere.
+   * Adds/removes event listeners based on dropdown open state.
+   */
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -117,6 +144,10 @@ function FilterDropdown({ value, onSelect }) {
   const [isAnimating, setIsAnimating] = useState(false);
   const dropdownRef = useRef(null);
 
+  /**
+   * Triggers animation effect when value changes.
+   * Briefly scales the button to provide visual feedback.
+   */
   useEffect(() => {
     setIsAnimating(true);
     const timer = setTimeout(() => setIsAnimating(false), 300);
@@ -125,6 +156,10 @@ function FilterDropdown({ value, onSelect }) {
 
   const options = ['All', 'Verified', 'Pending', 'Rejected'];
 
+  /**
+   * Returns the color styling for a given filter status.
+   * Applies appropriate background and text colors based on filter type.
+   **/
   const getStatusColor = (status) => {
     if (status === 'All') return 'bg-blue-100 text-blue-800';
     switch (status) {
@@ -139,6 +174,10 @@ function FilterDropdown({ value, onSelect }) {
     }
   };
 
+  /**
+   * Returns the appropriate SVG icon for a given filter status.
+   * Different icons represent all publications, verified, pending, and rejected states.
+   **/
   const getStatusIcon = (status) => {
     switch (status) {
       case 'All':
@@ -188,6 +227,32 @@ function FilterDropdown({ value, onSelect }) {
     };
   }, [isOpen]);
 
+  /**
+   * Sets up click-outside handler to close dropdown when user clicks elsewhere.
+   * Adds/removes event listeners based on dropdown open state.
+   */
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        if (isOpen) {
+          setIsOpen(false);
+        }
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isOpen]);
+
+  /**
+   * Handles filter option selection.
+   * Updates the filter value and closes the dropdown.
+   **/
   const handleSelect = (option) => {
     onSelect(option);
     setIsOpen(false);

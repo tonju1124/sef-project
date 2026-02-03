@@ -1,5 +1,11 @@
 import { Link } from 'react-router-dom';
 
+/**
+ * LoginSignUpLink Component
+ * 
+ * Displays a link to the sign-up page for users who don't have an account.
+ * Includes animated hover effects for better UX.
+ */
 function LoginSignUpLink() {
   return (
     <>

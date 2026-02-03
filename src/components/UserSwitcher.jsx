@@ -1,7 +1,13 @@
 import { useUser } from '../context/UserContext';
 
-// UserSwitcher component to switch between admin and student users  this will be deleted after demo}
-
+/**
+ * UserSwitcher Component
+ * 
+ * Development utility component for switching between different user roles.
+ * Allows testing different features based on user role (admin, student, lecturer, coordinator).
+ * 
+ * NOTE: This component is intended for development/demo purposes and should be removed before production.
+ */
 export default function UserSwitcher() {
   const { user, switchUser } = useUser();
 

@@ -2,6 +2,12 @@ import LoginSignupSidebar from "./components/LoginSignupSidebar";
 import SignUpHeader from "./components/SignUp/SignUpHeader";
 import SignUpForm from "./components/SignUp/SignUpForm";
 
+/**
+ * SignUp Component
+ * 
+ * The registration page for new users to create an account.
+ * Provides a form to enter user details including role, faculty, and credentials.
+ */
 function SignUp() {
   return (
     <div className="min-h-screen bg-white flex select-none">

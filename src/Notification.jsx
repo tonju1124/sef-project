@@ -4,6 +4,12 @@ import UserDropdown from './components/UserDropdown';
 import NotificationCard from './components/Notification/NotificationCard';
 import { useUser } from './context/UserContext';
 
+/**
+ * Notification Component
+ * 
+ * Displays a list of notifications for the current user.
+ * Shows messages about publication status, system updates, and other relevant alerts.
+ */
 function Notification() {
 
       const [navOpen, setNavOpen] = useState(false);

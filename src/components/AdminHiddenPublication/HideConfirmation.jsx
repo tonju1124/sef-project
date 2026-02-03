@@ -1,3 +1,9 @@
+/**
+ * HideConfirmation Component
+ * 
+ * A confirmation modal for hiding publications.
+ * Displays publication title and requires confirmation before hiding.
+ */
 function HideConfirmation({ publicationTitle, onConfirm, onCancel }) {
   return (
     <div className="fixed inset-0 backdrop-blur-lg flex items-center justify-center z-50 bg-white bg-opacity-10 cursor-pointer animate-fadeIn" onClick={onCancel}>
@@ -11,10 +17,12 @@ function HideConfirmation({ publicationTitle, onConfirm, onCancel }) {
           </div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Hide Publication</h2>
           <p className="text-gray-600 mb-4">Are you sure you want to hide this publication?</p>
+          {/* Display publication information for confirmation */}
           <div className="bg-gray-50 p-4 rounded-lg mb-3">
             <p className="text-sm text-gray-600">Title: <span className="font-semibold text-gray-800">{publicationTitle}</span></p>
           </div>
         </div>
+        {/* Action buttons: Cancel or Hide */}
         <div className="flex gap-4 justify-center pt-6 border-t border-gray-200">
           <button
             onClick={onCancel}
