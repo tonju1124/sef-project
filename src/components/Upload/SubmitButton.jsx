@@ -1,3 +1,9 @@
+/**
+ * SubmitButton Component
+ * 
+ * The submit button for the publication upload form.
+ * Positioned at the bottom-right of the form.
+ */
 export default function SubmitButton({ onClick }) {
   return (
     <div className="flex justify-end w-[95%]">

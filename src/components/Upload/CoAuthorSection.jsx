@@ -1,5 +1,11 @@
 import { useState } from "react";
 
+/**
+ * CoAuthorSection Component
+ * 
+ * Manages the co-author input field in the publication upload form.
+ * Toggles between button and input field for adding/editing co-author name.
+ */
 export default function CoAuthorSection({
   coAuthorName,
   setCoAuthorName,

@@ -5,6 +5,12 @@ import AdminHidePublication from './components/AdminHiddenPublication/AdminHideP
 import { useUser } from './context/UserContext';
 import NotAnAdminError from './components/NotAnAdminError';
 
+/*
+ * HiddenPublication Component
+ * Admin-only page for managing publication visibility.
+ * Allows admins to hide or unhide publications from public view.
+ * 
+ */
 function HiddenPublication() {
   const [navOpen, setNavOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);

@@ -1,3 +1,9 @@
+/**
+ * FileUploadSection Component
+ * 
+ * Manages file uploads with visual feedback for selected files.
+ * Displays either an upload button (when no files) or list of selected files.
+ */
 export default function FileUploadSection({
   title,
   buttonLabel,

@@ -6,6 +6,12 @@ import { useUser } from "./context/UserContext";
 import NotACoordinator from "./components/NotACoordinator";
 import SearchBar from "./components/SearchBar";
 
+/**
+ * CoordinatorVerify Component
+ * 
+ * Coordinator-only page for verifying research publications.
+ * Allows coordinators to review, approve, or reject publications submitted by faculty members.
+ */
 function CoordinatorVerify() {
   const [navOpen, setNavOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);

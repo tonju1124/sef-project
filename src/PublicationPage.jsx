@@ -9,6 +9,13 @@ import PublicationInfo from './components/PublicationPage/PublicationInfo';
 import PublicationDescription from './components/PublicationPage/PublicationDescription';
 import FilePreview from './components/PublicationPage/FilePreview';
 
+/**
+ * PublicationPage Component
+ * 
+ * Detailed view page for a single publication.
+ * Displays comprehensive information about the publication including title, authors,
+ * description, status, and file previews.
+ */
 function PublicationPage() {
   const [navOpen, setNavOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);
@@ -22,9 +29,6 @@ function PublicationPage() {
   const publication = publications.find(pub => pub.id === parseInt(id));
   
   console.log('Found publication:', publication);
-
-  const [isBookmarked, setIsBookmarked] = useState(publication?.bookmarked || false);
-  const [isAnimating, setIsAnimating] = useState(false);
 
   if (!publication) {
     return (
@@ -42,17 +46,17 @@ function PublicationPage() {
     );
   }
 
+  /**
+   * Formats a date string from YYYY-MM-DD to DD/MM/YYYY format
+   * Returns "N/A" if date string is invalid or missing
+   * 
+   * @param {string} dateString - Date in YYYY-MM-DD format
+   * @returns {string} Formatted date in DD/MM/YYYY format or "N/A"
+   */
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
     const [year, month, day] = dateString.split('-');
     return `${day}/${month}/${year}`;
-  };
-
-  const toggleBookmark = () => {
-    setIsAnimating(true);
-    setIsBookmarked(!isBookmarked);
-    publication.bookmarked = !publication.bookmarked;
-    setTimeout(() => setIsAnimating(false), 200);
   };
 
   return (
@@ -65,12 +69,7 @@ function PublicationPage() {
           <PublicationHeader 
             title={publication.title}
             status={publication.status}
-            isBookmarked={isBookmarked}
-            isAnimating={isAnimating}
-            onBookmarkClick={toggleBookmark}
-          />
-          
-          <PublicationInfo 
+
             author={publication.author}
             coauthor={publication.coauthor}
             uploadDate={publication.uploadDate}

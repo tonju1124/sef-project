@@ -6,6 +6,12 @@ import SearchBar from './components/SearchBar';
 import { useUser } from './context/UserContext';
 import { publications } from './data/publications';
 
+/**
+ * Analytics Component
+ * Displays analytics and statistics about the user's publications.
+ * Groups publications by category and provides search filtering.
+ **/
+
 function Analytics() {
   const [navOpen, setNavOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);
@@ -16,7 +22,7 @@ function Analytics() {
   // Filter publications where current user is author or coauthor
   // Admins see everything, regular users see only verified and not hidden
   const userPublications = publications.filter(
-    pub => (pub.author === user.name || pub.coauthor === user.name) && 
+    pub => (pub.author === user.userID || pub.coauthor === user.userID) && 
       (user.role === "admin" ? true : (!pub.hidden && pub.status === "verified"))
   );
 
@@ -34,10 +40,17 @@ function Analytics() {
     label: key.charAt(0).toUpperCase() + key.slice(1)
   }));
 
+  /**
+   * Toggles the expanded state of a category card
+   * Opens the selected category to show publications, or closes it if already open
+  **/
   const toggleCategory = (category) => {
     setExpandedCategory(expandedCategory === category ? null : category);
   };
 
+  /**
+   * Calculates the total number of publications for the user
+   **/
   const getTotalPublications = () => {
     return userPublications.length;
   };
@@ -54,7 +67,11 @@ function Analytics() {
         return matchingArticles.length > 0;
       });
 
-  // Get filtered articles for each category
+  /**
+   * Gets filtered articles for a specific category based on search query
+   * Returns all articles if no search query, otherwise filters by title match
+   **/
+
   const getFilteredArticles = (categoryId) => {
     if (searchQuery.trim() === '') {
       return articlesByCategory[categoryId];

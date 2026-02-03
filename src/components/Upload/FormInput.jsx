@@ -1,3 +1,9 @@
+/**
+ * FormInput Component
+ * 
+ * A reusable text input field for forms with optional error state styling.
+ * Used in the upload form for title and other text inputs.
+ */
 export default function FormInput({
   label,
   value,

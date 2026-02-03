@@ -3,6 +3,12 @@ import NavigationSidebar from "./components/NavigationSidebar";
 import UserDropdown from "./components/UserDropdown";
 import UserProfileCard from "./components/UserProfile/UserProfileCard";
 
+/**
+ * UserProfile Component
+ * 
+ * Page displaying the current user's profile information.
+ * Allows users to view and edit their personal details.
+ */
 function UserProfile() {
   const [navOpen, setNavOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);

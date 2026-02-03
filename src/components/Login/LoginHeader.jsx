@@ -1,3 +1,9 @@
+/**
+ * LoginHeader Component
+ * 
+ * Displays the welcoming header for the login page.
+ * Shows the page title and a brief description.
+ */
 function LoginHeader() {
   return (
     <div className="mb-8">

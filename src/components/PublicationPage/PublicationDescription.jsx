@@ -1,3 +1,9 @@
+/**
+ * PublicationDescription Component
+ * 
+ * Displays the full publication description/abstract.
+ * Preserves formatting and line breaks from the original text.
+ */
 function PublicationDescription({ description }) {
   return (
     <div className="mb-8 pb-8 border-b border-gray-200">

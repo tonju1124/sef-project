@@ -1,3 +1,9 @@
+/**
+ * LoginSubmitButton Component
+ * 
+ * The submit button for the login form with loading state animation.
+ * Shows a spinner and "Signing in..." text when loading, otherwise shows "Sign In".
+ */
 function LoginSubmitButton({ isLoading }) {
   return (
     <button

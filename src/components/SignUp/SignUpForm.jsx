@@ -5,6 +5,12 @@ import LoginSubmitButton from "../Login/LoginSubmitButton";
 import SignUpLogInLink from "./SignUpLogInLink";
 import SignUpFields from "./SignUpFields";
 
+/**
+ * SignUpForm Component
+ * 
+ * The main registration form containing all input fields for account creation.
+ * Manages user input, validation, and form submission.
+ */
 function SignUpForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

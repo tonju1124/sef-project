@@ -6,7 +6,7 @@ function UserVerification() {
 
   // Get publications where current user is author or coauthor
   const userPublications = publications.filter(
-    pub => pub.author === user.name || pub.coauthor === user.name
+    pub => pub.author === user.userID || pub.coauthor === user.userID
   );
 
   // Format date from YYYY-MM-DD to DD/MM/YYYY

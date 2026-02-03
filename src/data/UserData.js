@@ -1,7 +1,7 @@
 // Admin User
 export const adminUser = {
   id: 1,
-  name: "John Doe",
+  userID: "admin001",
   email: "john.doe@example.com",
   role: "admin",
   avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=John",
@@ -12,7 +12,6 @@ export const adminUser = {
   faculty: "FCM",
   phone: "+60 12-3456789",
   scholarLink: "https://scholar.google.com/citations?user=admin123",
-  bookmarks: [1, 5, 9],
   notifications: [
     {
       id: 1,
@@ -32,7 +31,7 @@ export const adminUser = {
 // Student User
 export const studentUser = {
   id: 2,
-  name: "Jane Smith",
+  userID: "student001",
   email: "jane.smith@example.com",
   role: "student",
   avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Jane",
@@ -43,7 +42,6 @@ export const studentUser = {
   faculty: "FCI",
   phone: "+60 14-5678901",
   scholarLink: "https://scholar.google.com/citations?user=student123",
-  bookmarks: [2, 6],
   notifications: [
     {
       id: 1,
@@ -57,7 +55,7 @@ export const studentUser = {
 // Lecturer User
 export const lecturerUser = {
   id: 3,
-  name: "Michael Chen",
+  userID: "lecturer001",
   email: "michael.chen@example.com",
   role: "lecturer",
   avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Michael",
@@ -68,7 +66,6 @@ export const lecturerUser = {
   faculty: "FCI",
   phone: "+60 16-7890123",
   scholarLink: "https://scholar.google.com/citations?user=lecturer123",
-  bookmarks: [3, 4, 10],
   notifications: [
     {
       id: 1,
@@ -88,7 +85,7 @@ export const lecturerUser = {
 // Coordinator User
 export const coordinatorUser = {
   id: 4,
-  name: "Amelia Johnson",
+  userID: "coordinator001",
   email: "amelia.johnson@example.com",
   role: "coordinator",
   avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Amelia",
@@ -99,7 +96,6 @@ export const coordinatorUser = {
   faculty: "FAS",
   phone: "+60 18-9012345",
   scholarLink: "https://scholar.google.com/citations?user=coordinator123",
-  bookmarks: [5, 7, 11, 15],
   notifications: [
     {
       id: 1,

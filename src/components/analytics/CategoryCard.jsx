@@ -1,3 +1,8 @@
+/*
+ * CategoryCard Component
+ * Displays a collapsible category card for analytics with publication list.
+ * Used in the Analytics page to show publications grouped by category.
+ */
 function CategoryCard({ category, count, isExpanded, onToggle, publications = [] }) {
   return (
     <div className="rounded-lg overflow-hidden">

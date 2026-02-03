@@ -1,3 +1,9 @@
+/**
+ * NotificationCard Component
+ * 
+ * Displays a single notification in a card/list format.
+ * Shows notification title, timestamp, and description.
+ */
 function NotificationCard({ title, timestamp, description }) {
   return (
     <div className="flex items-start gap-3 pb-4 border-b border-gray-200">

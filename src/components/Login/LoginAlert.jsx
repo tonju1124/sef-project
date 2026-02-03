@@ -1,3 +1,9 @@
+/**
+ * LoginAlert Component
+ * 
+ * Displays success or error alerts for the login form.
+ * Shows different styled messages based on the alert type with appropriate icons.
+ */
 function LoginAlert({ type, message }) {
   if (type === "error") {
     return (

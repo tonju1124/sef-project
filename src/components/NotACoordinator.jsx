@@ -1,5 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * NotACoordinatorError Component
+ * 
+ * Displays an access denied error modal for non-coordinator users attempting to access coordinator pages.
+ * Similar to NotAnAdminError but for coordinator role restriction.
+ */
 function NotACoordinatorError() {
   const navigate = useNavigate();
 

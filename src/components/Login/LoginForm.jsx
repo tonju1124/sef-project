@@ -4,6 +4,12 @@ import LoginFormFooter from "./LoginFormFooter";
 import LoginSubmitButton from "./LoginSubmitButton";
 import LoginSignUpLink from "./LoginSignUpLink";
 
+/**
+ * LoginForm Component
+ * 
+ * The main login form containing all input fields, validation alerts, and submit functionality.
+ * Manages form state and renders sub-components for inputs, alerts, and buttons.
+ */
 function LoginForm({
   id,
   setId,

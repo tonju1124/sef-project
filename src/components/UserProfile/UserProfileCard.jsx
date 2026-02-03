@@ -1,6 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import { useUser } from "../../context/UserContext";
 
+/**
+ * UserProfileCard Component
+ * 
+ * Displays and manages user profile information with view/edit modes.
+ * Supports editing profile details including title, faculty, contact info, and biography.
+ * Includes form validation, custom dropdowns, and animated transitions between view and edit modes.
+ */
 function UserProfileCard() {
   const { user } = useUser();
   const [isEditing, setIsEditing] = useState(false);
@@ -12,7 +19,7 @@ function UserProfileCard() {
   const facultyDropdownRef = useRef(null);
   const [formData, setFormData] = useState({
     title: user.title,
-    name: user.name,
+    name: user.userID,
     faculty: user.faculty,
     email: user.email,
     scholarLink: user.scholarLink,
@@ -24,7 +31,7 @@ function UserProfileCard() {
   useEffect(() => {
     setFormData({
       title: user.title,
-      name: user.name,
+      name: user.userID,
       faculty: user.faculty,
       email: user.email,
       scholarLink: user.scholarLink,
@@ -33,6 +40,10 @@ function UserProfileCard() {
     });
   }, [user]);
 
+  /**
+   * Handles changes to form input fields
+   * Updates the formData state with the new value from the input field
+   **/
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -41,6 +52,11 @@ function UserProfileCard() {
     }));
   };
 
+  /**
+   * Handles faculty selection changes from the dropdown
+   * If "Others" is selected, prepares the form for custom faculty input
+   * Otherwise, sets the selected faculty and clears custom input
+   **/
   const handleFacultyChange = (value) => {
     if (value === "Others") {
       setFormData(prev => ({
@@ -57,11 +73,20 @@ function UserProfileCard() {
     }
   };
 
+  /**
+   * Handles changes to the custom faculty input field
+   * Updates the customFaculty state when user types a custom faculty name
+   **/
   const handleCustomFacultyChange = (e) => {
     const value = e.target.value;
     setCustomFaculty(value);
   };
 
+  /**
+   * Handles saving the edited profile information
+   * Cleans up bio text (removes whitespace-only bios), applies custom faculty if selected,
+   * exits edit mode, and logs the saved data (placeholder for API call)
+   */
   const handleSave = () => {
     setIsEditing(false);
     // Clean up bio - if only whitespace, set to empty
@@ -74,6 +99,7 @@ function UserProfileCard() {
     setFormData(cleanedData);
   };
 
+  // Check if bio exceeds 200 characters to show "Read More" button
   const bioExceedsLimit = formData.bio.length > 200;
 
   // Close dropdown when clicking outside
@@ -91,6 +117,12 @@ function UserProfileCard() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  /**
+   * CustomDropdown Component
+   * 
+   * A reusable custom dropdown menu with smooth animations and hover effects.
+   * Displays selected value and toggles to show options list when clicked.
+   **/
   const CustomDropdown = ({ label, value, options, onChange, isOpen, dropdownRef }) => (
     <div className="relative" ref={dropdownRef}>
       <button
@@ -257,7 +289,8 @@ function UserProfileCard() {
                   value={formData.name}
                   onChange={handleInputChange}
                   placeholder="John Doe"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  disabled
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 cursor-not-allowed text-gray-600"
                 />
               </div>
 

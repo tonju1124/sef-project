@@ -2,6 +2,12 @@ import { useNavigate } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
 import { useState } from 'react';
 
+/**
+ * UserDropdown Component
+ * 
+ * Displays the current user profile button and dropdown menu.
+ * Located in top-right corner, provides navigation to profile and logout options.
+ */
 function UserDropdown({ navOpen, userOpen, setUserOpen }) {
   const navigate = useNavigate();
   const { user } = useUser();
@@ -44,7 +50,7 @@ function UserDropdown({ navOpen, userOpen, setUserOpen }) {
         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
           <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
         </svg>
-        <span className="text-sm font-medium">{user.name}</span>
+        <span className="text-sm font-medium">{user.userID}</span>
         <svg className={`w-4 h-4 transition-transform ${userOpen ? 'rotate-180' : ''}`} fill="currentColor" viewBox="0 0 24 24">
           <path d="M7 10l5 5 5-5z" />
         </svg>

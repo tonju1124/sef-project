@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./upload.css";
 import { useUser } from "./context/UserContext";
 import { publications } from "./data/publications";
 import BackButton from "./components/Upload/BackButton";
@@ -12,6 +11,13 @@ import DescriptionTextarea from "./components/Upload/DescriptionTextarea";
 import SubmitButton from "./components/Upload/SubmitButton";
 import PublicationSuccessModal from "./components/Upload/PublicationSuccessModal";
 
+/**
+ * Upload Component
+ * 
+ * Page for uploading new research publications.
+ * Provides a comprehensive form for entering publication details, uploading files,
+ * and submitting for verification.
+ */
 function Upload() {
   const { user } = useUser();
   const navigate = useNavigate();
@@ -30,18 +36,36 @@ function Upload() {
     proof: false
   });
 
+  /**
+   * Handles file selection for publication documents
+   * Updates state with selected files and clears any publication file errors
+   * 
+   * @param {React.ChangeEvent<HTMLInputElement>} e - The file input change event
+   */
   const handlePublicationFileChange = (e) => {
     const files = Array.from(e.target.files);
     setPublicationFiles(files);
     setErrors({ ...errors, publication: false });
   };
 
+  /**
+   * Handles file selection for proof documents
+   * Updates state with selected files and clears any proof file errors
+   * 
+   * @param {React.ChangeEvent<HTMLInputElement>} e - The file input change event
+   */
   const handleProofFileChange = (e) => {
     const files = Array.from(e.target.files);
     setProofFiles(files);
     setErrors({ ...errors, proof: false });
   };
 
+  /**
+   * Handles changes to the title input field
+   * Updates title state and clears title error if input is not empty
+   * 
+   * @param {React.ChangeEvent<HTMLInputElement>} e - The title input change event
+   */
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
     if (e.target.value.trim() !== "") {
@@ -49,6 +73,12 @@ function Upload() {
     }
   };
 
+  /**
+   * Handles changes to the description textarea
+   * Enforces 1000 character limit and clears description error if input is not empty
+   * 
+   * @param {React.ChangeEvent<HTMLTextAreaElement>} e - The description textarea change event
+   */
   const handleDescriptionChange = (e) => {
     if (e.target.value.length <= 1000) {
       setDescription(e.target.value);
@@ -58,6 +88,12 @@ function Upload() {
     }
   };
 
+  /**
+   * Gets today's date in YYYY-MM-DD format
+   * Used for setting the upload date of new publications
+   * 
+   * @returns {string} Current date in YYYY-MM-DD format
+   */
   const getTodayDate = () => {
     const today = new Date();
     const year = today.getFullYear();
@@ -66,10 +102,21 @@ function Upload() {
     return `${year}-${month}-${day}`;
   };
 
+  /**
+   * Generates the next available publication ID
+   * Finds the maximum ID in existing publications and increments by 1
+   * 
+   * @returns {number} The next unique publication ID
+   */
   const getNextId = () => {
     return Math.max(...publications.map(p => p.id)) + 1;
   };
 
+  /**
+   * Handles form submission for creating a new publication
+   * Validates all required fields, creates publication object, adds to publications array,
+   * resets form, and shows success modal
+   */
   const handleSubmitClick = () => {
     const newErrors = {
       title: title.trim() === "",
@@ -87,7 +134,7 @@ function Upload() {
     const newPublication = {
       id: getNextId(),
       title: title.trim(),
-      author: user.name,
+      author: user.userID,
       coauthor: coAuthorName.trim() || "",
       uploadDate: getTodayDate(),
       description: description.trim(),
@@ -150,7 +197,7 @@ function Upload() {
             <div className="w-full">
               <label className="block text-sm font-medium text-gray-700 mb-2">Author:</label>
               <div className="w-full px-4 py-3 bg-gray-50 rounded-lg border border-gray-300 text-gray-700 font-medium">
-                {user.name}
+                {user.userID}
               </div>
             </div>
 

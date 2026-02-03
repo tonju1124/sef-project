@@ -13,7 +13,6 @@ import Analytics from './Analytics.jsx'
 import Verification from './Verification.jsx'
 import UserPublication from './UserPublication.jsx'
 import UserProfile from './UserProfile.jsx'
-import Bookmark from './Bookmark.jsx'
 import AdminAnnouncement from './AdminAnnouncement.jsx'
 import AdminUserManagement from './AdminUserManage.jsx'
 import HiddenPublication from './AdminHidePublication.jsx';
@@ -36,7 +35,6 @@ createRoot(document.getElementById('root')).render(
           <Route path="/verification" element={<Verification />} />
           <Route path="/user-publication" element={<UserPublication />} />
           <Route path="/profile" element={<UserProfile />} />
-          <Route path="/bookmark" element={<Bookmark />} />
           <Route path="/announcement" element={<AdminAnnouncement />} />
           <Route path="/adminusermanagement" element={<AdminUserManagement />} />
           <Route path="/hiddenpublication" element={<HiddenPublication />} />

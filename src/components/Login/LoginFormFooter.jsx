@@ -1,3 +1,9 @@
+/**
+ * LoginFormFooter Component
+ * 
+ * Displays a "Remember me" checkbox for the login form.
+ * Positioned between the input fields and submit button.
+ */
 function LoginFormFooter() {
   return (
     <div className="flex items-center justify-between text-sm mb-5">

@@ -4,6 +4,13 @@ import PublicationCard from '../PublicationCard';
 import HideConfirmation from './HideConfirmation';
 import { publications } from '../../data/publications';
 
+/**
+ * AdminHidePublication Component
+ * 
+ * Page for managing hidden publications.
+ * Displays all hidden publications with ability to restore them using fade animation.
+ * Includes search functionality to filter hidden publications.
+ */
 function AdminHidePublication() {
   const [showHideModal, setShowHideModal] = useState(false);
   const [restoredPublications, setRestoredPublications] = useState(new Set());
@@ -11,7 +18,10 @@ function AdminHidePublication() {
   const [selectedPublicationId, setSelectedPublicationId] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Get all hidden publications (excluding restored ones)
+  /**
+   * Filter hidden publications and apply search query.
+   * Exclude publications that have been restored.
+   */
   const hiddenPublications = publications.filter(pub => {
     if (pub.hidden && !restoredPublications.has(pub.id)) {
       // Filter by search query
@@ -25,6 +35,10 @@ function AdminHidePublication() {
     return false;
   });
 
+  /**
+   * Handles publication restore action.
+   * Updates hidden status and applies fade out animation before removal.
+   */
   const handleRestore = (publicationId, publicationTitle) => {
     // Start fade out animation
     setFadingPublications(prev => new Set(prev).add(publicationId));
@@ -48,6 +62,10 @@ function AdminHidePublication() {
     console.log('Publication restored:', publicationTitle);
   };
 
+  /**
+   * Handles hide confirmation.
+   * Updates publication hidden status and removes from view with animation.
+   */
   const handleHideConfirm = () => {
     if (selectedPublicationId) {
       // Get the publication and update hidden status immediately

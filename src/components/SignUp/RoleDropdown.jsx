@@ -1,9 +1,19 @@
 import { useState, useRef, useEffect } from "react";
 
+/**
+ * RoleDropdown Component
+ * 
+ * A dropdown selector for choosing user role (Student or Lecturer).
+ * Displays selected role and provides toggle functionality for role selection.
+ */
 function RoleDropdown({ value, onChange, hasError }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
+  /**
+   * Sets up click-outside handler to close dropdown when user clicks elsewhere.
+   * Adds/removes event listener based on dropdown open state.
+   */
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -18,6 +28,9 @@ function RoleDropdown({ value, onChange, hasError }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
 
+  /**
+   * Available role options for user selection during signup.
+   */
   const options = [
     { value: "student", label: "Student" },
     { value: "lecturer", label: "Lecturer" }
@@ -43,6 +56,7 @@ function RoleDropdown({ value, onChange, hasError }) {
       </button>
       {isOpen && (
         <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg z-10 animate-slide-in">
+          {/* Display role options - user can click to select */}
           {options.map(option => (
             <button
               key={option.value}

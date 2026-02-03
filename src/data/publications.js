@@ -6,7 +6,6 @@ export const publications = [
     coauthor: "Jane Smith",
     uploadDate: "2024-01-15",
     description: "A comprehensive study on modern development practices",
-    bookmarked: true,
     hidden: false,
     category: "journal",
     status: "verified",
@@ -18,7 +17,6 @@ export const publications = [
     coauthor: "Amelia Johnson",
     uploadDate: "2024-01-10",
     description: "Research findings on technology trends",
-    bookmarked: false,
     hidden: false,
     category: "journal",
     status: "verified",
@@ -30,7 +28,6 @@ export const publications = [
     coauthor: "TomeGlow",
     uploadDate: "1956-01-10",
     description: "arono",
-    bookmarked: true,
     hidden: true,
     category: "article",
     status: "rejected",
@@ -42,7 +39,6 @@ export const publications = [
     coauthor: "John Doe",
     uploadDate: "2023-12-01",
     description: "這是我人生中的第一本書，記錄了我的成長與學習歷程。",
-    bookmarked: false,
     hidden: false,
     category: "book",
     status: "verified",
@@ -55,7 +51,6 @@ export const publications = [
     uploadDate: "2024-01-20",
     description:
       "Practical applications of machine learning algorithms in real-world scenarios",
-    bookmarked: true,
     hidden: false,
     category: "journal",
     status: "pending",
@@ -68,7 +63,6 @@ export const publications = [
     uploadDate: "2024-01-18",
     description:
       "Best practices for designing scalable and reliable cloud infrastructure",
-    bookmarked: false,
     hidden: false,
     category: "chapter",
     status: "pending",
@@ -81,7 +75,6 @@ export const publications = [
     uploadDate: "2024-01-12",
     description:
       "Essential concepts and techniques for analyzing large datasets",
-    bookmarked: true,
     hidden: false,
     category: "book",
     status: "verified",
@@ -94,7 +87,6 @@ export const publications = [
     uploadDate: "2024-01-08",
     description:
       "Comprehensive guide to protecting web applications from common vulnerabilities",
-    bookmarked: false,
     hidden: true,
     category: "journal",
     status: "rejected",
@@ -107,7 +99,6 @@ export const publications = [
     uploadDate: "2024-01-05",
     description:
       "Exploring ethical implications and considerations in AI development",
-    bookmarked: true,
     hidden: false,
     category: "proceeding",
     status: "verified",
@@ -120,7 +111,6 @@ export const publications = [
     uploadDate: "2023-12-28",
     description:
       "Modern approaches to software development and operations integration",
-    bookmarked: false,
     hidden: false,
     category: "article",
     status: "pending",
@@ -133,7 +123,6 @@ export const publications = [
     uploadDate: "2023-12-22",
     description:
       "Real-world use cases and implementation strategies for blockchain systems",
-    bookmarked: true,
     hidden: true,
     category: "journal",
     status: "rejected",
@@ -146,7 +135,6 @@ export const publications = [
     uploadDate: "2023-12-15",
     description:
       "Internet of Things technologies enabling smart city infrastructure and services",
-    bookmarked: false,
     hidden: false,
     category: "chapter",
     status: "verified",
@@ -159,7 +147,6 @@ export const publications = [
     uploadDate: "2024-01-25",
     description:
       "Introduction to quantum mechanics and quantum computing principles",
-    bookmarked: true,
     hidden: true,
     category: "book",
     status: "pending",
@@ -172,7 +159,6 @@ export const publications = [
     uploadDate: "2024-01-22",
     description:
       "Latest trends and best practices in mobile application development",
-    bookmarked: false,
     hidden: true,
     category: "proceeding",
     status: "rejected",
@@ -185,7 +171,6 @@ export const publications = [
     uploadDate: "2024-01-19",
     description:
       "Current cybersecurity threats and effective defense mechanisms",
-    bookmarked: true,
     hidden: false,
     category: "journal",
     status: "verified",
@@ -198,7 +183,6 @@ export const publications = [
     uploadDate: "2024-01-17",
     description:
       "Guidelines and patterns for designing robust and scalable APIs",
-    bookmarked: false,
     hidden: false,
     category: "article",
     status: "verified",
@@ -210,7 +194,6 @@ export const publications = [
     coauthor: "Grace Wong",
     uploadDate: "2024-01-14",
     description: "Managing containerized applications at scale with Kubernetes",
-    bookmarked: true,
     hidden: true,
     category: "chapter",
     status: "pending",
@@ -222,7 +205,6 @@ export const publications = [
     coauthor: "Amelia Johnson",
     uploadDate: "2024-01-11",
     description: "Recent breakthroughs in NLP and their practical applications",
-    bookmarked: false,
     hidden: false,
     category: "journal",
     status: "verified",
@@ -235,7 +217,6 @@ export const publications = [
     uploadDate: "2024-01-09",
     description:
       "Design patterns and best practices for microservices-based systems",
-    bookmarked: true,
     hidden: true,
     category: "book",
     status: "rejected",
@@ -248,7 +229,6 @@ export const publications = [
     uploadDate: "2024-01-06",
     description:
       "In-depth analysis comparing GraphQL and REST architectural approaches",
-    bookmarked: false,
     hidden: false,
     category: "article",
     status: "verified",
@@ -261,7 +241,6 @@ export const publications = [
     uploadDate: "2023-12-30",
     description:
       "Deploying and managing serverless applications in production environments",
-    bookmarked: true,
     hidden: false,
     category: "proceeding",
     status: "pending",
@@ -274,7 +253,6 @@ export const publications = [
     uploadDate: "2023-12-27",
     description:
       "Exploring edge computing technologies and their impact on system design",
-    bookmarked: false,
     hidden: true,
     category: "journal",
     status: "rejected",
@@ -287,7 +265,6 @@ export const publications = [
     uploadDate: "2023-12-24",
     description:
       "Techniques for optimizing React application performance and user experience",
-    bookmarked: true,
     hidden: false,
     category: "chapter",
     status: "verified",
@@ -300,7 +277,6 @@ export const publications = [
     uploadDate: "2023-12-20",
     description:
       "Scalable database sharding techniques for handling massive datasets",
-    bookmarked: false,
     hidden: true,
     category: "article",
     status: "pending",
@@ -313,7 +289,6 @@ export const publications = [
     uploadDate: "2023-12-18",
     description:
       "Implementing logging, monitoring, and tracing in distributed systems",
-    bookmarked: true,
     hidden: false,
     category: "book",
     status: "verified",

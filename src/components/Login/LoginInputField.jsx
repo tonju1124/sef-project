@@ -1,3 +1,10 @@
+/**
+ * LoginInputField Component
+ * 
+ * A reusable input field for login form with optional password visibility toggle.
+ * Supports both regular text inputs and password inputs with eye icon toggle.
+ * Includes icon decorations and proper focus states.
+ */
 function LoginInputField({
   label,
   type,

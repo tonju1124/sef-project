@@ -1,3 +1,10 @@
+/**
+ * LoginSignupSidebar Component
+ * 
+ * The left sidebar displayed on login and signup pages (desktop view only).
+ * Shows branding, welcome message, and decorative logo.
+ * Hidden on mobile/tablet views.
+ */
 function LoginSignupSidebar() {
   return (
     <div className="hidden lg:flex lg:w-1/2 bg-linear-to-br from-bg-gradient-start to-bg-gradient-end text-white flex-col items-center justify-center p-12">

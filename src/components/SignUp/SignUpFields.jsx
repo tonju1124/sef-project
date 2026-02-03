@@ -2,6 +2,12 @@ import LoginInputField from "../Login/LoginInputField";
 import RoleDropdown from "./RoleDropdown";
 import FacultyDropdown from "./FacultyDropdown";
 
+/**
+ * SignUpFields Component
+ * 
+ * Renders all input fields required for user registration.
+ * Includes email, role, faculty, password, and confirm password fields with associated state management.
+ */
 function SignUpFields({
   email,
   setEmail,
@@ -29,6 +35,7 @@ function SignUpFields({
 }) {
   return (
     <>
+      {/* Email input field */}
       <LoginInputField
         label="Email"
         type="email"
@@ -38,6 +45,7 @@ function SignUpFields({
         isPasswordField={false}
       />
 
+      {/* Role selection dropdown */}
       <div>
         <label className="block text-sm font-medium text-gray-900 mb-2">Role</label>
         <RoleDropdown
@@ -47,6 +55,7 @@ function SignUpFields({
         />
       </div>
 
+      {/* Faculty selection dropdown with custom input option */}
       <div>
         <label className="block text-sm font-medium text-gray-900 mb-2">Faculty</label>
         <FacultyDropdown
@@ -60,6 +69,7 @@ function SignUpFields({
         />
       </div>
 
+      {/* Password input field with visibility toggle */}
       <LoginInputField
         label="Password"
         type={showPassword ? "text" : "password"}
@@ -71,6 +81,7 @@ function SignUpFields({
         onTogglePassword={() => setShowPassword(!showPassword)}
       />
 
+      {/* Confirm password input field with visibility toggle */}
       <LoginInputField
         label="Confirm Password"
         type={showConfirmPassword ? "text" : "password"}
