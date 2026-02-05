@@ -1,13 +1,16 @@
 import { useNavigate } from 'react-router-dom';
+import { useUser } from '../context/UserContext';
 
 /**
  * NotAnAdminError Component
  * 
  * Displays an access denied error modal for non-admin users attempting to access admin pages.
  * Shows a modal with blur background overlay and returns user to home page on click.
+ * Verifies user is not an admin by checking role from database.
  */
 function NotAnAdminError() {
   const navigate = useNavigate();
+  const { user } = useUser();
 
   return (
     <div className="fixed inset-0 z-999 flex items-center justify-center">

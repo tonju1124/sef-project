@@ -13,7 +13,7 @@ function PublicationInfo({ author, coauthor, uploadDate, category, formatDate })
       </div>
       <div>
         <p className="text-gray-600 text-sm font-medium mb-1">Co-author</p>
-        <p className="text-gray-800 text-lg italic">{coauthor || "None"}</p>
+        <p className="text-gray-800 text-lg">{coauthor || "-"}</p>
       </div>
       <div>
         <p className="text-gray-600 text-sm font-medium mb-1">Upload Date</p>

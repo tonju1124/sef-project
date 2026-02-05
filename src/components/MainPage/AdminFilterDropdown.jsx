@@ -11,8 +11,8 @@ function AdminFilterDropdown({ onFilterChange }) {
   const [hiddenFilter, setHiddenFilter] = useState('All');
   const [statusFilters, setStatusFilters] = useState({
     verified: true,
-    pending: true,
-    rejected: true
+    pending: false,
+    rejected: false
   });
   const buttonRef = useRef(null);
   const dropdownRef = useRef(null);
@@ -66,13 +66,13 @@ function AdminFilterDropdown({ onFilterChange }) {
     setHiddenFilter('All');
     setStatusFilters({
       verified: true,
-      pending: true,
-      rejected: true
+      pending: false,
+      rejected: false
     });
     notifyFilterChange('All', {
       verified: true,
-      pending: true,
-      rejected: true
+      pending: false,
+      rejected: false
     });
   };
 

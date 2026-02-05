@@ -14,9 +14,17 @@ import NotAnAdminError from './components/NotAnAdminError';
 function HiddenPublication() {
   const [navOpen, setNavOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);
-  const { user } = useUser();
+  const { user, loading } = useUser();
 
-  if (!user.isAdmin) {
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-500">Loading...</p>
+      </div>
+    );
+  }
+
+  if (user?.role !== 'admin') {
     return <NotAnAdminError />;
   }
 

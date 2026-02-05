@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../context/UserContext';
 import HideConfirmation from './AdminHiddenPublication/HideConfirmation';
-import { publications } from '../data/publications';
+import { supabase } from '../config/supabaseClient';
 
 /**
  * PublicationCard Component
@@ -18,29 +18,53 @@ function PublicationCard({ id, title, author, coauthor, uploadDate, description,
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
 
+  // Format the upload date to show only the date part
+  const formatDisplayDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    try {
+      const date = new Date(dateString);
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${day}/${month}/${year}`;
+    } catch {
+      return 'N/A';
+    }
+  };
+
   const handleHidePublication = () => {
     setShowHideModal(true);
     setShowDropdown(false);
     onModalStateChange?.(true);
   };
 
-  const confirmHidePublication = () => {
+  const confirmHidePublication = async () => {
     setShowHideModal(false);
     onModalStateChange?.(false);
     
     setIsHiding(true);
     
-    if (id) {
-      const pub = publications.find(p => p.id === id);
-      if (pub) {
-        pub.hidden = true;
-        console.log('Publication hidden:', pub.title);
+    try {
+      const { error } = await supabase
+        .from('publications')
+        .update({ is_hidden: true })
+        .eq('id', id);
+
+      if (error) {
+        console.error('Error hiding publication:', error);
+        setIsHiding(false);
+        return;
       }
+
+      console.log('Publication hidden successfully');
+      
+      setTimeout(() => {
+        onHideConfirm?.();
+      }, 500);
+    } catch (err) {
+      console.error('Error:', err);
+      setIsHiding(false);
     }
-    
-    setTimeout(() => {
-      onHideConfirm?.();
-    }, 500);
   };
 
   const cancelHidePublication = () => {
@@ -82,8 +106,8 @@ function PublicationCard({ id, title, author, coauthor, uploadDate, description,
             <h3 className="text-lg font-semibold mb-3">{title}</h3>
             <div className="space-y-1 text-sm text-gray-600">
               <p><span className="font-medium text-gray-700">Author:</span> {author}</p>
-              <p><span className="font-medium text-gray-700">Coauthor:</span> {coauthor}</p>
-              <p><span className="font-medium text-gray-700">Upload Date:</span> {uploadDate}</p>
+              <p><span className="font-medium text-gray-700">Coauthor:</span> {coauthor || "-"}</p>
+              <p><span className="font-medium text-gray-700">Upload Date:</span> {formatDisplayDate(uploadDate)}</p>
               <p className="line-clamp-1"><span className="font-medium text-gray-700">Publication Description:</span> {description}</p>
             </div>
           </div>

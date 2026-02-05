@@ -30,6 +30,7 @@ function RoleDropdown({ value, onChange, hasError }) {
 
   /**
    * Available role options for user selection during signup.
+   * Coordinator and Admin roles can only be assigned by admins.
    */
   const options = [
     { value: "student", label: "Student" },
@@ -39,6 +40,7 @@ function RoleDropdown({ value, onChange, hasError }) {
   return (
     <div className="relative" ref={dropdownRef}>
       <button
+        type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={`w-full px-4 py-2 border rounded-lg text-left flex justify-between items-center hover:bg-gray-50 focus:outline-none focus:ring-2 transition-all ${
           hasError ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-blue-500'
@@ -59,6 +61,7 @@ function RoleDropdown({ value, onChange, hasError }) {
           {/* Display role options - user can click to select */}
           {options.map(option => (
             <button
+              type="button"
               key={option.value}
               onClick={() => {
                 onChange(option.value);

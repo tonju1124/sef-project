@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useUser } from "../context/UserContext";
+import { supabase } from "../config/supabaseClient";
 
 /**
  * NavigationSidebar Component
@@ -12,13 +13,58 @@ import { useUser } from "../context/UserContext";
 function NavigationSidebar({ navOpen, setNavOpen }) {
   const navigate = useNavigate();
   const { user } = useUser();
-  const isAdmin = user.isAdmin;
+  const [unreadCount, setUnreadCount] = useState(0);
+  const isAdmin = user?.role === "admin";
+  const isCoordinator = user?.role === "coordinator";
+
+  // Fetch unread notification count
+  useEffect(() => {
+    if (user?.id) {
+      fetchUnreadCount();
+      // Set up real-time listener
+      const subscription = supabase
+        .channel(`notifications:${user.id}`)
+        .on(
+          'postgres_changes',
+          {
+            event: '*',
+            schema: 'public',
+            table: 'notifications',
+            filter: `user_id=eq.${user.id}`
+          },
+          () => {
+            fetchUnreadCount();
+          }
+        )
+        .subscribe();
+
+      return () => {
+        subscription.unsubscribe();
+      };
+    }
+  }, [user?.id]);
+
+  const fetchUnreadCount = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('notifications')
+        .select('id', { count: 'exact' })
+        .eq('user_id', user.id)
+        .eq('is_read', false);
+
+      if (!error) {
+        setUnreadCount(data?.length || 0);
+      }
+    } catch (err) {
+      console.error('Error fetching unread count:', err);
+    }
+  };
 
   // Navigation items available to all users
   const navItems = [
     { label: "Home", path: "/", icon: "home" },
     { label: "My Project", path: "/user-publication", icon: "project" },
-    { label: "Notification", path: "/notifications", icon: "notification" },
+    { label: "Notification", path: "/notifications", icon: "notification", showBadge: true },
     { label: "My Analytics", path: "/analytics", icon: "analytics" },
     {
       label: "Verification Status",
@@ -170,12 +216,17 @@ function NavigationSidebar({ navOpen, setNavOpen }) {
               <li key={item.label}>
                 <button
                   onClick={() => handleNavClick(item.path)}
-                  className="w-full text-left px-4 py-2 rounded hover:bg-gray-200 flex items-center gap-3 group"
+                  className="w-full text-left px-4 py-2 rounded hover:bg-gray-200 flex items-center gap-3 group relative"
                 >
                   <span className="transition-transform group-hover:scale-125">
                     {getIcon(item.icon)}
                   </span>
                   <span>{item.label}</span>
+                  {item.showBadge && unreadCount > 0 && (
+                    <span className="ml-auto bg-red-500 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center">
+                      {unreadCount > 99 ? '99+' : unreadCount}
+                    </span>
+                  )}
                 </button>
               </li>
             ))}
@@ -206,7 +257,7 @@ function NavigationSidebar({ navOpen, setNavOpen }) {
           )}
 
           {/* Coordinator Panel */}
-          {user.role === "coordinator" && (
+          {user?.role === "coordinator" && (
             <>
               <p className="text-lg font-semibold border-t-2 border-b-2 border-nav-border mb-4 py-4 px-2 mt-6">
                 Coordinator Panel

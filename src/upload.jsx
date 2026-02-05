@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "./context/UserContext";
-import { publications } from "./data/publications";
+import { supabase } from "./config/supabaseClient";
 import BackButton from "./components/Upload/BackButton";
 import PublicationTypeDropdown from "./components/Upload/PublicationTypeDropdown";
 import FileUploadSection from "./components/Upload/FileUploadSection";
@@ -21,6 +21,7 @@ import PublicationSuccessModal from "./components/Upload/PublicationSuccessModal
 function Upload() {
   const { user } = useUser();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
   const [selectedType, setSelectedType] = useState("Journal");
   const [title, setTitle] = useState("");
   const [coAuthorName, setCoAuthorName] = useState("");
@@ -29,6 +30,8 @@ function Upload() {
   const [publicationFiles, setPublicationFiles] = useState([]);
   const [proofFiles, setProofFiles] = useState([]);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadError, setUploadError] = useState("");
   const [errors, setErrors] = useState({
     title: false,
     description: false,
@@ -36,28 +39,60 @@ function Upload() {
     proof: false
   });
 
+  // Transition effect when page loads
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 400);
+    return () => clearTimeout(timer);
+  }, []);
+
   /**
    * Handles file selection for publication documents
-   * Updates state with selected files and clears any publication file errors
+   * Validates file types (PDF, DOC, DOCX, TXT) and updates state
    * 
    * @param {React.ChangeEvent<HTMLInputElement>} e - The file input change event
    */
   const handlePublicationFileChange = (e) => {
     const files = Array.from(e.target.files);
+    const allowedTypes = ['.pdf', '.doc', '.docx', '.txt'];
+    const invalidFiles = files.filter(file => {
+      const extension = '.' + file.name.split('.').pop().toLowerCase();
+      return !allowedTypes.includes(extension);
+    });
+    
+    if (invalidFiles.length > 0) {
+      setUploadError(`Invalid file type. Only PDF, DOC, DOCX, and TXT files are allowed.`);
+      return;
+    }
+    
     setPublicationFiles(files);
     setErrors({ ...errors, publication: false });
+    setUploadError("");
   };
 
   /**
    * Handles file selection for proof documents
-   * Updates state with selected files and clears any proof file errors
+   * Validates file types (PDF, DOC, DOCX, TXT) and updates state
    * 
    * @param {React.ChangeEvent<HTMLInputElement>} e - The file input change event
    */
   const handleProofFileChange = (e) => {
     const files = Array.from(e.target.files);
+    const allowedTypes = ['.pdf', '.doc', '.docx', '.txt'];
+    const invalidFiles = files.filter(file => {
+      const extension = '.' + file.name.split('.').pop().toLowerCase();
+      return !allowedTypes.includes(extension);
+    });
+    
+    if (invalidFiles.length > 0) {
+      setUploadError(`Invalid file type. Only PDF, DOC, DOCX, and TXT files are allowed.`);
+      return;
+    }
+    
     setProofFiles(files);
     setErrors({ ...errors, proof: false });
+    setUploadError("");
   };
 
   /**
@@ -113,11 +148,37 @@ function Upload() {
   };
 
   /**
-   * Handles form submission for creating a new publication
-   * Validates all required fields, creates publication object, adds to publications array,
-   * resets form, and shows success modal
+   * Uploads a file to Supabase Storage
+   * @param {File} file - The file to upload
+   * @param {string} folder - The folder path in storage
+   * @returns {Promise<string>} The public URL of the uploaded file
    */
-  const handleSubmitClick = () => {
+  const uploadFileToStorage = async (file, folder) => {
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+    const filePath = `${folder}/${fileName}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from('publication-files')
+      .upload(filePath, file);
+
+    if (uploadError) {
+      throw new Error(`Failed to upload ${file.name}: ${uploadError.message}`);
+    }
+
+    // Get public URL
+    const { data } = supabase.storage
+      .from('publication-files')
+      .getPublicUrl(filePath);
+
+    return data.publicUrl;
+  };
+
+  /**
+   * Handles form submission for creating a new publication
+   * Validates all required fields, uploads files to storage, creates publication in database
+   */
+  const handleSubmitClick = async () => {
     const newErrors = {
       title: title.trim() === "",
       description: description.trim() === "",
@@ -127,40 +188,144 @@ function Upload() {
     setErrors(newErrors);
 
     if (newErrors.title || newErrors.description || newErrors.publication || newErrors.proof) {
+      setUploadError("Please fill in all required fields");
       return;
     }
 
-    // Create new publication object
-    const newPublication = {
-      id: getNextId(),
-      title: title.trim(),
-      author: user.userID,
-      coauthor: coAuthorName.trim() || "",
-      uploadDate: getTodayDate(),
-      description: description.trim(),
-      bookmarked: false,
-      hidden: false,
-      category: selectedType.toLowerCase(),
-      status: "pending"
-    };
+    if (!user || !user.id) {
+      setUploadError("You must be logged in to upload publications");
+      return;
+    }
 
-    // Add to publications array
-    publications.push(newPublication);
+    setIsUploading(true);
+    setUploadError("");
 
-    // Reset all fields
-    setTitle("");
-    setCoAuthorName("");
-    setDescription("");
-    setSelectedType("Journal");
-    setPublicationFiles([]);
-    setProofFiles([]);
-    setErrors({ title: false, description: false, publication: false, proof: false });
-    
-    setShowSuccessModal(true);
+    try {
+      // Get the current authenticated user
+      const { data: { user: authUser }, error: authError } = await supabase.auth.getUser();
+      
+      if (authError || !authUser) {
+        throw new Error("You must be logged in to upload publications");
+      }
+
+      // Upload publication files
+      const publicationUrls = [];
+      for (const file of publicationFiles) {
+        const url = await uploadFileToStorage(file, 'publications');
+        publicationUrls.push(url);
+      }
+
+      // Upload proof files
+      const proofUrls = [];
+      for (const file of proofFiles) {
+        const url = await uploadFileToStorage(file, 'proofs');
+        proofUrls.push(url);
+      }
+
+      // Insert publication into database
+      const { data, error: insertError } = await supabase
+        .from('publications')
+        .insert([
+          {
+            title: title.trim(),
+            author_id: authUser.id,
+            co_authors: coAuthorName.trim() || null,
+            description: description.trim(),
+            publication_type: selectedType.toLowerCase(),
+            publication_files: publicationUrls,
+            proof_files: proofUrls,
+            status: 'pending',
+            is_hidden: false,
+          }
+        ])
+        .select();
+
+      if (insertError) {
+        throw new Error(`Failed to create publication: ${insertError.message}`);
+      }
+
+      // Create notification for the user
+      if (data && data[0]) {
+        const publicationId = data[0].id;
+        console.log('Creating notification for user:', authUser.id);
+        console.log('Publication title:', title.trim());
+        
+        const { data: notifData, error: notifError } = await supabase
+          .from('notifications')
+          .insert([
+            {
+              user_id: authUser.id,
+              title: 'Publication Reviewing',
+              message: title.trim(),
+              is_read: false
+            }
+          ])
+          .select();
+
+        if (notifError) {
+          console.error('Error creating notification:', notifError);
+          console.error('Error details:', notifError.message, notifError.code);
+        } else {
+          console.log('Notification created successfully:', notifData);
+        }
+      }
+
+      // Success! Reset all fields
+      setTitle("");
+      setCoAuthorName("");
+      setDescription("");
+      setSelectedType("Journal");
+      setPublicationFiles([]);
+      setProofFiles([]);
+      setErrors({ title: false, description: false, publication: false, proof: false });
+      setShowSuccessModal(true);
+      
+      console.log('Publication created successfully:', data);
+    } catch (error) {
+      console.error('Upload error:', error);
+      setUploadError(error.message || 'Failed to upload publication. Please try again.');
+    } finally {
+      setIsUploading(false);
+    }
   };
 
+  // Show loading transition
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+        <div className="text-center animate-fade-in">
+          <div className="w-16 h-16 border-4 border-gray-300 border-t-black rounded-full animate-spin mx-auto mb-4"></div>
+          <h2 className="text-2xl font-semibold text-gray-800">Loading Upload Page</h2>
+          <p className="text-gray-600 mt-2">Preparing your workspace...</p>
+        </div>
+        <style>
+          {`
+            @keyframes fade-in {
+              from { opacity: 0; transform: translateY(10px); }
+              to { opacity: 1; transform: translateY(0); }
+            }
+            .animate-fade-in {
+              animation: fade-in 0.5s ease-out;
+            }
+          `}
+        </style>
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 text-black flex flex-col select-none p-8">
+    <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 text-black flex flex-col select-none p-8 animate-slide-up">
+      <style>
+        {`
+          @keyframes slide-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          .animate-slide-up {
+            animation: slide-up 0.4s ease-out;
+          }
+        `}
+      </style>
       {showSuccessModal && <PublicationSuccessModal onClose={() => setShowSuccessModal(false)} />}
       <div className="w-full max-w-4xl mx-auto flex flex-col gap-6">
         <BackButton />
@@ -170,6 +335,18 @@ function Upload() {
           <h1 className="text-3xl font-bold text-gray-800 mb-2">Publish Your Research</h1>
           <p className="text-gray-600">Share your academic publication with the community</p>
         </div>
+
+        {/* Error Message */}
+        {uploadError && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+            <div className="flex items-center gap-2">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+              </svg>
+              <span className="font-medium">{uploadError}</span>
+            </div>
+          </div>
+        )}
 
         {/* Publication Type Section */}
         <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
@@ -229,6 +406,8 @@ function Upload() {
               <input
                 id="publicationFileInput"
                 type="file"
+                accept=".pdf,.doc,.docx,.txt"
+                multiple
                 onChange={handlePublicationFileChange}
                 className="hidden"
               />
@@ -247,6 +426,8 @@ function Upload() {
               <input
                 id="proofFileInput"
                 type="file"
+                accept=".pdf,.doc,.docx,.txt"
+                multiple
                 onChange={handleProofFileChange}
                 className="hidden"
               />
@@ -268,7 +449,23 @@ function Upload() {
 
         {/* Submit Button Section */}
         <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200 flex justify-end">
-          <SubmitButton onClick={handleSubmitClick} />
+          <button
+            onClick={handleSubmitClick}
+            disabled={isUploading}
+            className="px-6 py-2 bg-black text-white rounded-lg hover:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed transition-all duration-200 flex items-center gap-2"
+          >
+            {isUploading ? (
+              <>
+                <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+                Uploading...
+              </>
+            ) : (
+              'Submit Publication'
+            )}
+          </button>
         </div>
       </div>
 

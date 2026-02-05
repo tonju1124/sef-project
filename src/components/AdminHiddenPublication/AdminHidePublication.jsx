@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import SearchBar from '../SearchBar';
 import PublicationCard from '../PublicationCard';
 import HideConfirmation from './HideConfirmation';
-import { publications } from '../../data/publications';
+import { supabase } from '../../config/supabaseClient';
 
 /**
  * AdminHidePublication Component
@@ -13,86 +13,128 @@ import { publications } from '../../data/publications';
  */
 function AdminHidePublication() {
   const [showHideModal, setShowHideModal] = useState(false);
-  const [restoredPublications, setRestoredPublications] = useState(new Set());
+  const [publications, setPublications] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [fadingPublications, setFadingPublications] = useState(new Set());
   const [selectedPublicationId, setSelectedPublicationId] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
 
+  useEffect(() => {
+    fetchHiddenPublications();
+  }, []);
+
+  /**
+   * Fetch all hidden publications from the database
+   */
+  const fetchHiddenPublications = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('publications')
+        .select('*, profiles(full_name, email)')
+        .eq('is_hidden', true)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching hidden publications:', error);
+        setLoading(false);
+        return;
+      }
+
+      // Format the data to match the component's expected structure
+      const formattedData = data.map(pub => ({
+        id: pub.id,
+        title: pub.title,
+        author: pub.profiles?.full_name || pub.profiles?.email || 'Unknown',
+        coauthor: pub.co_authors || '',
+        uploadDate: pub.created_at,
+        description: pub.description,
+        category: pub.publication_type
+      }));
+
+      setPublications(formattedData);
+    } catch (err) {
+      console.error('Error:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   /**
    * Filter hidden publications and apply search query.
-   * Exclude publications that have been restored.
    */
-  const hiddenPublications = publications.filter(pub => {
-    if (pub.hidden && !restoredPublications.has(pub.id)) {
-      // Filter by search query
-      const query = searchQuery.toLowerCase();
-      return (
-        pub.title.toLowerCase().includes(query) ||
-        pub.author.toLowerCase().includes(query) ||
-        pub.coauthor.toLowerCase().includes(query)
-      );
-    }
-    return false;
+  const filteredPublications = publications.filter(pub => {
+    const query = searchQuery.toLowerCase();
+    return (
+      pub.title.toLowerCase().includes(query) ||
+      pub.author.toLowerCase().includes(query) ||
+      pub.coauthor.toLowerCase().includes(query)
+    );
   });
 
   /**
    * Handles publication restore action.
-   * Updates hidden status and applies fade out animation before removal.
+   * Updates is_hidden status in database and applies fade out animation before removal.
    */
-  const handleRestore = (publicationId, publicationTitle) => {
+  const handleRestore = async (publicationId, publicationTitle) => {
     // Start fade out animation
     setFadingPublications(prev => new Set(prev).add(publicationId));
     
-    // Remove from list after animation completes (300ms)
-    setTimeout(() => {
-      setRestoredPublications(prev => new Set(prev).add(publicationId));
+    try {
+      const { error } = await supabase
+        .from('publications')
+        .update({ is_hidden: false })
+        .eq('id', publicationId);
+
+      if (error) {
+        console.error('Error restoring publication:', error);
+        setFadingPublications(prev => {
+          const next = new Set(prev);
+          next.delete(publicationId);
+          return next;
+        });
+        return;
+      }
+
+      console.log('Publication restored:', publicationTitle);
+      
+      // Remove from list after animation completes (300ms)
+      setTimeout(() => {
+        setPublications(prev => prev.filter(p => p.id !== publicationId));
+        setFadingPublications(prev => {
+          const next = new Set(prev);
+          next.delete(publicationId);
+          return next;
+        });
+      }, 300);
+    } catch (err) {
+      console.error('Error:', err);
       setFadingPublications(prev => {
         const next = new Set(prev);
         next.delete(publicationId);
         return next;
       });
-      
-      // Update the publication's hidden status to false
-      const pub = publications.find(p => p.id === publicationId);
-      if (pub) {
-        pub.hidden = false;
-      }
-    }, 300);
-    
-    console.log('Publication restored:', publicationTitle);
+    }
   };
 
   /**
    * Handles hide confirmation.
-   * Updates publication hidden status and removes from view with animation.
+   * This shouldn't be needed on this page but kept for consistency.
    */
   const handleHideConfirm = () => {
-    if (selectedPublicationId) {
-      // Get the publication and update hidden status immediately
-      const pub = publications.find(p => p.id === selectedPublicationId);
-      if (pub) {
-        pub.hidden = true;
-        console.log('Publication hidden:', pub.title);
-      }
-      
-      // Start fade out animation
-      setFadingPublications(prev => new Set(prev).add(selectedPublicationId));
-      
-      // Remove from list after animation completes (300ms)
-      setTimeout(() => {
-        // Mark as hidden by adding to restoredPublications (removes from hidden list)
-        setRestoredPublications(prev => new Set(prev).add(selectedPublicationId));
-        setFadingPublications(prev => {
-          const next = new Set(prev);
-          next.delete(selectedPublicationId);
-          return next;
-        });
-      }, 300);
-    }
-    
     setShowHideModal(false);
     setSelectedPublicationId(null);
   };
+
+  if (loading) {
+    return (
+      <div className="w-full flex items-center justify-center py-20">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-gray-300 border-t-black rounded-full animate-spin mx-auto mb-4"></div>
+          <h2 className="text-xl font-semibold text-gray-800">Loading hidden publications...</h2>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full">
@@ -119,8 +161,8 @@ function AdminHidePublication() {
       
       {/* Display all hidden publications */}
       <div>
-        {hiddenPublications.length > 0 ? (
-          hiddenPublications.map((publication) => (
+        {filteredPublications.length > 0 ? (
+          filteredPublications.map((publication) => (
             <div 
               key={publication.id}
               className={`transition-opacity duration-300 ${fadingPublications.has(publication.id) ? 'opacity-0' : 'opacity-100'}`}
@@ -132,7 +174,6 @@ function AdminHidePublication() {
                 coauthor={publication.coauthor}
                 uploadDate={publication.uploadDate}
                 description={publication.description}
-                bookmarked={publication.bookmarked}
                 hideBookmarkBtn={true}
                 hideDropdownBtn={true}
                 showRestoreBtn={true}

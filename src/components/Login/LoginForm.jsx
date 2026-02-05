@@ -17,6 +17,8 @@ function LoginForm({
   setPassword,
   showPassword,
   setShowPassword,
+  rememberMe,
+  setRememberMe,
   isLoading,
   error,
   success,
@@ -29,11 +31,11 @@ function LoginForm({
         {success && <LoginAlert type="success" message="" />}
 
         <LoginInputField
-          label="ID"
-          type="text"
+          label="Email"
+          type="email"
           value={id}
           onChange={(e) => setId(e.target.value)}
-          placeholder="Enter your ID"
+          placeholder="Enter your email"
           isPasswordField={false}
         />
 
@@ -48,7 +50,7 @@ function LoginForm({
           isPasswordField={true}
         />
 
-        <LoginFormFooter />
+        <LoginFormFooter rememberMe={rememberMe} setRememberMe={setRememberMe} />
 
         <LoginSubmitButton isLoading={isLoading} />
       </form>

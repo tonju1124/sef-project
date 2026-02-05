@@ -56,6 +56,7 @@ function FacultyDropdown({ value, customFaculty, setCustomFaculty, onChange, has
     <>
       <div className="relative" ref={dropdownRef}>
         <button
+          type="button"
           onClick={() => setIsOpen(!isOpen)}
           className={`w-full px-4 py-2 border rounded-lg text-left flex justify-between items-center hover:bg-gray-50 focus:outline-none focus:ring-2 transition-all ${
             hasError ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-blue-500'
@@ -76,6 +77,7 @@ function FacultyDropdown({ value, customFaculty, setCustomFaculty, onChange, has
           <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-300 rounded-lg shadow-lg z-10 animate-slide-in">
             {options.map(option => (
               <button
+                type="button"
                 key={option.value}
                 onClick={() => {
                   onChange(option.value);

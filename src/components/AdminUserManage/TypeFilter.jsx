@@ -8,7 +8,7 @@ import { useState, useRef, useEffect } from 'react';
  */
 function TypeFilter({ value, onChange }) {
   const [isOpen, setIsOpen] = useState(false);
-  const types = ['All', 'Admin', 'Student', 'Lecturer', 'Coordinator'];
+  const types = ['All', 'Admin', 'Coordinator', 'Lecturer', 'Student'];
   const dropdownRef = useRef(null);
   const buttonRef = useRef(null);
 
