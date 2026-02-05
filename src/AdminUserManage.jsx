@@ -5,6 +5,7 @@ import { useUser } from './context/UserContext';
 import NotAnAdminError from './components/NotAnAdminError';
 import AdminUserManagementBox from './components/AdminUserManage/AdminUserManageBox';
 import TypeFilter from './components/AdminUserManage/TypeFilter';
+import StatusFilter from './components/AdminUserManage/StatusFilter';
 import SearchBar from './components/SearchBar';
 
 /*
@@ -18,9 +19,19 @@ function AdminUserManagement() {
   const [showDeactiveModal, setShowDeactiveModal] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [typeFilter, setTypeFilter] = useState('All');
-  const { user } = useUser();
+  const [showActive, setShowActive] = useState(true);
+  const [showDeactivated, setShowDeactivated] = useState(true);
+  const { user, loading } = useUser();
 
-  if (!user.isAdmin) {
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-500">Loading...</p>
+      </div>
+    );
+  }
+
+  if (user?.role !== 'admin') {
     return <NotAnAdminError />;
   }
 
@@ -33,9 +44,19 @@ function AdminUserManagement() {
         <div className="border-b border-gray-300 w-full mb-4"></div>
         <div className="w-full mb-4">
           <SearchBar value={searchQuery} onChange={setSearchQuery} placeholder="Search by ID or email..." />
-          <TypeFilter value={typeFilter} onChange={setTypeFilter} />
+          <div className="flex gap-4 mt-4">
+            <TypeFilter value={typeFilter} onChange={setTypeFilter} />
+            <StatusFilter 
+              showActive={showActive} 
+              showDeactivated={showDeactivated} 
+              onChange={(status) => {
+                setShowActive(status.showActive);
+                setShowDeactivated(status.showDeactivated);
+              }}
+            />
+          </div>
         </div>
-        <AdminUserManagementBox showDeactiveModal={showDeactiveModal} setShowDeactiveModal={setShowDeactiveModal} searchQuery={searchQuery} typeFilter={typeFilter} />
+        <AdminUserManagementBox showDeactiveModal={showDeactiveModal} setShowDeactiveModal={setShowDeactiveModal} searchQuery={searchQuery} typeFilter={typeFilter} showActive={showActive} showDeactivated={showDeactivated} />
       </div>
     </div>
   );

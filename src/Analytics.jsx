@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import NavigationSidebar from './components/NavigationSidebar';
 import UserDropdown from './components/UserDropdown';
 import CategoryCard from './components/analytics/CategoryCard';
 import SearchBar from './components/SearchBar';
 import { useUser } from './context/UserContext';
-import { publications } from './data/publications';
+import { supabase } from './config/supabaseClient';
 
 /**
  * Analytics Component
@@ -17,22 +17,49 @@ function Analytics() {
   const [userOpen, setUserOpen] = useState(false);
   const [expandedCategory, setExpandedCategory] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [publications, setPublications] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const { user } = useUser();
 
-  // Filter publications where current user is author or coauthor
-  // Admins see everything, regular users see only verified and not hidden
-  const userPublications = publications.filter(
-    pub => (pub.author === user.userID || pub.coauthor === user.userID) && 
-      (user.role === "admin" ? true : (!pub.hidden && pub.status === "verified"))
-  );
+  useEffect(() => {
+    if (user?.id) {
+      fetchPublications();
+    }
+  }, [user?.id]);
 
-  // Group publications by category
+  const fetchPublications = async () => {
+    try {
+      setLoading(true);
+      // Only show verified publications, never pending or rejected
+      const { data, error: fetchError } = await supabase
+        .from('publications')
+        .select('id, title, publication_type, status, is_hidden')
+        .eq('author_id', user.id)
+        .eq('status', 'verified')
+        .eq('is_hidden', false)
+        .order('created_at', { ascending: false });
+
+      if (fetchError) {
+        throw new Error(fetchError.message);
+      }
+
+      setPublications(data || []);
+    } catch (err) {
+      console.error('Error fetching publications:', err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Group publications by publication_type
   const articlesByCategory = {
-    journal: userPublications.filter(pub => pub.category === 'journal').map(pub => pub.title),
-    chapter: userPublications.filter(pub => pub.category === 'chapter').map(pub => pub.title),
-    book: userPublications.filter(pub => pub.category === 'book').map(pub => pub.title),
-    proceeding: userPublications.filter(pub => pub.category === 'proceeding').map(pub => pub.title),
-    article: userPublications.filter(pub => pub.category === 'article').map(pub => pub.title),
+    journal: publications.filter(pub => pub.publication_type === 'journal').map(pub => pub.title),
+    chapter: publications.filter(pub => pub.publication_type === 'chapter').map(pub => pub.title),
+    book: publications.filter(pub => pub.publication_type === 'book').map(pub => pub.title),
+    proceeding: publications.filter(pub => pub.publication_type === 'proceeding').map(pub => pub.title),
+    article: publications.filter(pub => pub.publication_type === 'article').map(pub => pub.title),
   };
 
   const categories = Object.keys(articlesByCategory).map(key => ({
@@ -52,7 +79,7 @@ function Analytics() {
    * Calculates the total number of publications for the user
    **/
   const getTotalPublications = () => {
-    return userPublications.length;
+    return publications.length;
   };
 
   const totalPublications = getTotalPublications();
@@ -81,6 +108,33 @@ function Analytics() {
     );
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white text-black flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-gray-300 border-t-black rounded-full animate-spin mx-auto mb-4"></div>
+          <h2 className="text-xl font-semibold text-gray-800">Loading analytics...</h2>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-white text-black flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 text-lg mb-4">Error loading analytics: {error}</p>
+          <button
+            onClick={() => fetchPublications()}
+            className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-all"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-white text-black flex flex-col items-start justify-start relative select-none pt-20 pl-20 page-transition">
       <NavigationSidebar navOpen={navOpen} setNavOpen={setNavOpen} />
@@ -99,7 +153,7 @@ function Analytics() {
 
         {/* Publication Count Box */}
         <div className="border border-gray-300 rounded-lg p-6 mb-8 bg-gray-50">
-          <p className="text-xl font-semibold">Number of publications uploaded this month: <span className="text-2xl font-bold">{totalPublications}</span> Publication{totalPublications !== 1 ? 's' : ''}</p>
+          <p className="text-xl font-semibold">Total publications: <span className="text-2xl font-bold">{totalPublications}</span> Publication{totalPublications !== 1 ? 's' : ''}</p>
         </div>
 
         {/* Analytics Cards Grid */}

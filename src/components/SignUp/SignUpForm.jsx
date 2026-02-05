@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "../../config/supabaseClient";
 import LoginAlert from "../Login/LoginAlert";
-import LoginFormFooter from "../Login/LoginFormFooter";
-import LoginSubmitButton from "../Login/LoginSubmitButton";
 import SignUpLogInLink from "./SignUpLogInLink";
 import SignUpFields from "./SignUpFields";
 
@@ -9,9 +9,10 @@ import SignUpFields from "./SignUpFields";
  * SignUpForm Component
  * 
  * The main registration form containing all input fields for account creation.
- * Manages user input, validation, and form submission.
+ * Uses Supabase to create user accounts and profiles.
  */
 function SignUpForm() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -27,9 +28,12 @@ function SignUpForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
+  const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false);
 
   const handleRoleChange = (value) => {
     setRole(value);
+    setError(""); // Clear error when user selects a role
+    setRoleError(false);
   };
 
   const handleFacultyChange = (value) => {
@@ -39,6 +43,8 @@ function SignUpForm() {
       setFaculty(value);
       setCustomFaculty("");
     }
+    setError(""); // Clear error when user selects a faculty
+    setFacultyError(false);
   };
 
   // Close dropdown when clicking outside
@@ -89,32 +95,52 @@ function SignUpForm() {
   );
 
   const validateForm = () => {
+    setHasAttemptedSubmit(true);
+
+    // Validate fields one by one and return first error
     if (!email.trim()) {
       setError("Email is required");
       return false;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setError("Please enter a valid email");
+      setError("Incorrect email format");
       return false;
     }
+
     if (!role.trim()) {
       setError("Please select a role");
       setRoleError(true);
       return false;
     }
+    setRoleError(false);
+
     if (!faculty.trim()) {
       setError("Please select a Faculty");
       setFacultyError(true);
       return false;
     }
+    setFacultyError(false);
+
     if (faculty === "Others" && !customFaculty.trim()) {
       setError("Faculty name is required");
       setCustomFacultyError(true);
       return false;
     }
-    setRoleError(false);
-    setFacultyError(false);
     setCustomFacultyError(false);
+
+    if (!password || !confirmPassword) {
+      setError("Please confirm your password");
+      return false;
+    }
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters");
+      return false;
+    }
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return false;
+    }
+
     return true;
   };
 
@@ -127,8 +153,46 @@ function SignUpForm() {
 
     setIsLoading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      // Sign up with Supabase
+      const { data, error: signUpError } = await supabase.auth.signUp({
+        email: email,
+        password: password,
+      });
+
+      if (signUpError) {
+        setError(signUpError.message || "Signup failed. Please try again.");
+        setIsLoading(false);
+        return;
+      }
+
+      // Get the new user ID
+      const userId = data.user.id;
+      const finalFaculty = faculty === "Others" ? customFaculty : faculty;
+
+      // Create user profile in the profiles table
+      const { error: profileError } = await supabase
+        .from("profiles")
+        .insert([
+          {
+            id: userId,
+            email: email,
+            role: role,
+            faculty: finalFaculty,
+            is_active: true,
+          },
+        ]);
+
+      if (profileError) {
+        setError("Profile creation failed: " + profileError.message);
+        setIsLoading(false);
+        return;
+      }
+
+      // Success!
       setSuccess(true);
+      console.log("Signup successful! User:", email);
+
+      // Clear form
       setEmail("");
       setPassword("");
       setConfirmPassword("");
@@ -138,9 +202,13 @@ function SignUpForm() {
       setRoleError(false);
       setFacultyError(false);
       setCustomFacultyError(false);
-      console.log("Signup successful");
+
+      // Redirect to login after short delay
+      setTimeout(() => {
+        navigate("/login");
+      }, 2000);
     } catch (err) {
-      setError("Signup failed. Please try again.");
+      setError(err.message || "Signup failed. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -171,11 +239,20 @@ function SignUpForm() {
 
         <SignUpFields
           email={email}
-          setEmail={setEmail}
+          setEmail={(value) => {
+            setEmail(value);
+            setError(""); // Clear error when typing
+          }}
           password={password}
-          setPassword={setPassword}
+          setPassword={(value) => {
+            setPassword(value);
+            setError(""); // Clear error when typing
+          }}
           confirmPassword={confirmPassword}
-          setConfirmPassword={setConfirmPassword}
+          setConfirmPassword={(value) => {
+            setConfirmPassword(value);
+            setError(""); // Clear error when typing
+          }}
           showPassword={showPassword}
           setShowPassword={setShowPassword}
           showConfirmPassword={showConfirmPassword}
@@ -191,12 +268,41 @@ function SignUpForm() {
           CustomDropdown={CustomDropdown}
           handleRoleChange={handleRoleChange}
           handleFacultyChange={handleFacultyChange}
-          roleError={roleError}
-          facultyError={facultyError}
-          customFacultyError={customFacultyError}
+          roleError={hasAttemptedSubmit && roleError}
+          facultyError={hasAttemptedSubmit && facultyError}
+          customFacultyError={hasAttemptedSubmit && customFacultyError}
           setCustomFacultyError={setCustomFacultyError}
         />
-        <LoginSubmitButton isLoading={isLoading} />
+        
+        {/* Sign Up Button */}
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="w-full bg-black hover:bg-gray-800 disabled:bg-gray-600 disabled:opacity-50 text-white font-semibold py-2.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2"
+        >
+          {isLoading ? (
+            <>
+              <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                />
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                />
+              </svg>
+              Signing up...
+            </>
+          ) : (
+            "Sign Up"
+          )}
+        </button>
       </form>
 
       <SignUpLogInLink />

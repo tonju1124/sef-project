@@ -1,15 +1,15 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import NavigationSidebar from "./components/NavigationSidebar";
 import UserDropdown from "./components/UserDropdown";
 import SearchBar from "./components/SearchBar";
 import PublicationCard from "./components/PublicationCard";
 import { useUser } from "./context/UserContext";
-import { publications } from "./data/publications";
+import { supabase } from "./config/supabaseClient";
 
 /**
  * UserPublication Component
  * 
- * Displays all publications where the current user is the author or co-author.
+ * Displays all verified and not hidden publications where the current user is the author.
  * Includes search functionality to filter user's publications.
  */
 function UserPublication() {
@@ -17,24 +17,51 @@ function UserPublication() {
   const [userOpen, setUserOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [showHideModal, setShowHideModal] = useState(false);
+  const [publications, setPublications] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const { user } = useUser();
 
-  // Get publications where current user is author or coauthor from global publications list
-  // Admins see everything, regular users see only verified and not hidden
-  const userPublications = publications.filter(pub => 
-    (pub.author === user.userID || pub.coauthor === user.userID) && 
-    (user.role === "admin" ? true : (!pub.hidden && pub.status === "verified"))
-  );
+  useEffect(() => {
+    if (user?.id) {
+      fetchPublications();
+    }
+  }, [user?.id]);
+
+  const fetchPublications = async () => {
+    try {
+      setLoading(true);
+      // Only show verified and not hidden publications
+      const { data, error: fetchError } = await supabase
+        .from('publications')
+        .select('id, title, co_authors, description, created_at, author_id')
+        .eq('author_id', user.id)
+        .eq('status', 'verified')
+        .eq('is_hidden', false)
+        .order('created_at', { ascending: false });
+
+      if (fetchError) {
+        throw new Error(fetchError.message);
+      }
+
+      setPublications(data || []);
+    } catch (err) {
+      console.error('Error fetching publications:', err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Further filter by search with improved logic
   const filteredPublications = searchValue.trim() === ''
-    ? userPublications
-    : userPublications.filter(pub => {
+    ? publications
+    : publications.filter(pub => {
         const searchLower = searchValue.toLowerCase().trim();
         
         // Direct matches
         const titleMatch = pub.title.toLowerCase().includes(searchLower);
-        const descriptionMatch = pub.description.toLowerCase().includes(searchLower);
+        const descriptionMatch = pub.description?.toLowerCase().includes(searchLower) || false;
         
         if (titleMatch || descriptionMatch) {
           return true;
@@ -42,7 +69,7 @@ function UserPublication() {
         
         // Keyword-based matching
         const searchWords = searchLower.split(/\s+/).filter(word => word.length > 0);
-        const descriptionLower = pub.description.toLowerCase();
+        const descriptionLower = pub.description?.toLowerCase() || '';
         const titleLower = pub.title.toLowerCase();
         
         return searchWords.some(word => 
@@ -52,15 +79,46 @@ function UserPublication() {
       });
 
   /**
-   * Formats a date string from YYYY-MM-DD to DD/MM/YYYY format
+   * Formats a date string from YYYY-MM-DDTHH:MM:SS to DD/MM/YYYY format
    * 
-   * @param {string} dateString - Date in YYYY-MM-DD format
+   * @param {string} dateString - Date in ISO format
    * @returns {string} Formatted date in DD/MM/YYYY format
    */
   const formatDate = (dateString) => {
-    const [year, month, day] = dateString.split('-');
+    if (!dateString) return "N/A";
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-white text-black flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-gray-300 border-t-black rounded-full animate-spin mx-auto mb-4"></div>
+          <h2 className="text-xl font-semibold text-gray-800">Loading your publications...</h2>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-white text-black flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 text-lg mb-4">Error loading publications: {error}</p>
+          <button
+            onClick={() => fetchPublications()}
+            className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition-all"
+          >
+            Try Again
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white text-black flex flex-col items-start justify-start relative select-none pt-20 pl-20 page-transition">
@@ -89,9 +147,9 @@ function UserPublication() {
                 key={pub.id}
                 id={pub.id}
                 title={pub.title}
-                author={pub.author}
-                coauthor={pub.coauthor}
-                uploadDate={formatDate(pub.uploadDate)}
+                author={user?.full_name || user?.email}
+                coauthor={pub.co_authors}
+                uploadDate={formatDate(pub.created_at)}
                 description={pub.description}
                 onModalStateChange={setShowHideModal}
               />

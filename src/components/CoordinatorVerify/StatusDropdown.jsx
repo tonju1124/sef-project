@@ -7,7 +7,7 @@ import { useState, useRef, useEffect } from 'react';
  * Displays status with color-coded icons and allows selection from verified, pending, or rejected states.
  */
 
-function StatusDropdown({ status, onChange }) {
+function StatusDropdown({ status, onChange, disabled = false }) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
@@ -99,8 +99,9 @@ function StatusDropdown({ status, onChange }) {
   return (
     <div className="relative w-auto" ref={dropdownRef}>
       <button
-        onClick={() => setIsOpen(!isOpen)}
-        className={`px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 transition-all whitespace-nowrap ${getStatusColor(status)} hover:opacity-80`}
+        onClick={() => !disabled && setIsOpen(!isOpen)}
+        disabled={disabled}
+        className={`px-4 py-2 rounded-full text-sm font-medium flex items-center gap-2 transition-all whitespace-nowrap ${getStatusColor(status)} ${disabled ? 'opacity-50 cursor-not-allowed' : 'hover:opacity-80 cursor-pointer'}`}
       >
         {getStatusIcon(status)}
         {getStatusLabel(status)}

@@ -1,21 +1,48 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { supabase } from '../../config/supabaseClient';
 import CategoryCard from '../analytics/CategoryCard';
 import SearchBar from '../SearchBar';
-import { publications } from '../../data/publications';
 
 function CoordinatorAnalytics() {
   const [expandedCategory, setExpandedCategory] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [publications, setPublications] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Only show verified publications
-  const allPublications = publications.filter(pub => pub.status === 'verified');
+  // Fetch all verified and non-hidden publications from database
+  useEffect(() => {
+    fetchAllPublications();
+  }, []);
 
+  const fetchAllPublications = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('publications')
+        .select('*')
+        .eq('status', 'verified')
+        .eq('is_hidden', false);
+
+      if (error) {
+        console.error('Error fetching publications:', error);
+        return;
+      }
+
+      setPublications(data || []);
+    } catch (err) {
+      console.error('Error:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Group publications by publication_type (or category if you have that field)
   const articlesByCategory = {
-    journal: allPublications.filter(pub => pub.category === 'journal').map(pub => pub.title),
-    chapter: allPublications.filter(pub => pub.category === 'chapter').map(pub => pub.title),
-    book: allPublications.filter(pub => pub.category === 'book').map(pub => pub.title),
-    proceeding: allPublications.filter(pub => pub.category === 'proceeding').map(pub => pub.title),
-    article: allPublications.filter(pub => pub.category === 'article').map(pub => pub.title),
+    journal: publications.filter(pub => pub.publication_type === 'journal').map(pub => pub.title),
+    chapter: publications.filter(pub => pub.publication_type === 'chapter').map(pub => pub.title),
+    book: publications.filter(pub => pub.publication_type === 'book').map(pub => pub.title),
+    proceeding: publications.filter(pub => pub.publication_type === 'proceeding').map(pub => pub.title),
+    article: publications.filter(pub => pub.publication_type === 'article').map(pub => pub.title),
   };
 
   const categories = Object.keys(articlesByCategory).map(key => ({
@@ -28,7 +55,7 @@ function CoordinatorAnalytics() {
   };
 
   const getTotalPublications = () => {
-    return allPublications.length;
+    return publications.length;
   };
 
   const totalPublications = getTotalPublications();
@@ -52,6 +79,14 @@ function CoordinatorAnalytics() {
       article.toLowerCase().includes(searchQuery.toLowerCase())
     );
   };
+
+  if (loading) {
+    return (
+      <div className="text-center py-8">
+        <p className="text-gray-500">Loading analytics...</p>
+      </div>
+    );
+  }
 
   return (
     <>

@@ -1,18 +1,18 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { supabase } from './config/supabaseClient';
 import NavigationSidebar from './components/NavigationSidebar';
 import UserDropdown from './components/UserDropdown';
 import PublicationCard from './components/PublicationCard';
 import UploadPublicationButton from './components/MainPage/UploadPublicationButton';
 import FilterDropdown from './components/MainPage/FilterDropdown';
 import AdminFilterDropdown from './components/MainPage/AdminFilterDropdown';
-import { publications } from './data/publications';
 import SearchBar from './components/SearchBar';
 import { useUser } from './context/UserContext';
 
 /**
  * MainPage Component
  * 
- * The main landing page displaying all publications with filtering, sorting, and search capabilities.
+ * The main landing page displaying all publications from database with filtering, sorting, and search capabilities.
  * Provides different views and controls based on user role (admin vs regular users).
  */
 function MainPage() {
@@ -25,19 +25,84 @@ function MainPage() {
   const [adminFilters, setAdminFilters] = useState({
     hidden: 'All',
     status: {
-      verified: true,
-      pending: true,
-      rejected: true
+      approved: false,
+      pending: false,
+      rejected: false,
+      verified: true
     }
   });
-  const [refreshKey, setRefreshKey] = useState(0);
-  const { user } = useUser();
+  const [publications, setPublications] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const { user, loading: userLoading } = useUser();
 
   const sortOptions = ['Newest', 'Oldest'];
 
+  // Fetch publications from Supabase
+  useEffect(() => {
+    if (!userLoading) {
+      fetchPublications();
+    }
+  }, [user, userLoading]);
+
+  const fetchPublications = async () => {
+    try {
+      setLoading(true);
+      console.log('Fetching publications, user:', user);
+      let query = supabase
+        .from('publications')
+        .select(`
+          *,
+          profiles:author_id (
+            full_name,
+            email
+          )
+        `);
+
+      // If not admin, only show verified and visible publications
+      if (user?.role !== 'admin') {
+        console.log('Not admin, filtering for verified + not hidden');
+        query = query
+          .eq('status', 'verified')
+          .eq('is_hidden', false);
+      }
+
+      const { data, error } = await query.order('created_at', { ascending: false });
+      console.log('Publications response:', { data, error });
+
+      if (error) {
+        console.error('Error fetching publications:', error);
+        return;
+      }
+
+      // Transform data to match expected format
+      const transformedData = data.map(pub => ({
+        id: pub.id,
+        title: pub.title,
+        author: pub.profiles?.full_name || pub.profiles?.email || 'Unknown',
+        coauthor: pub.co_authors || '',
+        uploadDate: new Date(pub.created_at).toISOString(),
+        description: pub.description || '',
+        hidden: pub.is_hidden,
+        status: pub.status,
+        category: pub.category,
+        publicationType: pub.publication_type,
+        fileUrl: pub.file_url,
+        viewCount: pub.view_count
+      }));
+
+      console.log('Transformed data:', transformedData);
+      setPublications(transformedData);
+      console.log('Publications state set, count:', transformedData.length);
+    } catch (err) {
+      console.error('Error:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleHideConfirm = () => {
-    // Trigger a re-render to apply filters after publication data changes
-    setRefreshKey(prev => prev + 1);
+    // Refresh publications after hiding
+    fetchPublications();
   };
 
   const handleSortOpen = (pos) => {
@@ -57,7 +122,7 @@ function MainPage() {
 
   const filteredPublications = searchValue.trim() === ''
     ? publications.filter(pub => {
-        if (user.role !== "admin") {
+        if (user?.role !== "admin") {
           return !pub.hidden && pub.status === "verified";
         }
         
@@ -70,10 +135,10 @@ function MainPage() {
         return hiddenMatch && statusMatch;
       })
     : publications.filter(pub => {
-        if (user.role !== "admin" && (pub.hidden || pub.status !== "verified")) return false;
+        if (user?.role !== "admin" && (pub.hidden || pub.status !== "verified")) return false;
         
         // Admin filters
-        if (user.role === "admin") {
+        if (user?.role === "admin") {
           const hiddenMatch = adminFilters.hidden === 'All' ? true :
             adminFilters.hidden === 'Hidden' ? pub.hidden :
             adminFilters.hidden === 'Visible' ? !pub.hidden : true;
@@ -122,11 +187,13 @@ function MainPage() {
   return (
     <div className="min-h-screen bg-white text-black flex flex-col items-start justify-start relative select-none pt-20 pl-20 page-transition">
       <NavigationSidebar navOpen={navOpen} setNavOpen={setNavOpen} />
-      <UserDropdown
-        navOpen={navOpen}
-        userOpen={userOpen}
-        setUserOpen={setUserOpen}
-      />
+      {user && (
+        <UserDropdown
+          navOpen={navOpen}
+          userOpen={userOpen}
+          setUserOpen={setUserOpen}
+        />
+      )}
       <div className={`z-20 w-full pr-20 ${navOpen ? "blur-xs" : ""}`}>
         <h1 className="text-3xl font-bold mb-4">Home</h1>
         <div className="border-b border-gray-300 w-full mb-4"></div>
@@ -146,16 +213,18 @@ function MainPage() {
               onSelect={handleSortSelect}
               dropdownPos={sortPos}
             />
-            {user.role === "admin" && (
+            {user?.role === "admin" && (
               <AdminFilterDropdown onFilterChange={handleAdminFilterChange} />
             )}
           </div>
 
           {/* Upload publication button */}
-          <UploadPublicationButton />
+          {user && user?.role !== "admin" && <UploadPublicationButton />}
         </div>
         <div className="mt-2">
-          {filteredPublications.length > 0 ? (
+          {userLoading || loading ? (
+            <p className="text-gray-500 text-center py-8">Loading publications...</p>
+          ) : filteredPublications.length > 0 ? (
             sortedPublications.map((pub) => (
               <PublicationCard
                 key={pub.id}

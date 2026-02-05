@@ -1,18 +1,48 @@
+import { useState, useEffect } from "react";
 import { useUser } from "../../context/UserContext";
-import { publications } from "../../data/publications";
+import { supabase } from "../../config/supabaseClient";
 
 function UserVerification() {
   const { user } = useUser();
+  const [publications, setPublications] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Get publications where current user is author or coauthor
-  const userPublications = publications.filter(
-    pub => pub.author === user.userID || pub.coauthor === user.userID
-  );
+  useEffect(() => {
+    if (user?.id) {
+      fetchUserPublications();
+    }
+  }, [user?.id]);
 
-  // Format date from YYYY-MM-DD to DD/MM/YYYY
+  const fetchUserPublications = async () => {
+    try {
+      setLoading(true);
+      const { data, error: fetchError } = await supabase
+        .from('publications')
+        .select('id, title, status, created_at, publication_type')
+        .eq('author_id', user.id)
+        .order('created_at', { ascending: false });
+
+      if (fetchError) {
+        throw new Error(fetchError.message);
+      }
+
+      setPublications(data || []);
+    } catch (err) {
+      console.error('Error fetching publications:', err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Format date from YYYY-MM-DDTHH:MM:SS to DD/MM/YYYY
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
-    const [year, month, day] = dateString.split('-');
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   };
 
@@ -58,9 +88,36 @@ function UserVerification() {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <div className="text-center">
+          <div className="w-12 h-12 border-4 border-gray-300 border-t-black rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-500">Loading your publications...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-red-50 border border-red-200 text-red-700 px-6 py-4 rounded-lg">
+        Error loading publications: {error}
+      </div>
+    );
+  }
+
+  if (publications.length === 0) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-gray-500 text-lg">You haven't uploaded any publications yet.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
-      {userPublications.map((publication) => (
+      {publications.map((publication) => (
         <div
           key={publication.id}
           className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow duration-300"
@@ -71,10 +128,10 @@ function UserVerification() {
                 {publication.title}
               </h2>
               <p className="text-gray-600 text-sm">
-                Upload Date: {formatDate(publication.uploadDate)}
+                Upload Date: {formatDate(publication.created_at)}
               </p>
               <p className="text-gray-600 text-sm">
-                Category: {publication.category.charAt(0).toUpperCase() + publication.category.slice(1)}
+                Type: {publication.publication_type ? publication.publication_type.charAt(0).toUpperCase() + publication.publication_type.slice(1) : 'N/A'}
               </p>
             </div>
             <div className={`${getStatusColor(publication.status)} px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap flex justify-center items-center gap-2`}>

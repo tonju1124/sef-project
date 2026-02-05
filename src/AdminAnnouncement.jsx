@@ -3,19 +3,28 @@ import NavigationSidebar from './components/NavigationSidebar';
 import UserDropdown from './components/UserDropdown';
 import { useUser } from './context/UserContext';
 import NotAnAdminError from './components/NotAnAdminError';
+import AnnouncementForm from './components/AdminAnnouncement/AnnouncementForm';
 
 /**
  * AdminAnnouncement Component
  * 
  * Admin-only page for creating and managing system-wide announcements.
- * Restricted to users with admin privileges.
+ * Admins can send notifications to all users about events, updates, and issues.
  */
 function AdminAnnouncement() {
   const [navOpen, setNavOpen] = useState(false);
   const [userOpen, setUserOpen] = useState(false);
-  const { user } = useUser();
+  const { user, loading } = useUser();
 
-  if (!user.isAdmin) {
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-500">Loading...</p>
+      </div>
+    );
+  }
+
+  if (user?.role !== 'admin') {
     return <NotAnAdminError />;
   }
 
@@ -24,9 +33,13 @@ function AdminAnnouncement() {
       <NavigationSidebar navOpen={navOpen} setNavOpen={setNavOpen} />
       <UserDropdown navOpen={navOpen} userOpen={userOpen} setUserOpen={setUserOpen} />
       <div className={`z-20 w-full pr-20 ${navOpen ? 'blur-xs' : ''}`}>
-        <h1 className="text-3xl font-bold mb-4">Announcement</h1>
-        <div className="border-b border-gray-300 w-full mb-4"></div>
-        <p className="text-gray-600">Create and manage announcements here.</p>
+        <h1 className="text-3xl font-bold mb-4">Send Announcement</h1>
+        <div className="border-b border-gray-300 w-full mb-6"></div>
+
+        <div className="w-full">
+          <p className="text-gray-600 mb-8 text-lg">Send announcements to all active users about events, updates, and issues.</p>
+          <AnnouncementForm />
+        </div>
       </div>
     </div>
   );
