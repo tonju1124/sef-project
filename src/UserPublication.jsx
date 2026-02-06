@@ -147,7 +147,7 @@ function UserPublication() {
                 key={pub.id}
                 id={pub.id}
                 title={pub.title}
-                author={user?.full_name || user?.email}
+                author={user?.fullName || user?.email}
                 coauthor={pub.co_authors}
                 uploadDate={formatDate(pub.created_at)}
                 description={pub.description}
