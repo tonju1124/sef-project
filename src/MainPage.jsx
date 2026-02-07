@@ -219,7 +219,7 @@ function MainPage() {
           </div>
 
           {/* Upload publication button */}
-          {user && user?.role !== "admin" && <UploadPublicationButton />}
+          {user && user?.role !== "admin" && user?.role !== "coordinator" && <UploadPublicationButton />}
         </div>
         <div className="mt-2">
           {userLoading || loading ? (
