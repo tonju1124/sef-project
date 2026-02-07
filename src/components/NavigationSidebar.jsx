@@ -61,17 +61,23 @@ function NavigationSidebar({ navOpen, setNavOpen }) {
   };
 
   // Navigation items available to all users
-  const navItems = [
-    { label: "Home", path: "/", icon: "home" },
-    { label: "My Project", path: "/user-publication", icon: "project" },
-    { label: "Notification", path: "/notifications", icon: "notification", showBadge: true },
-    { label: "My Analytics", path: "/analytics", icon: "analytics" },
+  const allNavItems = [
+    { label: "Home", path: "/", icon: "home", showToAll: true },
+    { label: "My Project", path: "/user-publication", icon: "project", showToAll: false },
+    { label: "Notification", path: "/notifications", icon: "notification", showBadge: true, showToAll: true },
+    { label: "My Analytics", path: "/analytics", icon: "analytics", showToAll: false },
     {
       label: "Verification Status",
       path: "/verification",
       icon: "verification",
+      showToAll: false,
     },
   ];
+
+  // Filter nav items based on user role - only regular users see personal items
+  const navItems = allNavItems.filter(item => 
+    item.showToAll || (!isAdmin && !isCoordinator)
+  );
 
   // Navigation items visible only to admin users
   const adminItems = [
