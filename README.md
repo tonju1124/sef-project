@@ -1,6 +1,6 @@
 # SEF Project – Research Publications Portal
 
-A React + Vite front-end for managing and showcasing academic publications. The app supports multiple roles (student, lecturer, coordinator, admin), publication uploads, verification flows, analytics dashboards, bookmarks, notifications, and profile pages. Data is currently mocked in the client for demo purposes. This is also my first react project.
+A full-stack React + Vite application for managing and showcasing academic publications. The app supports multiple roles (student, lecturer, coordinator, admin), publication uploads, verification flows, analytics dashboards, bookmarks, notifications, and profile pages. Built with Supabase for authentication, database, and storage. This is also my first react project.
 
 ## Features
 
@@ -18,45 +18,57 @@ A React + Vite front-end for managing and showcasing academic publications. The 
 - Vite 7
 - React Router
 - Tailwind CSS
+- Supabase (Authentication, Database, Storage)
 
 ## Getting Started
 
-Prerequisites: Node.js 18+ (recommended) and npm.
+### Prerequisites
 
-Install dependencies:
+- Node.js 18+ (recommended) and npm
+- A Supabase account and project ([supabase.com](https://supabase.com))
+
+### Setup
+
+1. **Install dependencies:**
 
 ```bash
 npm install
 ```
 
-Run the dev server:
+2. **Configure environment variables:**
 
+Create a `.env` file in the root directory with your Supabase credentials:
+
+```env
+VITE_SUPABASE_URL= url
+VITE_SUPABASE_ANON_KEY= anon key
+```
+
+3. **Run the dev server:**
 ```bash
 npm run dev
 ```
 
-Build for production:
-
+4. **Build for production:**
 ```bash
 npm run build
 ```
 
-Preview the production build:
-
+5. **Preview the production build:**
 ```bash
 npm run preview
 ```
 
-## Demo Roles
+## User Roles
 
-Use the on-screen role switcher (bottom-right) to switch between:
+The application supports multiple user roles with different permissions:
 
-- Admin
-- Student
-- Lecturer
-- Coordinator
+- **Admin** — Full system access, user management, announcements
+- **Student** — View and upload publications, bookmarks
+- **Lecturer** — View and upload publications, bookmarks
+- **Coordinator** — Verify publications, department analytics
 
-User data is mocked in [src/data/UserData.js](src/data/UserData.js).
+User roles are managed through Supabase authentication and stored in the database.
 
 ## Key Routes
 
@@ -85,11 +97,11 @@ User data is mocked in [src/data/UserData.js](src/data/UserData.js).
 	- data/ — Mock data for users and publications
 	- *.jsx — Page-level routes
 
-## Notes
+## Database & Backend
 
-- This is a front-end demo with mocked data; there is no backend or persistence.
-- Update mock data in [src/data/publications.js](src/data/publications.js) and [src/data/UserData.js](src/data/UserData.js).
+This application uses Supabase for:
+- **Authentication** — User signup, login, password reset, and email verification
+- **Database** — PostgreSQL database for users, publications, bookmarks, notifications, and analytics
+- **Storage** — File storage for publication documents and assets
 
-## License
-
-Private project for coursework/demo use.
+Make sure your Supabase project has the necessary tables and storage buckets configured.
